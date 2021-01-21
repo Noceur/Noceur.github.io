@@ -120,10 +120,17 @@ p, ul, ol, article {
 }
 
 .p2 {
-  max-width: 60ch; /* Limit line-length to 60 characters */
+  /* max-width: 60ch; /* Limit line-length to 60 characters */
   margin-bottom: .6em;
   margin-left: 50px;
   margin-block-start: 30px;
+}
+
+.img-text {
+  font-style: italic;
+  font-size: 80%;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 
 ul {
