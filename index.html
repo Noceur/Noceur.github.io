@@ -32,7 +32,7 @@
             </h1>
             <nav>
                 <a href="index.html#log">Log</a>
-                <a href="index.html#projects">Projects</a>
+                <a href="index.html#archive">Project archive</a>
                 <a href="index.html#resume">Résumé</a>
                 <!-- <a href="index.html#photos">Photos</a> -->
                 <!-- <a href="index.html#portfolio">Portfolio</a> -->
@@ -41,61 +41,135 @@
 
         <main>
 
+            <!-- home -->
             <section
                 id="home">
                 <!-- HOME -->
 
-                <p>Put short explanation on how to browse site, link to posts for current projects. lalalalalalalallalalalalalalalalalalalalalalalalalllll aaaaalala</p>
-                <p>Link to old projects.</p>
-
-
-                instagram scraper
-                                reddit bots
-                                apexuniversity
-                                pct
-                                game jams
-                                work experience
-                                starting own company
-
-
+                Stuff
             </section>
 
+            <!-- archive -->
             <section
-                id="projects">
-                <!-- ABOUT -->
+                id="archive">
+                <!-- Projects -->
 
-                <p>This is the about page.
+                <p>This is the archive page, I have been very bad with documenting my previous work and projects so I will fill this page out as I come across or remember my old stuff (and some ongoing).
                     <a href="index.html#another-page">This is a link to another page</a>.</p>
+                <br>
+
+                <h1 class="project-title">
+                    Game related
+                </h2>
+                <table class="d">
+                    <tr class="proj">
+                        <!-- role -->
+                        <!-- tech -->
+                        <!-- length -->
+                        <td>
+                            <a href="index.html#unrealGJ"> Unreal Engine GJ</a>
+                        </td>
+                        <!-- two birds one stone -->
+                        <td>
+                            Global game jam
+                        </td>
+                    </tr>
+                    <tr class="proj">
+
+                            <td>Apex University</td>
+                        <!-- a mammoth space odyssey -->
+                    </tr>
+                </table>
+                <br>
+
+                <h1 class="project-title">
+                    Programming projects
+                </h2>
+                <table class="d">
+                    <tr class="proj">
+                        <!-- role -->
+                        <!-- tech -->
+                        <!-- length -->
+                            <td>
+                        Lytic
+                        </td>
+                        <!-- two birds one stone -->
+                            <td>
+                        Reddit stalker
+                    </td>
+                        <!-- a mammoth space odyssey -->
+                    </tr>
+                    <tr class="proj">
+                        <td>Asset manager</td>
+                        <!-- Do I want this here, part of work experience? -->
+                        <td></td>
+                    </tr>
+                </table>
+                <br>
+
+                <h1 class="project-title">
+                    Multi-day hikes & Travel
+                    <!-- Link to albums -->
+                </h2>
+                <table class="d">
+                    <tr class="proj">
+                        <td>PCT</td>
+                        <td>Kungsleden</td>
+                    </tr>
+                </table>
 
                 <!-- <figure>
-                                                    <a href="index.html#img-about">
-                                                        <img loading="lazy" alt="" src="./index_files/bbb" width="1200" height="600">
-                                                    </a>
-                                                    <figcaption>Example of an image with a link to a larger version.</figcaption>
-                                                </figure> -->
+                                                                    <a href="index.html#img-about">
+                                                                        <img loading="lazy" alt="" src="./index_files/bbb" width="1200" height="600">
+                                                                    </a>
+                                                                    <figcaption>Example of an image with a link to a larger version.</figcaption>
+                                                                </figure> -->
 
             </section>
 
-
-            <section
-                id="log">
+            <!-- log -->
+            <section id="log">
                 <!-- Log entries -->
                 <!-- For images make sure to use the <code> loading="lazy" </code> attribute, so they get loaded only when needed. -->
 
+
+                    <article>
+                    <!-- TITLE -->
+                        <h2 class="post-title"> <label name="+" for="5">+</label>Houdini - Basics<small>
+                            <time datetime="18-01-2021">18.01.2021</time>
+                        </small>
+                        <input id="5" style="display:none" type="checkbox" onclick="showText(this)">
+                    </h2>
+
+                    <!-- CONTENT -->
+                    <div style="display:none">
+                        <p class="p2">Started learning Houdini basics plus the Python integration. Managed to import terrain heightmap and scatter some objects on terrain based on different constraints.</p>
+                        <br>
+
+                    </div>
+                </article>
+
                 <article>
-                        <!-- TITLE -->
-                        <h2 class="post-title">
-                            <label name="+" for="4">+</label>World Creator 2 - Desert dunes<small>
-                                <time datetime="18-01-2021">18.01.2021</time>
-                            </small>
-                            <input id="4" style="display:none" type="checkbox" onclick="showText(this)">
-                        </h2>
-    
-                        <!-- CONTENT -->
-                        <div style="display:none">
-                            <p class="p2">Made some desert dune heightmaps for a prototype game two of my friends and I wish to experiment with, also got to try out the texturing and other surrounding features of WC2 but I get a feeling I would rather do this kind of things in Houdini or other environments.</p>
-                        </div>
-                    </article>
+                    <!-- TITLE -->
+                    <h2 class="post-title">
+                        <label name="+" for="4">+</label>World Creator 2 - Desert dunes<small>
+                            <time datetime="18-01-2021">18.01.2021</time>
+                        </small>
+                        <input id="4" style="display:none" type="checkbox" onclick="showText(this)">
+                    </h2>
+
+                    <!-- CONTENT -->
+                    <div style="display:none">
+                        <p class="p2">Made some desert dune heightmaps for a prototype game two of my friends and I wish to experiment with, also got to try out the texturing and other surrounding features of WC2 but I get a feeling I would rather do this kind of things in Houdini or other environments.
+                            <br><br>
+                        </p>
+                        <center>
+                            <img class="img-log" src="img/log/4/dunes.png" alt="Terrain" loading="lazy"><br>
+                            <img class="img-log" src="img/log/4/dunes_2.png" alt="Terrain" loading="lazy"><br>
+                        </center>
+
+                    </div>
+                </article>
 
                 <article>
                     <!-- TITLE -->
@@ -108,19 +182,22 @@
 
                     <!-- CONTENT -->
                     <div style="display:none">
-                        <p class="p2">Used google earth to find interesting places to use as references, the biggest issue I have is translating the scale of the real world to something that would be useful in a game, something I will have to work on getting right. 
-                        <br>
-                        Made a basic terrain with refereneces from a valley area in Chile. Also tried to use openstreetmaps to import the terrain to use right away as a underlying basis but didn't turn out so well at the first attempt, might have to revisit this unless I decide to use <a href="https://www.youtube.com/watch?v=n8AL-_gkIZQ" target="_blank">Houdinis MapBox tool</a> for these kind of things...
-                        <br>
-                        These are my terrain results so far: 
-                        <br><br>
-                        <center>
-                        <img src="img/log/3/chile_2.png" alt="Terrain" loading=lazy><div class="img-text">design.</div><br>
-                        <img src="img/log/3/chile_3.png" alt="Terrain" loading=lazy><div class="img-text">Height, although the heights should be at least *2.</div><br>
-                        <img src="img/log/3/chile.png" alt="Terrain" loading=lazy><div class="img-text">Current result, missing textures and the lakes are currently completely flat.</div><br>
-                        </center>
-                        <br>
-                        Also considering I should get rid of the titles for the log entries, too lazy to consider what to call them.</p>
+                        <p class="p2">Used google earth to find interesting places to use as references, the biggest issue I have is translating the scale of the real world to something that would be useful in a game, something I will have to work on getting right.
+                            <br><br>
+                            Made a basic terrain with refereneces from a valley area in Chile. Also tried to use openstreetmaps to import the terrain to use right away as a underlying basis but didn't turn out so well at the first attempt, might have to revisit this unless I decide to use
+                            <a href="https://www.youtube.com/watch?v=n8AL-_gkIZQ" target="_blank">Houdinis MapBox tool</a>
+                            for these kind of things...
+                            <br><br>
+                            These are my terrain results so far:
+                            <br><br>
+                            <center>
+                                <img class="img-log" src="img/log/3/chile_2.png" alt="Terrain" loading="lazy"><div class="img-text">design.</div><br>
+                                <img class="img-log" src="img/log/3/chile_3.png" alt="Terrain" loading="lazy"><div class="img-text">Height, although the heights should be at least *2.</div><br>
+                                <img class="img-log" src="img/log/3/chile.png" alt="Terrain" loading="lazy"><div class="img-text">Current result, missing textures and the lakes are currently completely flat.</div>
+                            </center>
+                        </p>
+                        <p class="p2">
+                            Also considering I should get rid of the titles for the log entries, too lazy to consider what to call them.</p>
                     </div>
                 </article>
 
@@ -135,17 +212,18 @@
 
                     <!-- CONTENT -->
                     <div style="display:none">
-                        <p class="p2">Started learning world creator 2 (hence referred to as WC2), goal is to use this as a basis for a level design workflow, I from the sound of it WC3 should be releasing as a BETA in February which should be great since it will allow for better world composition. <br><br>
-                        Either way my current planned leveldesign workflow is the following:<br>
+                        <p class="p2">Started learning world creator 2 (hence referred to as WC2), goal is to use this as a basis for a level design workflow, I from the sound of it WC3 should be releasing as a BETA in February which should be great since it will allow for better world composition.
+                            <br><br>
+                            Either way my current planned leveldesign workflow is the following:<br>
 
-                        WC2 Terrain -> Houdini for object placements and scripting support -> Unreal/Unity.</p>
+                            WC2 Terrain -> Houdini for object placements and scripting support -> Unreal/Unity.</p>
                     </div>
                 </article>
 
                 <article>
                     <!-- TITLE -->
                     <h2 class="post-title">
-                        <label name="+" for="1">+</label>init<small>
+                        <label name="+" for="1">+</label>git init website<small>
                             <time datetime="14-01-2021">14.01.2021</time>
                         </small>
                         <input id="1" style="display:none" type="checkbox" onclick="showText(this)">
@@ -154,7 +232,8 @@
                     <!-- CONTENT -->
                     <div style="display:none">
                         <p class="p2">
-                            Started building this website, intention is to keep it as light weight (and static) as possible and not include any unecessary libraries. <br>
+                            Started building this website, intention is to keep it as light weight (and static) as possible and not include any unecessary libraries.
+                            <br>
                             Turns out I am quite bad at web development but here we are, should be servicable enough for now.
 
                             <br>
@@ -162,12 +241,13 @@
 
                             <br>
                             <br>
-                            </p>
+                        </p>
                     </div>
                 </article>
 
             </section>
 
+            <!-- photos -->
             <section
                 id="photos">
                 <!-- PHOTOS -->
@@ -196,6 +276,7 @@
 
             </section>
 
+            <!-- portfolio -->
             <section
                 id="portfolio">
                 <!-- PORTFOLIO -->
@@ -223,46 +304,40 @@
 
             </section>
 
+            <!-- unrealGJ -->
             <section
-                id="another-page">
+                id="unrealGJ">
                 <!-- ANOTHER PAGE -->
 
                 <p>This page is not referenced in the menu, yet it exists.</p>
                 <p>
-                    <a href="index.html#about">← back</a>
+                    <a href="index.html#archive">← back</a>
                 </p>
 
             </section>
 
+            <!-- resume -->
             <section
                 id="resume">
                 <!-- HOME -->
 
                 <p>Add text and CV</p>
 
+            </section>
+
+            <!-- another-page -->
+            <section
+                id="another-page">
+                <!-- ANOTHER PAGE -->
+
+                <p>This page is not referenced in the menu, yet it exists.</p>
+                <p>
+                    <a href="index.html#archive">← back</a>
+                </p>
 
             </section>
         </body>
     </body>
-</html></main><!-- ----------
-                                    LIGHTBOX IMAGES
-                                    ----------- --><!-- PHOTOS grid --><div>
-<a href="index.html#photos" class="lightbox" id="img-01"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a>
-<a href="index.html#photos" class="lightbox" id="img-02"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a>
-<a href="index.html#photos" class="lightbox" id="img-03"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a>
-<a href="index.html#photos" class="lightbox" id="img-04"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a>
-<a href="index.html#photos" class="lightbox" id="img-05"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a>
-<a href="index.html#photos" class="lightbox" id="img-06"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a>
-<a href="index.html#photos" class="lightbox" id="img-07"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a>
-<a href="index.html#photos" class="lightbox" id="img-08"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a>
-<a href="index.html#photos" class="lightbox" id="img-09"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a>
-<a href="index.html#photos" class="lightbox" id="img-10"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a>
-<a href="index.html#photos" class="lightbox" id="img-11"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a>
-<a href="index.html#photos" class="lightbox" id="img-12"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a>
-<a href="index.html#photos" class="lightbox" id="img-13"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a>
-<a href="index.html#photos" class="lightbox" id="img-14"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a>
-<a href="index.html#photos" class="lightbox" id="img-15"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a>
-
-<!-- Other images -->
-
-<a href="index.html#about" class="lightbox" id="img-about"><img loading="lazy" alt="" src="./index_files/bbb(8)"></a></div></body></html>
+</html></body></html></main><!-- ----------
+                                                                    LIGHTBOX IMAGES
+                                                                    ----------- --><!-- PHOTOS grid --><div><a href="index.html#photos" class="lightbox" id="img-01"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a><a href="index.html#photos" class="lightbox" id="img-02"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a><a href="index.html#photos" class="lightbox" id="img-03"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a><a href="index.html#photos" class="lightbox" id="img-04"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a><a href="index.html#photos" class="lightbox" id="img-05"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a><a href="index.html#photos" class="lightbox" id="img-06"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a><a href="index.html#photos" class="lightbox" id="img-07"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a><a href="index.html#photos" class="lightbox" id="img-08"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a><a href="index.html#photos" class="lightbox" id="img-09"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a><a href="index.html#photos" class="lightbox" id="img-10"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a><a href="index.html#photos" class="lightbox" id="img-11"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a><a href="index.html#photos" class="lightbox" id="img-12"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a><a href="index.html#photos" class="lightbox" id="img-13"><img loading="lazy" alt="" src="./index_files/bbb(7)"></a><a href="index.html#photos" class="lightbox" id="img-14"><img loading="lazy" alt="" src="./index_files/bbb(4)"></a><a href="index.html#photos" class="lightbox" id="img-15"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a><!-- Other images --><a href="index.html#about" class="lightbox" id="img-about"><img loading="lazy" alt="" src="./index_files/bbb(8)"></a></div></body></html>
