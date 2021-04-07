@@ -1,0 +1,146 @@
+<body>
+    <!--<p>House writeup<br><br>-->
+    <p>
+        This was a fun project - I wish I had more time to make
+        it more complete. Hopefully I will at some point, as it would be fun to further explore procedural creation of
+        parts of the model. <br>While I feel that I have the technical skills required to
+        produce assets, I can see that I am out of practice - especially when it comes to texturing, where things have
+        come a long way in just a few
+        years. This project has given me plenty of room to learn some of it.
+    </p>
+    <br><br>
+    <article>
+        <h2 class="post-title">
+            <label name="+" for="sg_method">+</label>Method<small></small>
+            <input id="sg_method" style="display:none" type="checkbox" onclick="showText(this)">
+        </h2>
+        <div style="display:none">
+            <p class="p2">
+                <b>Walls</b><br><br>
+                Right away I decided that I wanted to use a modular system, using as few base pieces as possible
+                (i.e. planks and beams) and then modifying those. I sclulpted these in zbrush (see image below)
+                but in retrospect they could have been made entirely in maya or, with more work, in substance
+                designer.<br>For some
+                variation in the walls I created a longer texture with several imperfections in it and simply moved
+                the UVs of the wall pieces to where I wanted them. I hid the seams with wooden
+                details (see video below). Not a very interesting method but doesn't require fancy shaders.<br><br>
+            </p>
+
+            <center>
+                <img class="img-log" src="img/housemodel/beam_sculpt.png" alt="beam" loading="lazy">
+            </center>
+            <div class="img-text">Beam sculpt.</div><br>
+
+            <br>
+
+            <video class="vid-log" controls preload="none">
+                <source src="vid/housemodel/wall_uv.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <center>
+                <i></i>
+            </center>
+            <div class="img-text">
+                Wall UV maps (videos only load on play).</div><br>
+            <br><br>
+            <p class="p2">
+                <b>Roof</b><br><br>
+
+                I wanted to save some time and experiment with making more 'organic' shapes for the roof, so I made a
+                base shape in maya for the roof coverage, as well as a roof tile model. Sent it over to Houdini and
+                generated relaxed points on the surface, used a copytopoints node to duplicate the roof tile to the points (see video below). Converted
+                it to voxels and applied some imperfections on it then outputing my highpoly file. Low poly was made
+                by hand, as were the roof beams.<br><br>
+
+            </p>
+            <video class="vid-log" controls preload="none">
+                <source src="vid/housemodel/houdini_high_gen.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="img-text">
+                    Chaotic procedural tile placement.</div>
+        </div>
+    </article>
+    <article>
+        <h2 class="post-title">
+            <label name="+" for="sg_improvements">+</label>Improvements<small></small>
+            <input id="sg_improvements" style="display:none" type="checkbox" onclick="showText(this)">
+        </h2>
+        <div style="display:none">
+            <p class="p2">
+                <b>Overall creation</b><br><br>
+                To take this a step further, should plenty of variations be needed, I would consider using
+                something like a houdini SOP network to generate houses from boxes or curves - see below for an example of
+                mesh generated using other meshes.
+            </p>
+            <video class="vid-log" controls preload="none">
+                <source src="vid/housemodel/house_gen.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div class="img-text">
+                    Basic generation of house using a SOP network.</div>
+
+            <p class="p2">
+                <b>Walls</b><br><br>
+                Adding more variations could markedly improve the look. The changes could probably be controlled by using houdini engine in
+                Unity/Unreal (I have
+                not tried to expose this functionality yet) to allow the designer to pick different wall variations by using a switch node, or directly in houdini
+                for different parts of the wall (a wall could be a window, damaged wall or other types, it
+                could also be randomized using a few rules plus a seed).
+                <br><br>
+                As for the wall textures I see two alternatives to my current solution:<br>
+                <ul class="ul-margin">
+                    <li>A) Use a shader with two different tilable materials, as well as a mask to define intersections. This would
+                        have
+                        been more fun to use and allow for more unique setups. since I don't know the
+                        limitations of mobile hardware enough I decided against it.</li><br>
+                    <li>B) Model imperfections and stick them on surfaces of the wall where seen fit. The upside is that
+                        there
+                        would be less wasted texture space, the downside that it would look the same as it currently does
+                        or possibly slightly worse.</li>
+                </ul>
+            </p>
+            <p class="p2">
+                <b>Roof</b><br><br>
+                A better option would have been to generate curves along the base roof mesh (see image below) to
+                place tiles along for the high poly version as described by
+                <a href="https://80.lv/articles/procedural-house-production/" target="_blank">Øyvind Fiksdal</a>.
+                My current solution used random scattering with a bit of relaxation on the points to prevent too
+                many overlaps, while Fiksdals solution would allow the panes to be placed realistically.<br><br>
+                Another option to make the solution a bit more cohesive and give designers more control would be to
+                use modular systems similar to that of the walls, downside being that this would be more stiff and would not
+                allow for more 'fun' shapes.
+
+                <center>
+                    <img class="img-log" src="img/housemodel/roof_tiles_lines.png" alt="beam" loading="lazy">
+                </center>
+                <div class="img-text">Procedurally generated curves for tile placements.</div>
+            </p>
+            
+            <p class="p2">
+                Lastly the roof could have used some some moss to feel more alive. I could have added this by scattering points on
+                the mesh
+                using either painted mask or detect crevices in the high poly mesh and using a perlin noise to
+                further
+                subract and create decent looking patterns for placements.
+                <br><br>
+
+                <!-- 
+                The weakness I recognize in my capabilities is clearly that I have limited experience with
+                modern
+                texturing solutions such as substance painter/designer, and no experience with 3ds Max
+                which I am
+                aware
+                you use in your pipeline. What I can already offer while I get up to speed and learn to use these tools effectively, is a skillset
+                that is more technical. I might be able to assist other artists by improving the pipeline. I've
+                made a
+                few tools to deal with both pipeline improvements (for level design) and asset management (batch
+                renaming and moving files for example) and I have some knowledge of shaders.</p> -->
+
+
+        </div>
+    </article><br>
+</body>
+</p>
+</article>
+</body>

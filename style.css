@@ -126,6 +126,10 @@ p, ul, ol, article {
   margin-bottom: .6em;
 }
 
+.ul-margin{
+  margin-left: 100px;
+}
+
 .p2 {
   /* max-width: 60ch; /* Limit line-length to 60 characters */
   margin-bottom: .6em;
@@ -135,6 +139,17 @@ p, ul, ol, article {
 
 .img-log{
   margin-left: 50px;
+  margin-right: auto;
+  width: 100%
+}
+
+.vid-log{
+  margin-left: 50px;
+  margin-right: auto;
+  width: 100%
+}
+
+.vid-log2{
   margin-right: auto;
   width: 100%
 }
@@ -219,7 +234,12 @@ hr {
   opacity: .1;
   /* margin: 1.2em 0; */
   margin: auto;
+  margin-left: 50px
   width: 30%;
+}
+
+.hr-margin {
+  margin-left: 100px;
 }
 
 abbr {
@@ -355,7 +375,7 @@ section:target iframe {
 a[href*="//"]:after { 
   font-weight: 300;
   font-size: .85em;
-  content: "\2197"; /* top right arrow: ↗ */
+  /*content: "\2197";  top right arrow: ↗ */
   color: var(--textcolor);
   opacity: .25;
 }
