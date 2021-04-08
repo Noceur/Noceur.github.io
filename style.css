@@ -6,6 +6,9 @@
   --bgcolor: #fff;
   --highlight: #2749c9;
 
+  /* time needed to fade things in */
+  --fadetime: .4s;
+
 }
 
 @media (prefers-color-scheme: dark) {
@@ -51,7 +54,7 @@ section:target { /* Show section */
 }
 
 section#home { /* Show #home by default */
-  display: block;
+  /* display: block; */
 }
 
 /* ------- Header ------- */
@@ -146,12 +149,12 @@ p, ul, ol, article {
 .vid-log{
   margin-left: 50px;
   margin-right: auto;
-  width: 100%
+  width: 100%;
 }
 
 .vid-log2{
   margin-right: auto;
-  width: 100%
+  width: 100%;
 }
 
 .img-text {
@@ -234,7 +237,7 @@ hr {
   opacity: .1;
   /* margin: 1.2em 0; */
   margin: auto;
-  margin-left: 50px
+  margin-left: 50px;
   width: 30%;
 }
 
@@ -354,6 +357,12 @@ figure.video {
   padding-bottom: 56.25%; /* 16:9 */
   height: 0;
   overflow: hidden;
+}
+
+iframe{
+  width: 0;
+  height: 0;
+  display: none;
 }
 
 figure.video iframe, figure.video object, figure.video embed {
@@ -596,4 +605,139 @@ article time {
     object-fit: contain;
   }
     
+}
+
+/* Fade animations */
+
+#fade_text p {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+#fade_text h2 {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+#fade_text a {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+#fade_text img {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+#fade_text video {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+#fade_text h1 {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+#fade_text tr {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+#fade_text section {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+#fade_text article {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+#fade_text body {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
+@keyframes fadein {
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-moz-keyframes fadein { /* Firefox */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity:1;
+  }
+}
+@-o-keyframes fadein { /* Opera */
+  from {
+      opacity:0;
+  }
+  to {
+      opacity: 1;
+  }
 }

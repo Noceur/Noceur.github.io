@@ -25,7 +25,6 @@
 </head>
 
 <body>
-
     <header>
         <h1>
             <a href="index.html#home">0xDEADBEEF</a>
@@ -38,21 +37,24 @@
             <!-- <a href="index.html#portfolio">Portfolio</a> -->
         </nav>
     </header>
-
+    
+    <div id="fade_text">
+    
     <main>
-
+        
         <!-- home -->
         <section id="home">
             <!-- HOME -->
-
+            <p>
             *Crickets*
             <br><br>
             Page will hopefully at some point be properly filled, for now you will have to enjoy the speed that a mostly
             empty page without a bunch of unnecessary JS libraries can load! You might be able to find a bit of content
             over at the
             <a href="index.html#log">log.</a>
+        </p>
         </section>
-
+        
         <!-- archive -->
         <section id="archive">
             <!-- Projects -->
@@ -164,7 +166,7 @@
                         below is a video, excuse the poor quality.
                         <br><br>
 
-                        <video controls preload="none">
+                        <video class="vid-log2" controls preload="none">
                             <source src="vid/log/6/cube_placements.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -173,7 +175,7 @@
                         I have also had time to explore the labs tools for building trees and they seem real neat! Below
                         is a tree set up to generate along a curve.<br><br>
 
-                        <video controls preload="none">
+                        <video class="vid-log2" controls preload="none">
                             <source src="vid/log/6/viewport_tree.mp4" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -387,11 +389,10 @@
         </section>
 
         <!-- House project -->
-        <section id="housemodel2">
+        <section id="housemodel">
             <!-- ANOTHER PAGE -->
                 <iframe src="housemodel.html" onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
                <p>
-                <a href="index.html">← back</a>
             </p>
 
         </section>
@@ -457,6 +458,7 @@
         class="lightbox" id="img-15"><img loading="lazy" alt="" src="./index_files/bbb(5)"></a><!-- Other images --><a
         href="index.html#about" class="lightbox" id="img-about"><img loading="lazy" alt=""
             src="./index_files/bbb(8)"></a></div>
-</body>
+        </div>
+        </body>
 
 </html>
