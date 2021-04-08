@@ -2,9 +2,11 @@
   
   /* Color scheme */
   
-  --textcolor: #121212;
-  --bgcolor: #fff;
-  --highlight: #2749c9;
+  --textcolor: #dadada;
+  --titlecolor: #777777;
+  --titlecolorHilight: #dadada;
+  --bgcolor: #141414;
+  --highlight: #ffc400;
 
   /* time needed to fade things in */
   --fadetime: .4s;
@@ -18,6 +20,8 @@
     --titlecolorHilight: #dadada;
     --bgcolor: #141414;
     --highlight: #ffc400;
+
+    --fadetime: .4s;
   }
 }
 
@@ -176,7 +180,7 @@ table {
 } 
 
 tr.proj{
-  height: 50px;
+  height: 25px;
 }
 
 th,td {
