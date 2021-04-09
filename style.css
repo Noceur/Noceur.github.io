@@ -713,6 +713,16 @@ article time {
   -o-animation: fadein var(--fadetime); /* Opera */
 }
 
+#fade_text .img-text {
+  /* margin-top: 25px;
+  font-size: 21px;
+  text-align: center; */
+  animation: fadein var(--fadetime);
+  -moz-animation: fadein var(--fadetime); /* Firefox */
+  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+  -o-animation: fadein var(--fadetime); /* Opera */
+}
+
 @keyframes fadein {
   from {
       opacity:0;
