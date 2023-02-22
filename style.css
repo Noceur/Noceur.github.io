@@ -800,6 +800,7 @@ article time {
 details {
     padding: 5px 0vw .8vw 2vw;
     user-select: none;
+    user-select: text !important;
     /* background-color: var(titlecolor); */
     /* border: 2px solid var(--highlight);
     border-radius: 3px; */
