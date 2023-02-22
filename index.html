@@ -17,10 +17,13 @@
     <meta name="twitter:card" content="summary_large_image">
 
     <!-- stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <link href="style.css" rel="stylesheet">
+    <link href="packages/prism/prism.css" rel="stylesheet" />
 
     <!-- Basic script functionality -->
     <script src="basic.js"></script>
+    <script src="packages/prism/prism.js"></script>
+
 
 </head>
 
@@ -32,8 +35,8 @@
         </h1>
         <nav>
             <a href="#log">Log</a>
-            <a href="#archive">Project archive</a>
-            <a href="#resume">Résumé</a>
+            <!-- <a href="#archive">Project archive</a> -->
+            <a href="#contact">Contact</a>
             <!-- <a href="#photos">Photos</a> -->
             <!-- <a href="#portfolio">Portfolio</a> -->
         </nav>
@@ -47,15 +50,15 @@
         <section id="home">
             <!-- HOME -->
             <p>
-            <b>Generic title.</b>
+            <!-- <b>Generic title.</b> -->
+            This site exists for me to keep a digital logbook and share some of my projects, the website itself being one of them. <br>
+            Currently it is missing most of my projects but 2023 is the year that changes.
             <br><br>
-            A site existing for me to keep a digital logbook and share some of my projects, this website being one of them. 
-            Hopefully I will at some point actually get around to filling it out with details in early 2023.
-
-            The goal with the website was minimal JS, no libraries and extremely light weight (currently barebone html, css and js together consumes &#60;20kb). 
-            Enjoy a so far mostly empty but performant page!
+            The goal with the website project itself was minimal JS, no libraries and extremely light weight 
+            (currently barebone html, css and js together consumes &#60;20kb) while still looking nice. <br>
+            Enjoy the so far mostly empty but very performant page!
             <br><br>
-            You'll find information about some of my projects over at the <a href="index.html#log">log</a> for now.
+            You'll find information about some of my smaller projects over at the <a href="index.html#log">log</a> for now.
         </p>
         </section>
         
@@ -63,7 +66,8 @@
         <section id="archive">
             <!-- Projects -->
 
-            <p>This is the archive page, page will contain old projects once completed, until then feel free to ask me about them.
+            <p>This is the archive page, it will contain old projects once completed. Until then feel free to reach out and send me a <a href="mailto:m.mellhage@gmail.com">email</a> 
+                if you wish to know more.
             <br>
 
             <h1 class="project-title">
@@ -146,23 +150,6 @@
             <!-- Log entries -->
             <!-- For images make sure to use the <code> loading="lazy" </code> attribute, so they get loaded only when needed. -->
 
-            <article>
-                <!-- TITLE -->
-                <h2 class="post-title"> <label name="+" for="7">+</label>stuff<small>
-                        <time datetime="17-01-2023">17-01-2023</time>
-                    </small>
-                    <input id="7" style="display:none" type="checkbox" onclick="showText(this)">
-                </h2>
-
-                <!-- CONTENT -->
-                <div style="display:none">
-                    <p class="p2">
-                        test commit
-                    </p>
-                    <br>
-
-                </div>
-            </article>
 
             <article>
                 <!-- TITLE -->
@@ -387,7 +374,7 @@
             <!-- PORTFOLIO -->
 
             <div class="slides">
-                <figure><img loading="lazy" alt="" src="./index_files/bbb(4)"></figure>
+                <figure><img loading="lazy" alt="" src="./index_files/bbb(4)"></figure
                 <figure><img loading="lazy" alt="" src="./index_files/bbb(5)"></figure>
                 <figure><img loading="lazy" alt="" src="./index_files/bbb(4)"></figure>
                 <figure>
@@ -418,6 +405,34 @@
 
         </section>
 
+        <!-- House project -->
+        <section id="template">
+            <!-- ANOTHER PAGE -->
+                <iframe src="template.html" onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
+               <p>
+            </p>
+
+        </section>
+
+        <!-- House project -->
+        <section id="100daysoftechart">
+            <!-- ANOTHER PAGE -->
+                <iframe src="100daysoftechart.html" onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
+               <p>
+            </p>
+
+        </section>
+
+        <!-- Showcase for Jagex -->
+        <section id="jagex">
+            
+            <!-- ANOTHER PAGE -->
+                <iframe src="jagex.html" onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
+               <p>
+            </p>
+
+        </section>
+
         <!-- unrealGJ -->
         <section id="unrealGJ">
             <!-- ANOTHER PAGE -->
@@ -429,11 +444,10 @@
 
         </section>
 
-        <!-- resume -->
-        <section id="resume">
+        <!-- contact -->
+        <section id="contact">
             <!-- HOME -->
-
-            <p>Expected a CV did you? <br>For now please take a look at my <a href="https://de.linkedin.com/in/mellhage">LinkedIn</a> or send me a <a href="mailto:m.mellhage@gmail.com">email.</a></p>
+            Best way of reaching me right now is either through <a href="https://de.linkedin.com/in/mellhage">LinkedIn</a> or by sending me a <a href="mailto:m.mellhage@gmail.com">email.</a></p>
 
         </section>
 

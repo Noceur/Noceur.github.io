@@ -141,8 +141,15 @@ p, ul, ol, article {
   /* max-width: 60ch; /* Limit line-length to 60 characters */
   margin-bottom: .6em;
   margin-left: 50px;
-  margin-block-start: 30px;
+  margin-block-start: 15px;
 }
+
+.h2 {
+    /* max-width: 60ch; /* Limit line-length to 60 characters */
+    margin-bottom: .6em;
+    margin-left: 50px;
+    margin-block-start: 30px;
+  }
 
 .img-log{
   margin-left: 50px;
@@ -243,6 +250,12 @@ hr {
   margin: auto;
   margin-left: 50px;
   width: 30%;
+}
+
+/* Solid border */
+hr.solid {
+    border-top: 3px solid #bbb;
+    width: 100%;
 }
 
 .hr-margin {
@@ -565,6 +578,18 @@ article time {
   z-index: 4;
 }
 
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: red;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+  }
+
 /* ------- Smaller screens ------- */
 
 @media only screen and (max-width: 680px) {
@@ -723,6 +748,8 @@ article time {
   -o-animation: fadein var(--fadetime); /* Opera */
 }
 
+
+
 @keyframes fadein {
   from {
       opacity:0;
@@ -754,4 +781,110 @@ article time {
   to {
       opacity: 1;
   }
+}
+
+@keyframes fadeout {
+    from {
+        opacity:1;
+    }
+    to {
+        opacity:0;
+    }
+  }
+
+
+
+
+
+
+details {
+    padding: 5px 0vw .8vw 2vw;
+    user-select: none;
+    /* background-color: var(titlecolor); */
+    /* border: 2px solid var(--highlight);
+    border-radius: 3px; */
+    max-width: 100%;
+}
+
+details>summary div.icon {
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s;
+    font-weight: 800;
+    /* margin-left: auto; */
+    color: var(--highlight)
+}
+
+details[open] summary div.icon {
+    transform-origin: bottom;
+    /* transform-origin: 10px 3px; */
+    transform: rotate(45deg);
+    /* animation: fadeout var(--fadetime); */
+    /* color: rgba(0, 0, 0, 0);  */
+}
+
+summary {
+    padding-left: 1.6em;
+    display: flex;
+    cursor: pointer;
+    font-weight: 600;
+    /* background-color: var(--titlecolor); */
+  }
+
+summary h2{
+    color: var(--titlecolor);
+}
+
+details[open] h2{
+    /* transform: rotate(180deg); */
+    /* animation: fadeout var(--fadetime); */
+    color: var(--titlecolorHilight);
+    transform: translateX(5px);
+ }
+
+ details[open] details-content{
+    animation: fadein var(--fadetime);
+    /* color: red; */
+ }
+
+ details[closed] details-content{
+    /* color: blue; */
+}
+
+details-content div{
+    padding: 0vw 0vw 0vw 1.3em;
+}
+
+details-content p{
+    padding-left: 3em;
+}
+
+details-content h2{
+    padding: 0vw 0vw 0vw 3em;
+}
+
+details-content h1{
+    padding: 0vw 0vw 0vw 3em;
+}
+
+details-content ul{
+    padding: 0vw 0vw 0vw 5em;
+}
+
+
+details-content img{
+    padding: 0vw 0vw 0vw 3em;
+}
+
+
+  summary::-webkit-details-marker {
+    display: none;
+  }
+
+  #fade_text .details {
+    animation: fadein var(--fadetime);
+    -moz-animation: fadein var(--fadetime); /* Firefox */
+    -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
+    -o-animation: fadein var(--fadetime); /* Opera */
+    animation: fadeout var(--fadetime);
 }
