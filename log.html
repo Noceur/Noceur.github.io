@@ -1,0 +1,195 @@
+
+<!-- Log entries -->
+<!-- For images make sure to use the <code> loading="lazy" </code> attribute, so they get loaded only when needed. -->
+
+<div>
+    <script src="packages/prism/prism.js"></script>
+
+
+<article>
+    <!-- TITLE -->
+    <h2 class="post-title"> <label name="+" for="6">+</label>Houdini & More - Mucking about<small>
+            <time datetime="02-02-2021">02.02.2021</time>
+        </small>
+        <input id="6" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+
+    <!-- CONTENT -->
+    <div style="display:none">
+        <p class="p2">Spent a few days testing out various tools and aspects of Houdini both for placements
+            and basic mesh generating, as a friend and I are currently prototyping a game in a desert
+            environment I've been hoping to be able to output a lot more in lesser time by sprinkling rocks
+            and vegetion automatically.<br><br>
+
+            My current plan is to space bigger cliffs and similar in the center with a bunch of smaller
+            intersecting cliffs around them and rocks below as seen below. The red cubes are automatically
+            placed using a mask created by curvature, slope and height of the terrain while the yellow
+            surrounding cubes are placed using the red cubes as source points. The purple on the other hand
+            is generated surrounding the first mask which created the red cubes, not the best explanation so
+            below is a video, excuse the poor quality.
+            <br><br>
+
+            <video class="vid-log2" controls preload="none">
+                <source src="vid/log/6/cube_placements.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <br><br>
+            I have also had time to explore the labs tools for building trees and they seem real neat! Below
+            is a tree set up to generate along a curve.<br><br>
+
+            <video class="vid-log2" controls preload="none">
+                <source src="vid/log/6/viewport_tree.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <br><br>
+            Furthermore some time was spent getting accustomed to ZBrush as well as trying out quixel mixer
+            for texturing, definitely prefer this way of texturing over how I learned to do it manually with
+            photoshop. Hope to create a few more and refined pieces to use for cliffs in my terrain.
+
+            <br><br>
+            <center>
+                <img class="img-log" src="img/log/6/cliff.png" alt="Cliff" loading="lazy"><br>
+            </center>
+
+        </p>
+        <br>
+
+    </div>
+</article>
+
+<article>
+    <!-- TITLE -->
+    <h2 class="post-title">
+        <label name="+" for="5">+</label>Houdini - Basics<small>
+            <time datetime="20-01-2021">20.01.2021</time>
+        </small>
+        <input id="5" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+
+    <!-- CONTENT -->
+    <div style="display:none">
+        <p class="p2">As a level designer at Sandbox Interactive a few years back it drew me nuts how we at
+            first built the world, most every rock and tree were placed by hand in the method of one click =
+            one asset placed, it didn't seem very efficient use of our teams time or resources, eventually
+            we effectivized the process but a lot of time went down that down into manually building
+            everything by hand.
+            <br><br>
+            Scroll forward a couple years and I am better aware of how much our wrists could have been
+            spared, I just hope the majority of teams doing these types of tasks these days quickly come to
+            realize how helpful procedural scattering of objects can be as a first pass and I feel that I'm
+            myself yet only to scrape the barest surface.</p>
+        <br>
+
+    </div>
+</article>
+
+<article>
+    <!-- TITLE -->
+    <h2 class="post-title">
+        <label name="+" for="4">+</label>World Creator 2 - Desert dunes<small>
+            <time datetime="19-01-2021">19.01.2021</time>
+        </small>
+        <input id="4" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+
+    <!-- CONTENT -->
+    <div style="display:none">
+        <p class="p2">Made some desert dune heightmaps for a prototype game two of my friends and I wish to
+            experiment with, also got to try out the texturing and other surrounding features of WC2 but I
+            get a feeling I would rather do this kind of things in Houdini or other environments.
+            <br><br>
+        </p>
+        <center>
+            <img class="img-log" src="img/log/4/dunes.png" alt="Terrain" loading="lazy"><br>
+            <img class="img-log" src="img/log/4/dunes_2.png" alt="Terrain" loading="lazy"><br>
+        </center>
+
+    </div>
+</article>
+
+<article>
+    <!-- TITLE -->
+    <h2 class="post-title">
+        <label name="+" for="3">+</label>World creator 2 - Chile<small>
+            <time datetime="18-01-2021">18.01.2021</time>
+        </small>
+        <input id="3" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+
+    <!-- CONTENT -->
+    <div style="display:none">
+        <p class="p2">Used google earth to find interesting places to use as references, the biggest issue I
+            have is translating the scale of the real world to something that would be useful in a game,
+            something I will have to work on getting right.
+            <br><br>
+            Made a basic terrain with refereneces from a valley area in Chile. Also tried to use
+            openstreetmaps to import the terrain to use right away as a underlying basis but didn't turn out
+            so well at the first attempt, might have to revisit this unless I decide to use
+            <a href="https://www.youtube.com/watch?v=n8AL-_gkIZQ" target="_blank">Houdinis MapBox tool</a>
+            for these kind of things...
+            <br><br>
+            These are my terrain results so far:
+            <br><br>
+            <center>
+                <img class="img-log" src="img/log/3/chile_2.png" alt="Terrain" loading="lazy">
+                <div class="img-text">design.</div><br>
+                <img class="img-log" src="img/log/3/chile_3.png" alt="Terrain" loading="lazy">
+                <div class="img-text">Height, although the heights should be at least *2.</div><br>
+                <img class="img-log" src="img/log/3/chile.png" alt="Terrain" loading="lazy">
+                <div class="img-text">Current result, missing textures and the lakes are currently
+                    completely flat.</div>
+            </center>
+        </p>
+        <p class="p2">
+            Also considering I should get rid of the titles for the log entries, too lazy to consider what
+            to call them.</p>
+    </div>
+</article>
+
+<article>
+    <!-- TITLE -->
+    <h2 class="post-title">
+        <label name="+" for="2">+</label>World Creator 2 - Learning the ropes<small>
+            <time datetime="17-01-2021">17.01.2021</time>
+        </small>
+        <input id="2" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+
+    <!-- CONTENT -->
+    <div style="display:none">
+        <p class="p2">Started learning world creator 2 (hence referred to as WC2), goal is to use this as a
+            basis for a level design workflow, I from the sound of it WC3 should be releasing as a BETA in
+            February which should be great since it will allow for better world composition.
+            <br><br>
+            Either way my current planned leveldesign workflow is the following:<br>
+
+            WC2 Terrain -> Houdini for object placements and scripting support -> Unreal/Unity.</p>
+    </div>
+</article>
+
+<article>
+    <!-- TITLE -->
+    <h2 class="post-title">
+        <label name="+" for="1">+</label>git init website<small>
+            <time datetime="14-01-2021">14.01.2021</time>
+        </small>
+        <input id="1" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+
+    <!-- CONTENT -->
+    <div style="display:none">
+        <p class="p2">
+            Started building this website, intention is to keep it as light weight (and static) as possible and not include any unecessary libraries. Currently it is about 30kb of *.js, *.html and *.css, we'll see if it can be shaved down a bit further going forward.
+            <br><br>
+            Quite void of content but should be servicable enough for now.
+
+            <br>
+            <!-- <img src="./img/patagonia.jpg" alt="mountains" loading=lazy> -->
+
+            <br>
+            <br>
+        </p>
+    </div>
+</article>
