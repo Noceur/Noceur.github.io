@@ -17,7 +17,17 @@
     <!-- CONTENT -->
     <div style="display:none">
         <p class="p2">
-            Stuff
+            One of my recent experiments was that I wanted to generate a base shape for a rock/cliff using some primitives. 
+            The idea was to use a vellum solver to make a shrink wrap around the meshes to get the basic shape, and then apply some simple noises to make the shapes slightly more interesting.  
+            <br><br>
+            Finally there is a erosion system I put together using a fluid flip book solver as a test. I think a solution like this potentially could round off generated cliffs nicely, if the 
+            resolution of the mesh and particle sizes were adjusted - as it is now, the result is quite coarse.
+            <br><br>
+            <video class="vid-log2" controls preload="none">
+                <source src="vid/log/7/shrinkwrap_cliff.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
         </p>
         <br>
 
@@ -178,12 +188,15 @@
     <!-- CONTENT -->
     <div style="display:none">
         <p class="p2">Started learning world creator 2 (hence referred to as WC2), goal is to use this as a
-            basis for a level design workflow, I from the sound of it WC3 should be releasing as a BETA in
+            basis for a level design workflow. From the sound of it WC3 should be releasing as a BETA in
             February which should be great since it will allow for better world composition.
             <br><br>
-            Either way my current planned leveldesign workflow is the following:<br>
+            Either what I would like to explore is a workflow based on the following:<br>
 
-            WC2 Terrain -> Houdini for object placements and scripting support -> Unreal/Unity.</p>
+            WC Terrain -> Houdini for object placements, finer adjustments and scripting support -> Unreal/Unity.
+            <br><br>
+            For a proper production I suppose the whole Houdini aspect ought to be done with HDAs and Houdini Engine in the game engine or whatever is the editor of choice (Maya?).
+        </p>
     </div>
 </article>
 

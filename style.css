@@ -64,8 +64,6 @@ intro {
 
   -webkit-animation-delay: 10.1s;
   animation-delay: 10.1s;
-
-
 }
 
 section:target { /* Show section */
