@@ -1,0 +1,817 @@
+<div>
+    <script src="packages/prism/prism.js"></script>
+    <div id="test">
+    <!-- <div> -->
+    <!--<p>House writeup<br><br>-->
+    <p>
+        <!-- <b><center>Prelude</center></b> -->
+    </p>
+
+    <h2>Small showcase</h2>
+
+    Here are a few projects (professional and otherwise) that I think represent a little bit of my knowledge in lieu of a real portfolio, it has been curated with the role of an aspiring tech artist in mind. 
+    I have spent most of my career as a sort of technical level designer, and I think there is a decent amount of overlap with this role, and that my insights into 
+    working as a designer enhance my ability to work as the glue between disciplines.
+    <br><br>
+    (If any video looks like its stuck loading just press play anyway).<br>
+    <br><br>
+
+   
+    <article>
+        <h2 class="post-title">
+            <label name="+" for="tshowcase_1">+</label>Tools<small></small>
+            <input id="tshowcase_1" style="display:none" type="checkbox" onclick="showText(this)">
+        </h2>
+        <div style="display:none">
+
+        <details>
+            <summary>
+                <div class="icon">+</div>
+                <h2>Maya rig batch exporter</h2>
+                <br>
+            </summary>
+            <details-content>
+                <div>
+                    <p>
+                        This tool was requested by the animator at one of the companies I worked for, the issue that needed to be solved 
+                        was that certain actions had to be constantly repeated each time a rig needed to be exported. 
+                        As a lot of rigs constantly needed changes a batch exporting tool was requested which removed certain bones, 
+                        the controls while keeping the users personal export settings intact.
+                        <br><br>
+                        The tool was made in Maya using Python and had export profiles saved in JSONs so the settings could easily be shared or 
+                        changed depending on what rig the animator was working on.
+                        <br>
+
+                        <center><img class="img" src="img/jagex/batch_exporter.png" alt="house mesh" loading="lazy" width="50%" height="50%"></center>
+                        <div class="img-text">Tool interface</div><br>
+                        <p>
+
+                        <br><br>
+                        <h1>Usage</h1>
+                        <p>
+                            <b>"Profile name":</b><br> The name for the specific export that is later shown in the dropdown to allow modifying the rules.<br>
+                            <br>
+                            <b>"Add objects to save":</b><br> Objects selected (and children) were added to a list, these were the objects to be exported for the specific profile. This was a additive option so any objects selected when clicking the button a second time were appended to the list.<br>
+                            <b>"Add objects to delete":</b><br> Objects to be excluded from the list i.e. certain bones or the rig controls.<br>
+                            <b>"Profile save location":</b><br> Where the fbx file should be exported to.<br>
+                            <b>"Wipe new profile data":</b><br> To wipe the current "save" and "delete" data from the profile if one wishes to set it up again.<br>
+            
+                            Next section dealt with the already saved profiles.
+                            <b>"Profile":</b><br> The active profile to use the commands below at.<br>
+                            <b>"Export profile objects":</b><br> 
+                    </p>
+                            <ul>
+                                <li>Ran the one selected profile<br> </li>
+                                <li>Creating a undo history save point to later return to<br> </li>
+                                <li>Selecting objects<br></li>
+                                <li>Deleting unwanted further objects<br> </li>
+                                <li>Saving user export settings<br> </li>
+                                <li>Setting fbx exporter to tool/company settings<br> </li>
+                                <li>Exporting file<br></li>
+                                <li>Recovering user settings and restoring scene to undo history point<br></li>
+                            </ul>
+                            <p>
+                                <br>
+                            <b>"Export all profile objects":</b> Ran the above for all created profiles in the specific JSON.<br>
+                            <b>"Select profile objects":</b> Selected all meshes in specific profile excluding and unwanted objects, used to figure out issues with profile.<br>
+                            <b>"Delete profile":</b> Self explanatory.
+                            <br><br>
+                            Settings actions section existed to save or load different profiles to a JSON.
+                            <br><br>
+                            Code:
+                            <pre><code class="language-python line-numbers">
+                                    import maya.cmds as cmds
+                                    import maya.mel as mel
+                                    import os
+                                    import json
+                                    import sys
+                                    import time
+                                    
+                                    
+                                    class MR_Window(object):
+                                        
+                                        def __init__(self):
+                                            self.deleteChildren         = True # Option for False is not yet completed. Need additional time.
+                                            self.debug                  = False
+                                            self.wipeProfileAfterSave   = False
+                                            self.window                 = "FBX batch exporter"
+                                            self.title                  = "FBX batch exporter"
+                                    
+                                            self.settingsFile           = "/scripts/MellhageExporter/settings.json"
+                                            self.settingsFile           = "F:/Windows_user_folders/Desktop/test.json"
+                                            
+                                            self.size                   = (200, 400)
+                                            self.activeProfile          = False
+                                            self.settings               = {'profiles': {}}
+                                            self.saveObjs               = []
+                                            self.delObjs                = []
+                                            self.UndoInfo               = ""
+                                            self.lastSaveLocation       = ""
+                                            
+                                            self.restartWindow()
+                                            self.setupLayout()
+                                            if self.debug == True:
+                                                self.loadSettings()
+                                                    
+                                            
+                                        def exportObjs(self, multiExport=False):
+                                            if not multiExport:
+                                                self.setActiveProfile()
+                                            getFBXSettings()
+                                            try:
+                                                print ("settings: \n\t", self.settings)
+                                                print ("activeProfile: \n\t", self.activeProfile)
+                                                undoChunkOpen()
+                                                print ("delete objs: \n\t", self.activeProfile['delObjs'])
+                                                self.deleteObjs()
+                                                print ("save objs: \n\t", self.activeProfile['objs'])
+                                                self.selectObjs()
+                                                exportFBX(self.activeProfile['path']) 
+                                            except Exception as e:
+                                                print (e)
+                                                print ("PS. Run maya in admin mode.")
+                                            finally:
+                                                undoChunkOpen(False)
+                                                setFBXSettings()
+                                                pass
+                                            cmds.undo()
+                                            self.deselectObjs()
+                                                
+                                    
+                                        def exportAllObjs(self, *args):
+                                            originalProfile = self.activeProfile
+                                            try:
+                                                for profileEntry in self.settings['profiles'].keys():
+                                                    print ("")
+                                                    print (profileEntry)
+                                                    self.activeProfile = self.settings['profiles'][profileEntry]
+                                                    self.exportObjs(True)
+                                            except Exception as e:
+                                                print (e)
+                                                pass
+                                            self.activeProfile = originalProfile
+                                    
+                                    
+                                        def setActiveProfile(self, *args):
+                                            profileName = cmds.optionMenu(self.profileMenu, query = True, value = True)
+                                            self.activeProfile = self.settings['profiles'][profileName]
+                                    
+                                    
+                                        def selectObjs(self, *args):
+                                            if self.activeProfile:
+                                                mySel = cmds.ls(self.activeProfile['objs'])
+                                                cmds.select(mySel, hi=True)
+                                            else:
+                                                print ("no active profile")
+                                    
+                                    
+                                        def removeMenuItems(self, *args):
+                                            profiles = cmds.optionMenu(self.profileMenu, query = True, ill = True)
+                                            if profiles:
+                                                for profile in profiles:
+                                                    cmds.deleteUI(profile)
+                                    
+                                    
+                                        def initializeMenuItems(self, *args):
+                                            profiles = self.settings['profiles'].keys()
+                                            for entry in profiles:
+                                                cmds.menuItem(label=entry, parent=self.profileMenu)
+                                                
+                                    
+                                        def updateProfileItems(self, *args):
+                                            deletedItems = []
+                                            newItems = []
+                                            
+                                            profiles = self.settings['profiles'].keys()
+                                            
+                                            menuItems = cmds.optionMenu(self.profileMenu, query=True, ils=True)
+                                            menuItemNames = []
+                                            
+                                            for item in menuItems:
+                                                itemName = cmds.menuItem(item, query=True, l=True)
+                                                menuItemNames.append(itemName)
+                                                
+                                            print ("Profiles:")
+                                            print (profiles)
+                                            print ("MenuItemNames:")
+                                            print (menuItemNames)
+                                                    
+                                            for item in profiles:
+                                                if item in menuItemNames:
+                                                    print ("found")
+                                            
+                                    
+                                        def wipeState(self, *args):
+                                            cmds.textFieldGrp(self.profileName, e=True, text="")
+                                            self.saveObjs = []
+                                            self.delObjs  = []
+                                            
+                                    
+                                        def deleteProfile(self, *args):
+                                            # If True passed into args[0] it skips prompt
+                                            profileName = cmds.optionMenu(self.profileMenu, query = True, value = True)
+                                            targetProfileIndex = cmds.optionMenu(self.profileMenu, query = True, sl = True)
+                                            profiles    = cmds.optionMenu(self.profileMenu, query = True, ill = True)
+                                            if profiles and targetProfileIndex:
+                                                if args[0] == False:
+                                                    result = cmds.confirmDialog( title='Confirm', message='Are you sure you wish to delete profile "'+profileName+'"?', button=['Yes','No'], defaultButton='Yes', cancelButton='No', dismissString='No')
+                                                    if not result == "Yes":
+                                                        return
+                                                if profileName in self.settings['profiles']:
+                                                    targetProfileIndex -= 1
+                                                    cmds.deleteUI(profiles[targetProfileIndex])
+                                                    del self.settings['profiles'][profileName]
+                                                    print ("Profile data after delete:")
+                                                    print (self.settings['profiles'])
+                                    
+                                        
+                                        def deselectObjs(self, *args):
+                                            cmds.select(cl=True)
+                                    
+                                    
+                                        def loadSettings(self, *args):
+                                    
+                                    
+                                            try:
+                                                singleFilter = "JSON (*.json)"
+                                                fPath = cmds.fileDialog2(fm=1, fileFilter=singleFilter)
+                                                fEnding = fPath[0].split(".")[-1]
+                                                if (fEnding == "json"):
+                                                    self.settings = loadJson(fPath[0])
+                                                    self.postLoad()
+                                                    return True
+                                                print ("Not a json file.")
+                                                return False
+                                            except Exception as e:
+                                                print ("Failed to load settings file")
+                                                print (e)
+                                                return False
+                                            
+                                    
+                                        def postLoad(self, *args):
+                                            self.removeMenuItems()
+                                            self.initializeMenuItems()
+                                            self.setActiveProfile()
+                                    
+                                    
+                                        def saveSettings(self, *args):
+                                            singleFilter = "JSON (*.json)"
+                                            fPath = cmds.fileDialog2(fm=0, fileFilter=singleFilter)[0]
+                                            if fPath:
+                                                saveJson(fPath, self.settings)
+                                                   
+                                    
+                                        def saveProfile(self, *args):
+                                            # Perform checks
+                                            profile = cmds.textFieldGrp(self.profileName, query=True, text=True)
+                                            if not self.saveProfileCheck(profile):
+                                                return
+                                    
+                                            fPath = self.getSaveProfileSaveLocation(profile)
+                                    
+                                            if fPath:
+                                                self.settings['profiles'][profile] = {}
+                                                self.settings['profiles'][profile]['objs']    = self.saveObjs
+                                                self.settings['profiles'][profile]['delObjs'] = self.delObjs
+                                                self.settings['profiles'][profile]['path']    = fPath
+                                                cmds.menuItem(label=profile, parent=self.profileMenu)
+                                                self.setActiveProfile()
+                                            
+                                            if self.wipeProfileAfterSave:
+                                                self.wipeState()
+                                    
+                                        def saveProfileCheck(self, profile):
+                                            if not self.saveObjs:
+                                                self.promptDialog("Warning", "No objects added to profile")
+                                                return False
+                                            if not profile:
+                                                self.promptDialog("Warning", "No profile name")
+                                                return False
+                                    
+                                            if profile in self.settings['profiles']:
+                                                if not self.promptDialog("Overwrite", "Do you wish to overwrite the existing profile?", ["Yes", "No"], "Yes", "No", "No"):
+                                                    return False
+                                                self.deleteProfile(True)
+                                                self.settings['profiles'].pop(profile, None)
+                                            return True
+                                    
+                                    
+                                    
+                                        def getSaveProfileSaveLocation(self, profile):
+                                            singleFilter = "FBX (*.fbx)"
+                                            if self.lastSaveLocation:
+                                                SaveLocList = self.lastSaveLocation.split("/")
+                                                del SaveLocList[-1]
+                                                SaveLoc = "/".join(SaveLocList)
+                                                SaveLoc += "/" + profile
+                                                print ("Expected preferred save location:")
+                                                print (SaveLoc)
+                                                fPath = cmds.fileDialog2(fm=0, fileFilter=singleFilter, startingDirectory=SaveLoc)[0]
+                                            else:
+                                                saveLoc = "./" + profile
+                                                fPath = cmds.fileDialog2(fm=0, fileFilter=singleFilter, startingDirectory=saveLoc)[0]
+                                            self.lastSaveLocation = fPath
+                                            return fPath
+                                        
+                                    
+                                        def setupLayout(self, *args):
+                                            self.window = cmds.window(self.window, title=self.title, widthHeight=self.size)
+                                            cmds.columnLayout(adjustableColumn = True)
+                                            cmds.separator(height=10)
+                                            
+                                            cmds.text("Create profile")
+                                            self.profileName    = cmds.textFieldGrp(label='profile name:', height=30)
+                                            self.saveObjsBtn    = self.makeBtn("Add Objects to Save",   self.addSaveObjs)
+                                            self.deleteObjsBtn  = self.makeBtn("Add Objects to Delete", self.addDeleteObjs)
+                                            self.saveProfileBtn = self.makeBtn("Profile Save Location", self.saveProfile)
+                                            self.wipeStateBtn   = self.makeBtn("Wipe New profile Data", self.wipeState)
+                                            cmds.separator(height=10)
+                                    
+                                            cmds.text("Action on existing profile", height=20)
+                                            self.profileMenu = cmds.optionMenu(label='profile: ', changeCommand=self.setActiveProfile)
+                                            self.exportBtn        = self.makeBtn("Export profile objects",      self.exportObjs)
+                                            self.exportAllBtn     = self.makeBtn("Export all profile objects", self.exportAllObjs)
+                                            self.selectBtn        = self.makeBtn("Select profile objects",     self.selectObjs)
+                                            self.deleteProfileBtn = self.makeBtn("Delete profile",             self.deleteProfile)
+                                            cmds.separator(height=10)
+                                            
+                                            cmds.text("settings actions")
+                                            self.loadSettingsBtn = self.makeBtn("Load settings", self.loadSettings)
+                                            self.saveSettingsBtn = self.makeBtn("save settings", self.saveSettings)
+                                            cmds.separator(height=10)
+                                            
+                                            if(self.debug):
+                                                cmds.text("debug menu")
+                                                self.testCommandBtn1 = self.makeBtn("testMenuItems", self.wipeState)
+                                                self.testCommandBtn2 = self.makeBtn("addDeleteObjs", self.addDeleteObjs)
+                                                self.testCommandBtn3 = self.makeBtn("addSaveObjs",   self.addSaveObjs)
+                                                self.testCommandBtn4 = self.makeBtn("deleteObjs",    self.deleteObjs)
+                                                self.testCommandBtn6 = self.makeBtn("WarningTest",   self.debugtestWarning)         
+                                                self.testCommandBtn10 = self.makeBtn("parenttest",        self.deleteParentKeepChildren)            
+                                    
+                                    
+                                            cmds.showWindow()        
+                                            
+                                        def makeBtn(self, *args):
+                                            cmds.separator(height=2, style="none")
+                                            self.loadSettingsBtn = cmds.button(label=args[0], command=args[1])
+                                    
+                                    
+                                        # Not done yet
+                                        def deleteParentKeepChildren(self, *args):
+                                            delItems = ["pSphere1", "pSphere2"]
+                                            for item in delItems:
+                                                grandParent = cmds.listRelatives(item, parent=True)[0]
+                                                # if not grandparent use w=True
+                                                childrenList = cmds.listRelatives(item, children=True)
+                                                #print (grandParent)
+                                                for child in childrenList:
+                                                    #print(child)
+                                                    cmds.parent(child, w=True)
+                                                    cmds.parent(child, grandParent)
+                                                cmds.delete(item)
+                                    
+                                    
+                                    
+                                    
+                                        def addDeleteObjs(self, *args):
+                                            self.delObjs += cmds.ls(selection=True)
+                                            self.delObjs = list(set(self.delObjs))
+                                            print ("Deleting objects:")
+                                            print (self.delObjs)
+                                            
+                                        def promptDialog(self, title, message, buttons=[], defaultButton="Yes", cancelButton="No", dismissString="No"):
+                                            result = cmds.confirmDialog( title=title, message=message, button=buttons, defaultButton=defaultButton, cancelButton=cancelButton, dismissString=dismissString)
+                                            if result == defaultButton:
+                                                return True
+                                            cmds.warning(message)
+                                            return False
+                                    
+                                    
+                                        def addSaveObjs(self, *args):
+                                            self.saveObjs += cmds.ls(selection=True)
+                                            self.saveObjs = list(set(self.saveObjs))
+                                            print ("Saving objects:")
+                                            print (self.saveObjs)
+                                            
+                                    
+                                        def deleteObjs(self, *args):
+                                            if self.activeProfile:
+                                                mySel = cmds.ls(self.activeProfile['delObjs'])
+                                                mySel2 = cmds.select(mySel, hi=self.deleteChildren)
+                                                print (mySel)
+                                                print (mySel2)
+                                                cmds.delete()
+                                            else:
+                                                print ("no active profile")
+                                            
+                                    
+                                        def restartWindow(self, *args):
+                                            #delete window if exists
+                                            wName = self.window.replace(" ", "_")
+                                            if cmds.window(wName, exists = True):
+                                                cmds.deleteUI(wName)
+                                                 
+                                    
+                                    
+                                        def debugtestWarning(self, *args):
+                                            print (self.promptDialog("test title", "message", ["Yes", "No"], "Yes", "No", "No")    )      
+                                            print (self.promptDialog("test title", "message")   )
+                                            
+                                    
+                                    def undoChunkOpen(open=True):
+                                        # opens and closes a undo section
+                                        if not open:
+                                            print ("Undo chunk closed")
+                                            cmds.undoInfo(chunkName="state", closeChunk=True)
+                                            return
+                                        print ("Undo chunk opened")
+                                        cmds.undoInfo(chunkName="state", openChunk=True)
+                                    
+                                    
+                                    def saveJson(path, data):
+                                        print ("saving json file")
+                                        with open(path, 'w') as outfile:
+                                            json.dump(data, outfile)
+                                        
+                                    
+                                    def loadJson(path):
+                                        with open(path, "r") as json_file:
+                                            return json.load(json_file)
+                                    
+                                    
+                                    def getFBXSettings():
+                                        # get current user settings for FBX export and store them
+                                        mel.eval('FBXPushSettings;')
+                                    
+                                    
+                                    def setFBXSettings():
+                                        # set user-defined FBX settings back after export
+                                        mel.eval('FBXPopSettings;')
+                                    
+                                    def exportFBX(exportFileName, min_time=False, max_time=False):
+                                        # export selected as FBX
+                                    
+                                        # store current user FBX settings
+                                        getFBXSettings()
+                                    
+                                        # Geometry
+                                        mel.eval("FBXExportSmoothingGroups -v true")
+                                        mel.eval("FBXExportHardEdges -v false")
+                                        mel.eval("FBXExportTangents -v false")
+                                        mel.eval("FBXExportSmoothMesh -v true")
+                                        mel.eval("FBXExportInstances -v false")
+                                        mel.eval("FBXExportReferencedAssetsContent -v false")
+                                        mel.eval("FBXExportAnimationOnly -v false")
+                                        mel.eval("FBXExportBakeComplexAnimation -v true")
+                                        if not min_time == False:
+                                            mel.eval("FBXExportBakeComplexStart -v " + str(min_time))
+                                        if not max_time == False:
+                                            mel.eval("FBXExportBakeComplexEnd -v " + str(max_time))
+                                        mel.eval("FBXExportBakeComplexStep -v 1")
+                                        mel.eval("FBXExportUseSceneName -v false")
+                                        mel.eval("FBXExportQuaternion -v euler")
+                                        mel.eval("FBXExportShapes -v true")
+                                        mel.eval("FBXExportSkins -v true")
+                                        # Constraints
+                                        mel.eval("FBXExportConstraints -v false")
+                                        # Cameras
+                                        mel.eval("FBXExportCameras -v false")
+                                        # Lights
+                                        mel.eval("FBXExportLights -v false")
+                                        # Embed Media
+                                        mel.eval("FBXExportEmbeddedTextures -v false")
+                                        # Connections
+                                        mel.eval("FBXExportInputConnections -v false")
+                                        # Axis Conversion
+                                        mel.eval("FBXExportUpAxis y")
+                                        # Version
+                                        mel.eval("FBXExportFileVersion -v FBX201600")
+                                        mel.eval("FBXExportInAscii -v true")
+                                        cmds.file(exportFileName, exportSelected=True, type="FBX export", force=True, prompt=False)
+                                        # restore current user FBX settings
+                                        setFBXSettings()
+                                    
+                                    myWindow = MR_Window()
+                                    
+                                </code></pre><br>
+                            </p>
+                    </p>
+                </div>
+            </details-content>
+        </details>
+
+
+
+        <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>Asset manager</h2>
+                    <br>
+                </summary>
+                <details-content>
+                    <div>
+                        <p>
+                            Another issue that arose during Albions development was related to asset management, as each environmental prop had 9+ versions 
+                            (For different tiers + biome variations) plus meta files. Each time one asset needed to be moved this meant that the 
+                            artists had to go into 9 folders to rename 18 different files. The tool created allowed them to select one of the files and 
+                            input the new name. 
+                            <br>The tool would then return the suggested actions which the user could accept or deny and lastly 
+                            save all changes done to a logfile. The main challenge was that certain parts of some asset strings had to be excluded 
+                            so a lot of regex had to be applied to different parts of the folder structures.<br><br>
+
+                            <center><img class="img" src="img/jagex/AssetMover.png" alt="Screenshot of tool" loading="lazy"></center>
+                        </p>
+                    </div>
+                </details-content>
+            </details>
+
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>Level assembler</h2>
+                    <br>
+                </summary>
+                <details-content>
+                    <div>
+                        <p>
+                        This tool was created for Albion Online to improve the workflow of level designers, unfortunately I cannot share screenshots or videos of it but will
+                        provide a description of the issue and solution.
+                        <br>
+                        <h2>Background</h2>
+                        <p>
+    
+                        The game takes place in one single world without instancing, this is great for immersion but not so much for scalability without a 
+                        robust system. The game world consists of hundreds of 1x1km maps with loading zones in between, early during the games development 
+                        each of these maps were designed and built by hand, each asset placed by hand.<br><br>
+    
+                        As the game went through a phase of heavy growth (10x+ increase of playerbase) this was deemed to not be sustainable anymore.<br><br>
+                        
+                        <center><img class="img" src="img/jagex/old_style.jpg" alt="old setup" loading="lazy"></center>
+                        <div class="img-text">Old level setup</div>
+                        <p>
+    
+                        <h2>Templates and Layers</h2>
+                        <p>
+                        The solution to this was the creation of two systems: templates and layers.<br> 
+                        Templates purpose was to allow for levels to instead be assembled 
+                        by already built pieces of levels. The main component was what we called the "main template" which had slots for other templates but generally 
+                        not a lot of gameplay, it was the glue that tied the whole level together. Each main template also had layers baked in, these contained 
+                        variations of the levels as well as potential roads.<br><br>
+    
+                        <center><img class="img" src="img/jagex/main_template.png" alt="main template" loading="lazy"></center>
+                        <div class="img-text">Main template</div>
+                        <p>
+    
+                        <br><br>
+                        After that came the border templates, these also used the layer system which decided where each exit was located.<br><br>
+    
+                        <center><img class="img" src="img/jagex/border_templates.png" alt="border templates" loading="lazy"></center>
+                        <div class="img-text">Border templates</div>
+                        <p>
+    
+                        <br><br>
+                        The holes in the main template were what the majority of the content of the game took place:
+                        <ul>
+                            <li>Monster camps</li>
+                            <li>Castles & Guild territories</li>
+                            <li>Treasures</li>
+                            <li>Dungeon entrances</li>
+                            <li>Resource hotspots</li>
+                        </ul><br>
+    
+                        <center><img class="img" src="img/jagex/content_templates.jpg" alt="content templates" loading="lazy"></center>
+                        <div class="img-text">Content templates</div>
+                        <p>
+    
+                        <br><br>
+                        After that came roads, which existed to guide players to the different exits of the level, they were tied together with tiny 4x4 meter crossing 
+                        templates.
+    
+                        <br><br>
+                        The result was something like the following (minimap):<br><br>
+    
+                        <center><img class="img" src="img/jagex/minimap.png" alt="completed level minimap" loading="lazy"></center>
+                        <div class="img-text">Complete templated level</div>
+                        <p>
+    
+                        <br><br>
+                        <h1>The remaining problem and following solution</h1>
+                        <p>
+                        Our new system with templates and layers put us in a vastly improved position compared to our early fully hand-crafted solution. 
+                        The one remaining issue was that it wasn't fast enough to assemble the levels due to unity struggling with moving many thousands 
+                        of objects around at once to assemble the levels.<br><br>
+    
+                        The solution became a toolset I developed which fetched the location of all slots in a main template as well as the centerpoint 
+                        of each other template. The data was was dumped in a google sheet, one tab for the data and one for the assembler. <br>
+                        The level designer would be able to use dropdowns and see a preview of each template within the sheet. 
+                        It also used djikstras (pathfinding) alghoritm to decide the possible road setup layers depending on what exits were selected. <br>
+                        Finally the designer could select export to get a level JSON to add to the unity project. 
+                        The process going from 15-30 minutes to less than a minute while being a lot less error prone.  
+                        <br><br>     
+                        </p>
+                    </div>
+                </details-content>
+            </details>
+
+        </div>
+    </article>
+    <article>
+        <h2 class="post-title">
+            <label name="+" for="tshowcase_2">+</label>Houdini<small></small>
+            <input id="tshowcase_2" style="display:none" type="checkbox" onclick="showText(this)">
+        </h2>
+        <div style="display:none">
+            <!-- <b><center>Bullet points</center></b> -->
+            <p class="p2">
+            When I started my first job as a level designer we had a entirely manual approach to creating levels, each level handcrafted,
+            each stone and tree placed by hand one (or multiple) clicks at a time to the detriment of my wrists and sanity. After roughly half a year
+            I came to the conclusion that automation for placement and other such things were needed, I hadn't at that time come in contact with
+            idea of procedural workflows yet but if I had I would have tried solving our pain at that point already.
+            <br><br>
+            Fast forward a few years and I started playing around with Houdini, at first just for terrains but later for asset assembly and mesh generation.
+            I really think that the non-destructive nature that allows for easy revisions and ability to easily reuse and apply subnetworks/HDAs is an amazing
+            time saver while also ensuring a more even base level quality.
+        
+            <br><br>
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>Terrains & World creator</h2><br>
+                </summary>
+                <details-content>
+                    <div>
+                    <p>
+                    While houdini provideds great tools for scattering assets on heightfields and for very exact control
+                    the workflow and steps required to properly handle the heightfields themselves felt a bit lacking. 
+                    <br><br>
+                    <center><img class="img" src="img/jagex/houdini_heightfield_3.png" alt="Terrains generated in Houdini" loading="lazy"></center>
+                    <div class="img-text">Terrains generated in Houdini</div>
+                    <p>
+                    <br><br>
+                    As a result I looked into other options, and world creator seemingly being the most powerful tool. 
+                    The downside is however quite clear as it would add another package to the pipeline where there is less script 
+                    support or similar. Yet for certain projects I strongly believe a tool like it for the actual terrain generation 
+                    plus Houdini for base scattering of foliage and additional details (roads, rivers etc) would lead to great results.
+                    <br><br>
+                    <center><img class="img" src="img/jagex/world_creator_terrains.png" alt="terrains created in world creator" loading="lazy"></center>
+                    <div class="img-text">Terrains made in world creator 2022</div>
+                    <p>
+                    <br><br>
+                    Here I've taken the terrain created above in world creator and scattered some very simple meshes representing trees and generated a mesh 
+                    for a river. One of my current projects is looking into adjusting the terrain heightmap for rivers in Houdini instead of just taking the river 
+                    defined in WC, the reason being that it is easier to create cascading effects and procedurally placing particle effects among other things.
+                    <br><br>
+                    <center><img class="img" src="img/jagex/world_creator_scatter.png" alt="houdini scatter objects on terrain" loading="lazy"></center>
+                    <div class="img-text">Scattering of objects on terrain from world creator</div>
+                    <p>
+                    
+                    
+                    <br><br>
+                    Taking this workflow further I also imagine the best solution would be to output masks for each biome in world creator then using 
+                    the masks for asset placement rules in Houdini (or unreal/maya using Houdini engine).
+                    <br>
+
+
+                    </p>
+                    <br>
+                    <!-- <img class="img-log" src="img/face.jpg" alt="house mesh" loading="lazy">
+                    <div class="img-text">image text.</div><br> -->
+                </div>
+                </details-content>
+            </details>
+
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2> Powerlines & Cables</h2><br>
+                </summary>
+                <details-content>
+                <div>
+                    <p>
+                    The following is some experimentation at creating a cable and a powerline generator, the idea being that you can draw a curve on a terrain,
+                    drag a few sliders and have it output both the powerlines and remove the bigger foliage that wouldn't be allowed to exist in proximity.
+                    <br><br>
+                    
+
+                    <video class="vid-log2" controls preload="none">
+                            <source src="vid/jagex/pole_generator.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                    </video><br><br>
+
+                    Here the trees have been extracted by the same curve used to generate the powerlines.<br>
+
+                    <center><img class="img" src="img/jagex/pole_subtraction_trees.png" alt="Terrain with trees subtracted by tools" loading="lazy"></center>
+                    <p>
+                    <br><br>
+
+                    The next step would be to add a wire solver to create the wires. I already completed the solver solution but need a way of 
+                    identifying what points on the lines are attached to the poles, something to explore in the future.
+
+                    <video class="vid-log2" controls preload="none">
+                            <source src="vid/jagex/wires.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                    </video><br>
+
+                    
+                    
+                    
+                    </p>
+                </div>
+                </details-content>
+            </details>
+    </article>
+    <article>
+        <h2 class="post-title">
+            <label name="+" for="tshowcase_3">+</label>Unreal Engine<small></small>
+            <input id="tshowcase_3" style="display:none" type="checkbox" onclick="showText(this)">
+        </h2>
+<div style="display:none">
+        <p class="p2">
+            The projects I've been tinkering with recently have been mainly focused on playing around with unreal features and making a small prototype. 
+            It uses GAS (Epics Gameplay Ability System) to better deal with all the game’s abilities, cooldowns and spell costs in multiplayer and allows 
+            me to experiment faster with the engine features I am interested in.
+            <br>
+            Most of the level meshes and characters are coming from various packs.
+            <br>
+            <h2 class="h2">Effects</h2>
+            <p class="p2">
+            For the effects I have used a mix of Houdini/Maya for meshes and Substance Designer and Photoshop for the textures. 
+            Generally the effects are a mix of various resources, forum posts and tutorials.
+            
+            <br><br>
+
+            <details>
+                    <summary>
+                    <div class="icon">+</div>
+                    <h2>Fireball</h2>
+                    </summary>
+                    <details-content>
+                    <div>
+                    <p>
+                        <video class="vid-log2" controls preload="none">
+                                <source src="vid/jagex/fireball_compressed.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                        </video><br>
+                        The effect is made with very simple shapes available in Unreal plus a basic tilable fire texture.<br>
+                        Is split in 3 different niagara systems that are triggered by the ability blueprint and in turn animation montage: <br>
+                        <ul>
+                            <li>Ground effect: (triggered when casting) by the blueprint.</li>
+                            <li>Fireball spawns from the hand socket with an offset once the gameplay event triggers in the animation montage.</li>
+                            <li>Explosion triggers on fireball collision.</li>
+                        </ul><br>
+                    <p>
+                            <center><img class="img" src="img/jagex/unreal_niagara_fireball_cast.png" alt="Niagara setup" loading="lazy"></center>
+                            <div class="img-text">Niagara system ground cast setup</div>
+                            <p><br>
+                            <center><img class="img" src="img/jagex/unreal_niagara_fireball_explosion.png" alt="Niagara setup" loading="lazy"></center>
+                            <div class="img-text">Niagara system explosion cast setup</div>
+                            <p>
+
+                    </p>
+                </details-content>
+            </div>
+            </details> 
+            
+            <details>
+                    <summary>
+                    <div class="icon">+</div>
+                    <h2>Water material</h2>
+                    </summary>
+                    <details-content>
+                    <div>
+                    <p>
+                        Another experiment was my water material which I wanted to keep stylized but still add some depth to it.<br>
+                        The result was two materials, one expensive solution using subsurface scattering and one cheaper opaque version which just has some 
+                        foam for objects cutting through.<br><br>
+                        Expensive solution:
+                        <video class="vid-log2" controls preload="none">
+                                <source src="vid/jagex/water_expensive_compressed.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                        </video><br>
+                        <p>
+                        Cheap solution:
+                        <video class="vid-log2" controls preload="none">
+                                <source src="vid/jagex/water_cheap_compressed.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                        </video><br>
+                        
+                        
+
+                    </p>
+                </details-content>
+            </div>
+            </details>     
+            
+        </p>
+        <!-- <img class="img-log" src="img/face2.png" alt="house mesh" loading="lazy">
+        <div class="img-text">image text.</div><br> -->
+    </div>
+
+</article>
+    <br>
+        <a href="javascript:window.history.back();">← Back</a>
+
+        <!-- <a href="index.html">←  back</a> -->
+    </div>
+</div>
