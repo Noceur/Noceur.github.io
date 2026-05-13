@@ -834,7 +834,9 @@ details>summary div.icon {
     transition: all 0.3s;
     font-weight: 800;
     /* margin-left: auto; */
-    color: var(--highlight)
+    color: var(--highlight);
+    user-select: none !important;
+    -webkit-user-select: none !important;
 }
 
 details[open] > summary div.icon {
