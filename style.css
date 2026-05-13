@@ -823,14 +823,19 @@ details {
 details>summary div.icon {
     width: 24px;
     height: 24px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
     transition: all 0.3s;
     font-weight: 800;
     /* margin-left: auto; */
     color: var(--highlight)
 }
 
-details[open] summary div.icon {
-    transform-origin: bottom;
+details[open] > summary div.icon {
+    transform-origin: center;
     /* transform-origin: 10px 3px; */
     transform: rotate(45deg);
     /* animation: fadeout var(--fadetime); */
@@ -849,7 +854,7 @@ summary h2{
     color: var(--titlecolor);
 }
 
-details[open] h2{
+details[open] > summary h2{
     /* transform: rotate(180deg); */
     /* animation: fadeout var(--fadetime); */
     color: var(--titlecolorHilight);
