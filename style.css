@@ -338,25 +338,28 @@ pre, textarea { /* for code samples */
 /* Inline footnotes */
 
 label {
-  color: var(--highlight);
   cursor: pointer;
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+label[name="+"] {
+  color: var(--highlight);
   vertical-align: 0%;
   line-height: 1;
   font-size: 1.25em;
   font-family:'Courier New', Courier, monospace;
-  -webkit-user-select: none; /* Safari */        
-  -moz-user-select: none; /* Firefox */
-  -ms-user-select: none; /* IE10+/Edge */
-  user-select: none; /* Standard */
   font-variant-numeric: tabular-nums;
 }
 
-label:hover {
+label[name="+"]:hover {
   color: var(--highlight);
 }
 
-label:before {content:"[";}
-label:after {content:"]";}
+label[name="+"]:before {content:"[";}
+label[name="+"]:after {content:"]";}
 
 label + input,
 label + input + small {
