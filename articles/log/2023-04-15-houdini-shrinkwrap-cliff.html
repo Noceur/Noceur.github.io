@@ -1,0 +1,28 @@
+<article>
+    <!-- TITLE -->
+    <h2 class="post-title">
+        <label name="+" for="7">+</label><label for="7">Houdini - Shrinkwrap cliff</label><small>
+            <time datetime="15-04-2023">15.04.2023</time>
+        </small>
+        <input id="7" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+
+    <!-- CONTENT -->
+    <div style="display:none">
+        <p class="p2">
+            One of my recent experiments was that I wanted to generate a base shape for a rock/cliff using some primitives.
+            The idea was to use a vellum solver to make a shrink wrap around the meshes to get the basic shape, and then apply some simple noises to make the shapes slightly more interesting.
+            <br><br>
+            Finally there is a erosion system I put together using a fluid flip book solver as a test. I think a solution like this potentially could round off generated cliffs nicely, if the
+            resolution of the mesh and particle sizes were adjusted - as it is now, the result is quite coarse.
+            <br><br>
+            <video class="vid-log2" controls preload="none">
+                <source src="vid/log/7/shrinkwrap_cliff.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+        </p>
+        <br>
+
+    </div>
+</article>

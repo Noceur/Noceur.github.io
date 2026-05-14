@@ -1,0 +1,52 @@
+<article>
+    <!-- TITLE -->
+    <h2 class="post-title"> <label name="+" for="6">+</label><label for="6">Houdini & More - Mucking about</label><small>
+            <time datetime="02-02-2021">02.02.2021</time>
+        </small>
+        <input id="6" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+
+    <!-- CONTENT -->
+    <div style="display:none">
+        <p class="p2">Spent a few days testing out various tools and aspects of Houdini both for placements
+            and basic mesh generating, as a friend and I are currently prototyping a game in a desert
+            environment I've been hoping to be able to output a lot more in lesser time by sprinkling rocks
+            and vegetion automatically.<br><br>
+
+            My current plan is to space bigger cliffs and similar in the center with a bunch of smaller
+            intersecting cliffs around them and rocks below as seen below. The red cubes are automatically
+            placed using a mask created by curvature, slope and height of the terrain while the yellow
+            surrounding cubes are placed using the red cubes as source points. The purple on the other hand
+            is generated surrounding the first mask which created the red cubes, not the best explanation so
+            below is a video, excuse the poor quality.
+            <br><br>
+
+            <video class="vid-log2" controls preload="none">
+                <source src="vid/log/6/cube_placements.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <br><br>
+            I have also had time to explore the labs tools for building trees and they seem real neat! Below
+            is a tree set up to generate along a curve.<br><br>
+
+            <video class="vid-log2" controls preload="none">
+                <source src="vid/log/6/viewport_tree.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+
+            <br><br>
+            Furthermore some time was spent getting accustomed to ZBrush as well as trying out quixel mixer
+            for texturing, definitely prefer this way of texturing over how I learned to do it manually with
+            photoshop. Hope to create a few more and refined pieces to use for cliffs in my terrain.
+
+            <br><br>
+            <center>
+                <img class="img-log" src="img/log/6/cliff.png" alt="Cliff" loading="lazy"><br>
+            </center>
+
+        </p>
+        <br>
+
+    </div>
+</article>

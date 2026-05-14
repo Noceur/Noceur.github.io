@@ -27,17 +27,54 @@
 
 html {
   overflow-y: scroll;
+  scroll-behavior: smooth;
+  scrollbar-color: #333 transparent;
+  scrollbar-width: thin;
 }
 
 body {
   font-size: 18px;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   line-height: 1.4;
   color: var(--textcolor);
   background: var(--bgcolor);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   position: relative;
   max-width: 64em;  /* remove this for a full-width layout */
   margin: 0 auto;  /* centers the layout */
+}
+
+/* ------- Refinements ------- */
+
+::selection {
+  background: var(--highlight);
+  color: var(--bgcolor);
+}
+
+:focus-visible {
+  outline: 2px solid var(--highlight);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a2a2a;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--highlight);
 }
 
 /* ------- Sections ------- */
@@ -96,20 +133,39 @@ nav a:not(:last-of-type) {
   margin-right: 1.5vw;
 }
 
+nav a:hover,
+header h1 a:hover {
+  color: #ffae00;
+  text-shadow: none;
+}
+
 /* ------- General ------- */
 
 a {
   text-decoration: none;
   color: var(--highlight);
+  transition: color 0.2s ease, text-shadow 0.2s ease;
 }
 
 a:hover {
-  border-bottom: 1px solid;
+  color: #ffd97a;
+  text-shadow: 0 0 14px rgba(255, 196, 0, 0.45);
 }
 
 section h1 {
   font-size: 1em;
   margin: 0 0 1em 0;
+}
+
+section h1::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: .9em;
+  background: var(--highlight);
+  margin-right: .6em;
+  vertical-align: -1px;
+  border-radius: 1px;
 }
 
 h2, h3, h4 {
@@ -133,6 +189,17 @@ h2, h3, h4 {
   /* margin: 0; */
   margin-bottom: 20px;
   margin-top: 30px;
+}
+
+.project-title::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: .75em;
+  background: var(--highlight);
+  margin-right: .5em;
+  vertical-align: 1px;
+  border-radius: 1px;
 }
 
 /* .post-title:hover {
@@ -236,6 +303,7 @@ ul {
 
 ul li::marker {
   content: "\2022   ";
+  color: var(--highlight);
 }
 
 li {
@@ -257,8 +325,8 @@ small {
 hr {
   height: 1px;
   border: 0;
-  background: currentColor;
-  opacity: .1;
+  background: linear-gradient(to right, transparent, var(--highlight), transparent);
+  opacity: .35;
   /* margin: 1.2em 0; */
   margin: auto;
   margin-left: 50px;
@@ -330,6 +398,7 @@ pre, textarea { /* for code samples */
   width: 100%;
   white-space: pre;
   border:0;
+  border-left: 2px solid rgba(255,196,0,.35);
   border-radius: 4px;
   background:rgba(255,255,100,.075);
   box-shadow: inset 1px 1px 0 rgba(0,0,0,.2), inset -1px -1px 0 rgba(0,0,0,.04) ;
@@ -478,10 +547,13 @@ article time {
 .grid a {
   position: relative;
   border: 0;
+  transition: transform .25s ease, box-shadow .25s ease;
+  border-radius: 3px;
 }
 
 .grid a:hover {
-  transform: scale(.975);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px -12px rgba(255,196,0,.35);
 }
 
 /* For a square ratio */
@@ -654,114 +726,18 @@ article time {
 
 /* Fade animations */
 
-#fade_text p {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
-#fade_text h2 {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
-#fade_text a {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
-#fade_text img {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
-#fade_text video {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
-#fade_text h1 {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
-#fade_text tr {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
-#fade_text section {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
-#fade_text article {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
-#fade_text body {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
-  animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
-}
-
+#fade_text p,
+#fade_text h1,
+#fade_text h2,
+#fade_text a,
+#fade_text img,
+#fade_text video,
+#fade_text tr,
+#fade_text section,
+#fade_text article,
+#fade_text body,
 #fade_text .img-text {
-  /* margin-top: 25px;
-  font-size: 21px;
-  text-align: center; */
   animation: fadein var(--fadetime);
-  -moz-animation: fadein var(--fadetime); /* Firefox */
-  -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
-  -o-animation: fadein var(--fadetime); /* Opera */
 }
 
 
