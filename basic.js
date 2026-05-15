@@ -28,8 +28,3 @@ function showText (checkboxEle) {
     titleEle.children[0].innerText = expandSymbol;
     contentEle.style.display = vis;
 }
-
-// Get the latest 'news' post and return all the content so it can be displayed on the first page of the site.
-function latestNews(){
-
-}

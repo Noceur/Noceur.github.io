@@ -571,6 +571,21 @@ article time {
   object-fit: contain;
 }
 
+.img-pair {
+  display: flex;
+  gap: 1em;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.img-pair .img-log {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  height: auto;
+  margin: 0;
+}
+
 /* ------- Slideshow ------- */
 
 .slides {
@@ -887,4 +902,47 @@ details-content img{
     -webkit-animation: fadein var(--fadetime); /* Safari and Chrome */
     -o-animation: fadein var(--fadetime); /* Opera */
     animation: fadeout var(--fadetime);
+}
+
+/* ------- Log entries (article > details) ------- */
+
+article > details {
+    padding: 0;
+    max-width: 100%;
+}
+
+article > details > summary.post-title {
+    display: block;
+    padding: 0;
+    cursor: pointer;
+    list-style: none;
+    color: var(--titlecolor);
+    font-size: 1em;
+    font-weight: 600;
+    margin: 1.6em 0 .6em 0;
+    transition: color 0.3s ease-in-out, margin-left 0.3s ease-in-out;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+article > details > summary.post-title::before {
+    content: "[+]";
+    color: var(--highlight);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.25em;
+    font-variant-numeric: tabular-nums;
+    margin-right: .4em;
+}
+
+article > details[open] > summary.post-title {
+    color: var(--titlecolorHilight);
+    margin-left: 5px;
+}
+
+article > details[open] > summary.post-title::before {
+    content: "[-]";
+}
+
+article > details[open] > .article-content {
+    animation: fadein var(--fadetime);
 }
