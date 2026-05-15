@@ -870,6 +870,10 @@ details-content div{
     padding: 0vw 0vw 0vw 1.3em;
 }
 
+details-content summary h2 {
+    padding-left: 1em;
+}
+
 details-content p{
     padding-left: 3em;
 }
