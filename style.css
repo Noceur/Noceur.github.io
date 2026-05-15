@@ -421,6 +421,7 @@ label[name="+"] {
   font-size: 1.25em;
   font-family:'Courier New', Courier, monospace;
   font-variant-numeric: tabular-nums;
+  margin-right: .4em;
 }
 
 label[name="+"]:hover {
@@ -857,7 +858,7 @@ details[open] > summary h2{
     transform: translateX(5px);
  }
 
- details[open] details-content{
+ details[open] > details-content{
     animation: fadein var(--fadetime);
     /* color: red; */
  }
@@ -867,11 +868,11 @@ details[open] > summary h2{
 }
 
 details-content div{
-    padding: 0vw 0vw 0vw 1.3em;
+    padding: 0;
 }
 
 details-content summary h2 {
-    padding-left: 1em;
+    padding-left: 0;
 }
 
 details-content p{
