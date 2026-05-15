@@ -1,0 +1,508 @@
+<article>
+    <h2 class="post-title">
+        <label name="+" for="showcase_homeworld">+</label><label for="showcase_homeworld">Homeworld Mobile /
+            Dawn of Ages - Stratosphere Games</label><small></small>
+        <input id="showcase_homeworld" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+    <div style="display:none">
+
+        <p class="p2">
+            For Homeworld Mobile I mainly worked on the tutorial and narrative missions as well how
+            they were connected to the overall player progression. The logic was made using a
+            in-house node-based tool similar to blueprints.
+            <br><br>
+            <a href="https://www.youtube.com/watch?v=xGGi3GBuzUg">Playthrough of the video of all
+                the story missions can be seen at YouTube.</a>
+            <br><br>
+        </p>
+
+        <details>
+            <summary>
+                <div class="icon">+</div>
+                <h2>Maya rig batch exporter</h2>
+                <br>
+            </summary>
+            <details-content>
+                    <p>
+                        This tool was requested by the animator at one of the companies I worked for, the issue
+                        that needed to be solved
+                        was that certain actions had to be constantly repeated each time a rig needed to be
+                        exported.
+                        As a lot of rigs constantly needed changes a batch exporting tool was requested which
+                        removed certain bones,
+                        the controls while keeping the users personal export settings intact.
+                        <br><br>
+                        The tool was made in Maya using Python and had export profiles saved in JSONs so the
+                        settings could easily be shared or
+                        changed depending on what rig the animator was working on.
+                        <br>
+
+                        <center><img class="img" src="img/work/batch_exporter.png" alt="house mesh"
+                                loading="lazy" width="50%" height="50%"></center>
+                    <div class="img-text">Tool interface</div><br>
+                    <p>
+
+                        <br><br>
+                    <h1>Usage</h1>
+                    <p>
+                        <b>"Profile name":</b><br> The name for the specific export that is later shown in the
+                        dropdown to allow modifying the rules.<br>
+                        <br>
+                        <b>"Add objects to save":</b><br> Objects selected (and children) were added to a list,
+                        these were the objects to be exported for the specific profile. This was a additive
+                        option so any objects selected when clicking the button a second time were appended to
+                        the list.<br>
+                        <b>"Add objects to delete":</b><br> Objects to be excluded from the list i.e. certain
+                        bones or the rig controls.<br>
+                        <b>"Profile save location":</b><br> Where the fbx file should be exported to.<br>
+                        <b>"Wipe new profile data":</b><br> To wipe the current "save" and "delete" data from
+                        the profile if one wishes to set it up again.<br>
+
+                        Next section dealt with the already saved profiles.
+                        <b>"Profile":</b><br> The active profile to use the commands below at.<br>
+                        <b>"Export profile objects":</b><br>
+                    </p>
+                    <ul>
+                        <li>Ran the one selected profile<br> </li>
+                        <li>Creating a undo history save point to later return to<br> </li>
+                        <li>Selecting objects<br></li>
+                        <li>Deleting unwanted further objects<br> </li>
+                        <li>Saving user export settings<br> </li>
+                        <li>Setting fbx exporter to tool/company settings<br> </li>
+                        <li>Exporting file<br></li>
+                        <li>Recovering user settings and restoring scene to undo history point<br></li>
+                    </ul>
+                    <p>
+                        <br>
+                        <b>"Export all profile objects":</b> Ran the above for all created profiles in the
+                        specific JSON.<br>
+                        <b>"Select profile objects":</b> Selected all meshes in specific profile excluding and
+                        unwanted objects, used to figure out issues with profile.<br>
+                        <b>"Delete profile":</b> Self explanatory.
+                        <br><br>
+                        Settings actions section existed to save or load different profiles to a JSON.
+                        <br><br>
+                        Code:
+                    <pre><code class="language-python line-numbers">
+                            import maya.cmds as cmds
+                            import maya.mel as mel
+                            import os
+                            import json
+                            import sys
+                            import time
+
+
+                            class MR_Window(object):
+
+                                def __init__(self):
+                                    self.deleteChildren         = True # Option for False is not yet completed. Need additional time.
+                                    self.debug                  = False
+                                    self.wipeProfileAfterSave   = False
+                                    self.window                 = "FBX batch exporter"
+                                    self.title                  = "FBX batch exporter"
+
+                                    self.settingsFile           = "/scripts/MellhageExporter/settings.json"
+                                    self.settingsFile           = "F:/Windows_user_folders/Desktop/test.json"
+
+                                    self.size                   = (200, 400)
+                                    self.activeProfile          = False
+                                    self.settings               = {'profiles': {}}
+                                    self.saveObjs               = []
+                                    self.delObjs                = []
+                                    self.UndoInfo               = ""
+                                    self.lastSaveLocation       = ""
+
+                                    self.restartWindow()
+                                    self.setupLayout()
+                                    if self.debug == True:
+                                        self.loadSettings()
+
+
+                                def exportObjs(self, multiExport=False):
+                                    if not multiExport:
+                                        self.setActiveProfile()
+                                    getFBXSettings()
+                                    try:
+                                        print ("settings: \n\t", self.settings)
+                                        print ("activeProfile: \n\t", self.activeProfile)
+                                        undoChunkOpen()
+                                        print ("delete objs: \n\t", self.activeProfile['delObjs'])
+                                        self.deleteObjs()
+                                        print ("save objs: \n\t", self.activeProfile['objs'])
+                                        self.selectObjs()
+                                        exportFBX(self.activeProfile['path'])
+                                    except Exception as e:
+                                        print (e)
+                                        print ("PS. Run maya in admin mode.")
+                                    finally:
+                                        undoChunkOpen(False)
+                                        setFBXSettings()
+                                        pass
+                                    cmds.undo()
+                                    self.deselectObjs()
+
+
+                                def exportAllObjs(self, *args):
+                                    originalProfile = self.activeProfile
+                                    try:
+                                        for profileEntry in self.settings['profiles'].keys():
+                                            print ("")
+                                            print (profileEntry)
+                                            self.activeProfile = self.settings['profiles'][profileEntry]
+                                            self.exportObjs(True)
+                                    except Exception as e:
+                                        print (e)
+                                        pass
+                                    self.activeProfile = originalProfile
+
+
+                                def setActiveProfile(self, *args):
+                                    profileName = cmds.optionMenu(self.profileMenu, query = True, value = True)
+                                    self.activeProfile = self.settings['profiles'][profileName]
+
+
+                                def selectObjs(self, *args):
+                                    if self.activeProfile:
+                                        mySel = cmds.ls(self.activeProfile['objs'])
+                                        cmds.select(mySel, hi=True)
+                                    else:
+                                        print ("no active profile")
+
+
+                                def removeMenuItems(self, *args):
+                                    profiles = cmds.optionMenu(self.profileMenu, query = True, ill = True)
+                                    if profiles:
+                                        for profile in profiles:
+                                            cmds.deleteUI(profile)
+
+
+                                def initializeMenuItems(self, *args):
+                                    profiles = self.settings['profiles'].keys()
+                                    for entry in profiles:
+                                        cmds.menuItem(label=entry, parent=self.profileMenu)
+
+
+                                def updateProfileItems(self, *args):
+                                    deletedItems = []
+                                    newItems = []
+
+                                    profiles = self.settings['profiles'].keys()
+
+                                    menuItems = cmds.optionMenu(self.profileMenu, query=True, ils=True)
+                                    menuItemNames = []
+
+                                    for item in menuItems:
+                                        itemName = cmds.menuItem(item, query=True, l=True)
+                                        menuItemNames.append(itemName)
+
+                                    print ("Profiles:")
+                                    print (profiles)
+                                    print ("MenuItemNames:")
+                                    print (menuItemNames)
+
+                                    for item in profiles:
+                                        if item in menuItemNames:
+                                            print ("found")
+
+
+                                def wipeState(self, *args):
+                                    cmds.textFieldGrp(self.profileName, e=True, text="")
+                                    self.saveObjs = []
+                                    self.delObjs  = []
+
+
+                                def deleteProfile(self, *args):
+                                    # If True passed into args[0] it skips prompt
+                                    profileName = cmds.optionMenu(self.profileMenu, query = True, value = True)
+                                    targetProfileIndex = cmds.optionMenu(self.profileMenu, query = True, sl = True)
+                                    profiles    = cmds.optionMenu(self.profileMenu, query = True, ill = True)
+                                    if profiles and targetProfileIndex:
+                                        if args[0] == False:
+                                            result = cmds.confirmDialog( title='Confirm', message='Are you sure you wish to delete profile "'+profileName+'"?', button=['Yes','No'], defaultButton='Yes', cancelButton='No', dismissString='No')
+                                            if not result == "Yes":
+                                                return
+                                        if profileName in self.settings['profiles']:
+                                            targetProfileIndex -= 1
+                                            cmds.deleteUI(profiles[targetProfileIndex])
+                                            del self.settings['profiles'][profileName]
+                                            print ("Profile data after delete:")
+                                            print (self.settings['profiles'])
+
+
+                                def deselectObjs(self, *args):
+                                    cmds.select(cl=True)
+
+
+                                def loadSettings(self, *args):
+
+
+                                    try:
+                                        singleFilter = "JSON (*.json)"
+                                        fPath = cmds.fileDialog2(fm=1, fileFilter=singleFilter)
+                                        fEnding = fPath[0].split(".")[-1]
+                                        if (fEnding == "json"):
+                                            self.settings = loadJson(fPath[0])
+                                            self.postLoad()
+                                            return True
+                                        print ("Not a json file.")
+                                        return False
+                                    except Exception as e:
+                                        print ("Failed to load settings file")
+                                        print (e)
+                                        return False
+
+
+                                def postLoad(self, *args):
+                                    self.removeMenuItems()
+                                    self.initializeMenuItems()
+                                    self.setActiveProfile()
+
+
+                                def saveSettings(self, *args):
+                                    singleFilter = "JSON (*.json)"
+                                    fPath = cmds.fileDialog2(fm=0, fileFilter=singleFilter)[0]
+                                    if fPath:
+                                        saveJson(fPath, self.settings)
+
+
+                                def saveProfile(self, *args):
+                                    # Perform checks
+                                    profile = cmds.textFieldGrp(self.profileName, query=True, text=True)
+                                    if not self.saveProfileCheck(profile):
+                                        return
+
+                                    fPath = self.getSaveProfileSaveLocation(profile)
+
+                                    if fPath:
+                                        self.settings['profiles'][profile] = {}
+                                        self.settings['profiles'][profile]['objs']    = self.saveObjs
+                                        self.settings['profiles'][profile]['delObjs'] = self.delObjs
+                                        self.settings['profiles'][profile]['path']    = fPath
+                                        cmds.menuItem(label=profile, parent=self.profileMenu)
+                                        self.setActiveProfile()
+
+                                    if self.wipeProfileAfterSave:
+                                        self.wipeState()
+
+                                def saveProfileCheck(self, profile):
+                                    if not self.saveObjs:
+                                        self.promptDialog("Warning", "No objects added to profile")
+                                        return False
+                                    if not profile:
+                                        self.promptDialog("Warning", "No profile name")
+                                        return False
+
+                                    if profile in self.settings['profiles']:
+                                        if not self.promptDialog("Overwrite", "Do you wish to overwrite the existing profile?", ["Yes", "No"], "Yes", "No", "No"):
+                                            return False
+                                        self.deleteProfile(True)
+                                        self.settings['profiles'].pop(profile, None)
+                                    return True
+
+
+
+                                def getSaveProfileSaveLocation(self, profile):
+                                    singleFilter = "FBX (*.fbx)"
+                                    if self.lastSaveLocation:
+                                        SaveLocList = self.lastSaveLocation.split("/")
+                                        del SaveLocList[-1]
+                                        SaveLoc = "/".join(SaveLocList)
+                                        SaveLoc += "/" + profile
+                                        print ("Expected preferred save location:")
+                                        print (SaveLoc)
+                                        fPath = cmds.fileDialog2(fm=0, fileFilter=singleFilter, startingDirectory=SaveLoc)[0]
+                                    else:
+                                        saveLoc = "./" + profile
+                                        fPath = cmds.fileDialog2(fm=0, fileFilter=singleFilter, startingDirectory=saveLoc)[0]
+                                    self.lastSaveLocation = fPath
+                                    return fPath
+
+
+                                def setupLayout(self, *args):
+                                    self.window = cmds.window(self.window, title=self.title, widthHeight=self.size)
+                                    cmds.columnLayout(adjustableColumn = True)
+                                    cmds.separator(height=10)
+
+                                    cmds.text("Create profile")
+                                    self.profileName    = cmds.textFieldGrp(label='profile name:', height=30)
+                                    self.saveObjsBtn    = self.makeBtn("Add Objects to Save",   self.addSaveObjs)
+                                    self.deleteObjsBtn  = self.makeBtn("Add Objects to Delete", self.addDeleteObjs)
+                                    self.saveProfileBtn = self.makeBtn("Profile Save Location", self.saveProfile)
+                                    self.wipeStateBtn   = self.makeBtn("Wipe New profile Data", self.wipeState)
+                                    cmds.separator(height=10)
+
+                                    cmds.text("Action on existing profile", height=20)
+                                    self.profileMenu = cmds.optionMenu(label='profile: ', changeCommand=self.setActiveProfile)
+                                    self.exportBtn        = self.makeBtn("Export profile objects",      self.exportObjs)
+                                    self.exportAllBtn     = self.makeBtn("Export all profile objects", self.exportAllObjs)
+                                    self.selectBtn        = self.makeBtn("Select profile objects",     self.selectObjs)
+                                    self.deleteProfileBtn = self.makeBtn("Delete profile",             self.deleteProfile)
+                                    cmds.separator(height=10)
+
+                                    cmds.text("settings actions")
+                                    self.loadSettingsBtn = self.makeBtn("Load settings", self.loadSettings)
+                                    self.saveSettingsBtn = self.makeBtn("save settings", self.saveSettings)
+                                    cmds.separator(height=10)
+
+                                    if(self.debug):
+                                        cmds.text("debug menu")
+                                        self.testCommandBtn1 = self.makeBtn("testMenuItems", self.wipeState)
+                                        self.testCommandBtn2 = self.makeBtn("addDeleteObjs", self.addDeleteObjs)
+                                        self.testCommandBtn3 = self.makeBtn("addSaveObjs",   self.addSaveObjs)
+                                        self.testCommandBtn4 = self.makeBtn("deleteObjs",    self.deleteObjs)
+                                        self.testCommandBtn6 = self.makeBtn("WarningTest",   self.debugtestWarning)
+                                        self.testCommandBtn10 = self.makeBtn("parenttest",        self.deleteParentKeepChildren)
+
+
+                                    cmds.showWindow()
+
+                                def makeBtn(self, *args):
+                                    cmds.separator(height=2, style="none")
+                                    self.loadSettingsBtn = cmds.button(label=args[0], command=args[1])
+
+
+                                # Not done yet
+                                def deleteParentKeepChildren(self, *args):
+                                    delItems = ["pSphere1", "pSphere2"]
+                                    for item in delItems:
+                                        grandParent = cmds.listRelatives(item, parent=True)[0]
+                                        # if not grandparent use w=True
+                                        childrenList = cmds.listRelatives(item, children=True)
+                                        #print (grandParent)
+                                        for child in childrenList:
+                                            #print(child)
+                                            cmds.parent(child, w=True)
+                                            cmds.parent(child, grandParent)
+                                        cmds.delete(item)
+
+
+
+
+                                def addDeleteObjs(self, *args):
+                                    self.delObjs += cmds.ls(selection=True)
+                                    self.delObjs = list(set(self.delObjs))
+                                    print ("Deleting objects:")
+                                    print (self.delObjs)
+
+                                def promptDialog(self, title, message, buttons=[], defaultButton="Yes", cancelButton="No", dismissString="No"):
+                                    result = cmds.confirmDialog( title=title, message=message, button=buttons, defaultButton=defaultButton, cancelButton=cancelButton, dismissString=dismissString)
+                                    if result == defaultButton:
+                                        return True
+                                    cmds.warning(message)
+                                    return False
+
+
+                                def addSaveObjs(self, *args):
+                                    self.saveObjs += cmds.ls(selection=True)
+                                    self.saveObjs = list(set(self.saveObjs))
+                                    print ("Saving objects:")
+                                    print (self.saveObjs)
+
+
+                                def deleteObjs(self, *args):
+                                    if self.activeProfile:
+                                        mySel = cmds.ls(self.activeProfile['delObjs'])
+                                        mySel2 = cmds.select(mySel, hi=self.deleteChildren)
+                                        print (mySel)
+                                        print (mySel2)
+                                        cmds.delete()
+                                    else:
+                                        print ("no active profile")
+
+
+                                def restartWindow(self, *args):
+                                    #delete window if exists
+                                    wName = self.window.replace(" ", "_")
+                                    if cmds.window(wName, exists = True):
+                                        cmds.deleteUI(wName)
+
+
+
+                                def debugtestWarning(self, *args):
+                                    print (self.promptDialog("test title", "message", ["Yes", "No"], "Yes", "No", "No")    )
+                                    print (self.promptDialog("test title", "message")   )
+
+
+                            def undoChunkOpen(open=True):
+                                # opens and closes a undo section
+                                if not open:
+                                    print ("Undo chunk closed")
+                                    cmds.undoInfo(chunkName="state", closeChunk=True)
+                                    return
+                                print ("Undo chunk opened")
+                                cmds.undoInfo(chunkName="state", openChunk=True)
+
+
+                            def saveJson(path, data):
+                                print ("saving json file")
+                                with open(path, 'w') as outfile:
+                                    json.dump(data, outfile)
+
+
+                            def loadJson(path):
+                                with open(path, "r") as json_file:
+                                    return json.load(json_file)
+
+
+                            def getFBXSettings():
+                                # get current user settings for FBX export and store them
+                                mel.eval('FBXPushSettings;')
+
+
+                            def setFBXSettings():
+                                # set user-defined FBX settings back after export
+                                mel.eval('FBXPopSettings;')
+
+                            def exportFBX(exportFileName, min_time=False, max_time=False):
+                                # export selected as FBX
+
+                                # store current user FBX settings
+                                getFBXSettings()
+
+                                # Geometry
+                                mel.eval("FBXExportSmoothingGroups -v true")
+                                mel.eval("FBXExportHardEdges -v false")
+                                mel.eval("FBXExportTangents -v false")
+                                mel.eval("FBXExportSmoothMesh -v true")
+                                mel.eval("FBXExportInstances -v false")
+                                mel.eval("FBXExportReferencedAssetsContent -v false")
+                                mel.eval("FBXExportAnimationOnly -v false")
+                                mel.eval("FBXExportBakeComplexAnimation -v true")
+                                if not min_time == False:
+                                    mel.eval("FBXExportBakeComplexStart -v " + str(min_time))
+                                if not max_time == False:
+                                    mel.eval("FBXExportBakeComplexEnd -v " + str(max_time))
+                                mel.eval("FBXExportBakeComplexStep -v 1")
+                                mel.eval("FBXExportUseSceneName -v false")
+                                mel.eval("FBXExportQuaternion -v euler")
+                                mel.eval("FBXExportShapes -v true")
+                                mel.eval("FBXExportSkins -v true")
+                                # Constraints
+                                mel.eval("FBXExportConstraints -v false")
+                                # Cameras
+                                mel.eval("FBXExportCameras -v false")
+                                # Lights
+                                mel.eval("FBXExportLights -v false")
+                                # Embed Media
+                                mel.eval("FBXExportEmbeddedTextures -v false")
+                                # Connections
+                                mel.eval("FBXExportInputConnections -v false")
+                                # Axis Conversion
+                                mel.eval("FBXExportUpAxis y")
+                                # Version
+                                mel.eval("FBXExportFileVersion -v FBX201600")
+                                mel.eval("FBXExportInAscii -v true")
+                                cmds.file(exportFileName, exportSelected=True, type="FBX export", force=True, prompt=False)
+                                # restore current user FBX settings
+                                setFBXSettings()
+
+                            myWindow = MR_Window()
+
+                        </code></pre><br>
+                    </p>
+                    </p>
+            </details-content>
+        </details>
+
+    </div>
+</article>

@@ -1,0 +1,451 @@
+<article>
+    <h2 class="post-title">
+        <label name="+" for="showcase_myths">+</label><label for="showcase_myths">Myths - Spectarium
+            Games</label><small></small>
+        <input id="showcase_myths" style="display:none" type="checkbox" onclick="showText(this)">
+    </h2>
+    <div style="display:none">
+
+        <details>
+            <summary>
+                <div class="icon">+</div>
+                <h2>Level Design</h2>
+                <br>
+            </summary>
+            <details-content>
+                <p>
+                    Myths, was the latest project I worked on. Myths is a online ARPG primarily developed for
+                    mobile. I was the sole level designer on the project and developed the majority of my own
+                    editor toolset to speed up my workflow. I was also responsible for level decoration at first
+                    but as the project went on I had to shift focus to solving technical challenges while the
+                    environment team took over more and more of the decoration.<br><br>
+                    The pipeline by the end looked something like this:
+                </p>
+                <ul>
+                    <li>Level design and layout</li>
+                    <li>Gameplay events and encounters</li>
+                    <li>Level decoration</li>
+                    <li>Navigation mesh</li>
+                </ul><br>
+                <p>
+
+
+                    The absolute majority of the game mostly took place in various dungeons which consisted of
+                    hand-built rooms (zones) stitched together without loading zones. Each dungeon was designed
+                    to have a run time of 4-6 minutes.
+                    <br><br>
+
+
+                    Unfortunately due to financial trouble within the company I only got to plan out the
+                    majority of the procedural systems but never fulfill my vision. I will include those plans
+                    at the end of this section.
+                    <br><br>
+
+                    The plan was to have 5 biomes at launch with a end boss for each, at the time of me leaving
+                    the project we had 3 biomes and 2 bosses in various stages of completion, the Norse and
+                    Mayan biomes were the most complete while the Watcher biome was still in middle of
+                    development.
+                    <br><br>
+
+
+                    I had close collaboration with tech but especially environment art. Together with a
+                    fantastic env art (and tech art) team we solved the setup for 3 biomes with vastly different
+                    and often hard to hit requirements. For norse we "baked" the shadows into the vertex colors
+                    and with directional (but static) light that meant we were forced to have a very specific
+                    setup for the tiles as they were directional. Rotating a tile meant swapping out the mesh
+                    for another just for the sake of the light. We also had to use various other creative
+                    solutions for light and shadows. In retrospect this was not the best solution. for the Mayan
+                    biome we had more freedom but still had to be
+                    careful
+                    with how we set up the levels to make sure the lighting looked good and for the Watcher
+                    biome we had a more dynamic lighting setup which meant we had a lot more freedom but also
+                    had to be careful with how we set up the levels to make sure the lighting looked good.
+
+
+                    The biomes had different defining charactaristics which meant we couldn't just swap one
+                    biome for another to increase our level pool.
+                    Norse was outdoors with directional (but static) light, it had wide open spaces and often
+                    smaller branching paths. Mayan was our first indoor biome where we finally tried
+                    incorporating verticallity to some degree. The server only knew of one height level so
+                    verticallity was mostly an illusion. We also tried to have more small rooms and narrow
+                    passages. We also tried to not have a directional light setup which gave us a lot more
+                    freedom.
+                    The Watchers was our last biome was also indoors but it had wider areas, with a lot more
+                    fake light.
+                    To add:
+                    <br>
+                    Company ran out of money, if it had continued the plans for the game was as following:
+                    Destructibles, Traps, Dungeon generation graph. Unfortunately it burned before then.
+                    <br>
+                    <br>
+                </p>
+                <details>
+                    <summary>
+
+
+                        <div class="icon">+</div>
+                        <h2>Zones</h2>
+                        <br>
+                    </summary>
+                    <details-content>
+                        <div>
+                            <p>
+                                Anatomy of a zone:
+                                * Layout
+                                * Tilesets and rules between different biomes.
+                                * Decoration, individual pieces and compositions.
+                                * Walkable areas (for the client).
+                                * Gameplay events and encounters.
+                                * Navmesh for the server.
+                            </p>
+                        </div>
+                    </details-content>
+                </details>
+
+                <details>
+                    <summary>
+
+
+                        <div class="icon">+</div>
+                        <h2>Dungeons</h2>
+                        <br>
+                    </summary>
+                    <details-content>
+                        <div>
+                            <p>
+                                Consisted of a few zones stitched together without loading zones. At the time of
+                                my departure we had a system for stitching zones together but required exits to
+                                be manually defined and with the same size.
+                                * Types of zones: Starter, regular, adapter, scenario and exit.
+                            </p>
+                        </div>
+                    </details-content>
+                </details>
+
+                <details>
+                    <summary>
+                        <div class="icon">+</div>
+                        <h2>Procedural strategy</h2>
+                        <br>
+                    </summary>
+                    <details-content>
+                        <div>
+                            <p>
+                                A while back I put together a presentation for the team laying out a plan for
+                                how to shift our dungeon content from fully hand-built to a more procedural
+                                workflow.
+                                The original was meant to spark a discussion, so it leans into tradeoffs rather
+                                than absolutes &mdash; the version below pulls those thoughts together as a
+                                written walkthrough of how I approach scaling content delivery for a
+                                live-service game.
+                                <br><br>
+
+                            <h2>The problem</h2>
+                            <p>
+                                A fully manual pipeline produced nice-looking zones but didn't scale. Three
+                                issues kept surfacing.
+                                <br><br>
+                                The first is <b>repetition</b>: players churn through dungeons quickly, and any
+                                obvious reuse is noticed within minutes. With every zone made by hand, output is
+                                gated by how many people we hire.
+                                The second is <b>value per time invested</b>: when a zone is reused as-is, the
+                                second pass returns the same content the player already saw &mdash; output stays
+                                1:1 with authoring effort.
+                                The third is plain <b>workflow</b>. Layouts, decoration, encounters and dungeon
+                                assembly are all manual; we have tools that ease parts of it, but the wrist pain
+                                is real and the throughput is too low. I would rather generate content than
+                                generating carpal tunnel issues.
+                                <br><br>
+
+                                <center><img class="img" src="img/PCG_Talk/PCG_Carpal_tunnel.png"
+                                        alt="Painting of a man treating wrist pain" loading="lazy" width="40%">
+                                </center>
+                            <p>
+                                <br><br>
+
+                            <h2>Two paths</h2>
+                            <p>
+                                Two directions came out of this, both valid with different tradeoffs.
+                                <br><br>
+                                <b>Variants</b> are the safer bet given our constraints. A natural extension of
+                                what we already have, it retains current quality levels and squeezes a lot of
+                                additional value out of each zone for a comparatively small amount of extra
+                                work. This is the path I'd push for, and most of what follows is about how it
+                                would work.
+                                <br><br>
+                                <b>Fully generated</b> is the alternative &mdash; generating rooms or dungeons
+                                in one go. More rigid, more upfront investment, but huge long-term value across
+                                the project and likely future ones. Worth prototyping in parallel for parts of
+                                the game rather than betting the project on it now.
+                                <br><br>
+
+                            <h2>Dungeon graph</h2>
+                            <p>
+                                The graph sits at the top of the hierarchy and rains down over every other
+                                aspect of the dungeon.
+                                Each node is a zone with constraints &mdash; a theme (or a list of acceptable
+                                themes), an encounter density, whether it's optional or mandatory, fixed or
+                                varying &mdash; and the graph randomizes order and contents within those rules.
+                                This is where partial control lives: we can force two connected zones to host a
+                                scenario, lock down a starting biome, or guarantee a miniboss appears before an
+                                exit, while still letting the rest shuffle.
+                                Story or scenario aspects can be steered from here too.
+                                <br><br>
+
+                            <h2>Building zones</h2>
+                            <p>
+                                Setting up layouts and navmesh is the smaller part of building a zone, so I'd
+                                skip looking into automating that for now.
+                                Navmesh authoring itself is straightforward but error-prone &mdash; small misses
+                                compound and there are a lot of edge cases. It is also worth a separate look at
+                                how we build and store them (more on that under technical considerations further
+                                down).
+                                Norse and Mayan biomes also developed slightly different conventions &mdash;
+                                Mayan with freestanding rotatable walls, Norse directional &mdash; and we should
+                                decide whether we are keeping both for interior versus exterior or unifying.
+                                <br><br>
+
+                            <h2>Decoration hierarchy</h2>
+                            <p>
+                                Decoration is where most of the time goes, alongside chasing elusive navmesh
+                                issues. Right now everything lives as compositions or freestanding props, which
+                                is too flat. I'd split it into three layers, each with a different level of
+                                control.
+                                <br><br>
+
+                            <h1>Variants</h1>
+                            <p>
+                                Variants are the big zone-level pieces &mdash; a whole wall plus its
+                                surroundings, a fancy centerpiece, a pit of gas clouds.
+                                This is the highest level of variable content and where theme control bites: we
+                                might have two variants for "ritualistic," two for "ornate," two for "rubble."
+                                The dungeon graph picks the theme, the zone picks one of its matching variants.
+                                <br><br>
+
+                                <center><img class="img" src="img/PCG_Talk/PCG_Variants.png"
+                                        alt="Top-down view of a zone composed from variant chunks"
+                                        loading="lazy"></center>
+                            <div class="img-text">Large chunks control the majority of a zone's look, varied per
+                                theme.</div>
+                            <p>
+                                <br><br>
+
+                                <video class="vid-log2" controls preload="none">
+                                    <source src="vid/PCG_Talk/Variants.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <br><br>
+
+                            <h1>Compositions</h1>
+                            <p>
+                                Compositions are what variants are mainly built from. We already use them, but
+                                the key shift is <b>standardized sizes</b> (S, M, L, XL) with distinct shapes
+                                for corners, walls and central standalone pieces.
+                                That makes them swappable without trouble: a variant picks "ritual site" with a
+                                sacrificial stone, and a randomizer can swap the stone for a statue and shuffle
+                                the surrounding props, bigger pieces and all, without touching colliders.
+                                I still think we should keep some free, unconstrained compositions around
+                                &mdash; they have their place &mdash; but the bulk should be sized and shaped on
+                                purpose.
+                                <br><br>
+
+                                <center><img class="img"
+                                        src="img/PCG_Talk/Compositions/PCG_Compositions_Wall.png"
+                                        alt="Wall-shaped composition" loading="lazy" width="48%">
+                                    <img class="img"
+                                        src="img/PCG_Talk/Compositions/PCG_Compositions_InnerCorner.png"
+                                        alt="Inner-corner composition" loading="lazy" width="48%">
+                                </center>
+                            <div class="img-text">Wall and inner-corner compositions, built to slot into the
+                                same anchor points.</div>
+                            <p>
+                                <br>
+
+                                <center><img class="img"
+                                        src="img/PCG_Talk/Compositions/PCG_Compositions_OuterCorner.png"
+                                        alt="Outer-corner composition" loading="lazy" width="48%">
+                                    <img class="img"
+                                        src="img/PCG_Talk/Compositions/PCG_Compositions_FreeStanding.png"
+                                        alt="Freestanding composition" loading="lazy" width="48%">
+                                </center>
+                            <div class="img-text">Outer-corner and freestanding variants, swappable for each
+                                other at the right size class.</div>
+                            <p>
+                                <br><br>
+
+                            <h1>Micro details</h1>
+                            <p>
+                                Micro details are our smallest decorative aspects &mdash; props of certain
+                                kinds, ideally part of a composition or standalone. They can be randomized per
+                                run with no impact on colliders or navmesh: pebble swaps, bones spawning or not,
+                                lanterns on or off. Cheap variety once the setup is in place.
+                                Freestanding props don't go away under this scheme, just used more sparingly.
+                                <br><br>
+
+                                <center><img class="img" src="img/PCG_Talk/PCG_Micro_Details.png"
+                                        alt="Close-up of a zone showing scattered debris and small props"
+                                        loading="lazy"></center>
+                            <div class="img-text">Uncontrolled changes &mdash; zero effort after setup.</div>
+                            <p>
+                                <br><br>
+
+                                <video class="vid-log2" controls preload="none">
+                                    <source src="vid/PCG_Talk/Micro.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                                <br><br>
+
+                                Background and foreground are basically unsolved today. For backgrounds I lean
+                                toward vistas built from chunks that can be slapped together (and randomized)
+                                rather than continuous layers running the full length of the dungeon. Foreground
+                                I haven't had time to consider properly &mdash; open question.
+                                <br><br>
+
+                            <h2>Encounters</h2>
+                            <p>
+                                Hand-placed encounters carry little value for our combat style and break easily:
+                                designers update visuals without re-checking enemies, and there is no zone
+                                editor that shows both at once.
+                                The better default is to auto-spread enemy clusters across each zone and keep
+                                directed combat for scenarios.
+                                Bosses and tutorials will still be manual &mdash; those don't go away, and the
+                                same applies to scenarios once we have them.
+                                <br><br>
+
+                                <center><img class="img" src="img/PCG_Talk/PCG_Encounters.png"
+                                        alt="Top-down zone with numbered encounter markers" loading="lazy">
+                                </center>
+                            <div class="img-text">Auto-spread enemy clusters with directed encounters reserved
+                                for scenarios and bosses.</div>
+                            <p>
+                                <br><br>
+
+                            <h2>Events</h2>
+                            <p>
+                                Three tiers, each with different control.
+                                <br><br>
+                                <b>Scenarios</b> are fixed zones with manual setup &mdash; objects players
+                                interact with to trigger a challenge and earn a reward. Some can share a zone
+                                visually, and the dungeon graph lets us force two of them to land in connected
+                                zones.
+                                <br><br>
+                                <b>Minor gameplay events</b> are algorithm-driven: a random enemy ambush, a
+                                treasure-goblin spawn. Traps probably live here too, though I haven't placed
+                                them yet.
+                                <br><br>
+                                <b>Visual events</b> are flavor moments with no mechanical impact &mdash; dust
+                                raining from a rubble pile as a player approaches, a squirrel crossing the path,
+                                the shadow of something large rushing across the screen. Most likely
+                                client-side.
+                                <br><br>
+
+                            <h2>Fully generated dungeons</h2>
+                            <p>
+                                The alternative path, briefly. I don't have a fixed proposal here &mdash; likely
+                                some grid-based algorithm, possibly anchored wave function collapse.
+                                It is exciting and clearly the long-term lever: a system like this lends itself
+                                to future projects too. It is also more rigid &mdash; a balancing act between
+                                artistic freedom and systematically producing dungeons en masse &mdash; and with
+                                enough control and thought you can get genuinely beautiful results out of it.
+                                Path of Exile is a good example.
+                                Worth exploring at a later point with some light prototyping to see what comes
+                                out.
+                                <br><br>
+
+                            <h2>Technical considerations</h2>
+                            <p>
+                                A few loose threads &mdash; they don't fit neatly into the plan above but they
+                                shape what is actually feasible.
+                                <br><br>
+                                <b>Navmesh and colliders</b> are part of the game config and a good chunk of why
+                                a build takes time. Could we checksum them and skip rebuilds when unchanged?
+                                <br><br>
+                                <b>Level data</b> &mdash; if we end up with 500 zones and 10,000 levels, do we
+                                hit a storage or distribution wall? Storing seeds instead of fully generated
+                                data might be worth it.
+                                <br><br>
+                                <b>Dungeon pool</b> &mdash; tied to the previous point. If storage really is a
+                                problem, we could rotate a pool of dungeons every X days.
+                                <br><br>
+                                <b>Zone editing tool</b> &mdash; needed to inspect gameplay setup alongside zone
+                                geometry. Am I overlapping a gameplay event with a collider? Is a monster or
+                                boss getting stuck in a wall? Hard to answer without the tool.
+                                <br><br>
+                                <b>Eval and QA</b> &mdash; more randomization makes QA harder. We would likely
+                                need to generate alongside a vetting process before pushing dungeons live.
+                                <br><br>
+                            </p>
+                        </div>
+                    </details-content>
+                </details>
+
+            </details-content>
+        </details>
+
+        <details>
+            <summary>
+                <div class="icon">+</div>
+                <h2>Tools</h2>
+                <br>
+            </summary>
+            <details-content>
+
+                <details>
+                    <summary>
+                        <div class="icon">+</div>
+                        <h2>Pipeline</h2>
+                        <br>
+                    </summary>
+                    <details-content>
+                        <div>
+                            <p>
+                                Most of my tools were small scripts to speed up my workflow. Snapping, rotating,
+                                automatically swapping out tiles to other ones with different lighting baked in
+                                etc.
+                                I also set up a zone setup tool that created all necessary meta data required
+                                and similarly for the dungeons.
+                                With some custom scripts and setups I was able to set up the tiles and layout of
+                                a 100x100m zone in roughly 5 minutes.
+                            </p>
+                        </div>
+                    </details-content>
+                </details>
+
+                <details>
+                    <summary>
+                        <div class="icon">+</div>
+                        <h2>Macros</h2>
+                        <br>
+                    </summary>
+                    <details-content>
+                        <div>
+                            <p>
+                                For the sake of efficiency I also worked with a layered macro pad for my most
+                                used tools and shortcuts which I would strongly recommend for any level designer
+                                who want to spare their hands.
+
+                                <img class="img" src="img/work/Spectarium/MacroPad.jpg" alt="macro pad"
+                                    loading="lazy">
+                            </p>
+                        </div>
+                    </details-content>
+                </details>
+
+                <details>
+                    <summary>
+                        <div class="icon">+</div>
+                        <h2>Asset palette</h2>
+                        <br>
+                    </summary>
+                    <details-content>
+                        <div>
+                            <p></p>
+                        </div>
+                    </details-content>
+                </details>
+
+            </details-content>
+        </details>
+
+    </div>
+</article>
