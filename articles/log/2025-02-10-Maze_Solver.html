@@ -1,0 +1,516 @@
+<article>
+    <details>
+        <summary class="post-title">Sliding Maze Puzzle Solver
+            <small><time>10.02.2025</time></small>
+        </summary>
+        <div class="article-content">
+            <p class="p2">
+                During the Global Game Jam 2025 we had planned out additional mechanics for the game Sonosphere that we
+                just didn't have time to implement. The idea would be something like the old Pokemon sliding puzzles but
+                with boulders that could also be pushed for some additional challenge. <br><br><a
+                    href="https://www.youtube.com/watch?v=2sefXwFFI9E">A similar kind of puzzle can be seen in this
+                    youtube video.</a>
+                <br><br>
+
+                I used the program Tiled to design a few levels for this mechanic. The more advanced my puzzles became
+                though the more annoyed I got with adjusting them to be solvable and figuring out if they are and in how
+                many steps. So I decided to write a small program using BFS (breadth first search) to solve the puzzles
+                for me. The program was written in Python and processes json files which could be extracted from Tiled.
+                <br>
+                Here are the first three levels:
+                <br><br>
+
+            </p>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em;">
+                <img class="img-log" src="img/GGJ2025/Maze1.png" alt="GGJ game, Sonosphere, sliding puzzle level 1"
+                    loading="lazy">
+                <img class="img-log" src="img/GGJ2025/Maze2.png" alt="GGJ game, Sonosphere, sliding puzzle level 2"
+                    loading="lazy">
+                <img class="img-log" src="img/GGJ2025/Maze3.png" alt="GGJ game, Sonosphere, sliding puzzle level 3"
+                    loading="lazy">
+
+                <details>
+                    <summary>
+                        <div class="icon">+</div>
+                        <h2>Level 1 solution</h2>
+                    </summary>
+                    <details-content>
+                        <div>
+                            <p>
+                                4 moves:
+                                <br>1: up
+                                <br>2: push up
+                                <br>3: up
+                                <br>4: right
+                            </p>
+                        </div>
+                    </details-content>
+                </details>
+
+                <details>
+                    <summary>
+                        <div class="icon">+</div>
+                        <h2>Level 2 solution</h2>
+                    </summary>
+                    <details-content>
+                        <div>
+                            <p>
+                                17 moves:
+                                <br>1: up
+                                <br>2: left
+                                <br>3: up
+                                <br>4: left
+                                <br>5: up
+                                <br>6: right
+                                <br>7: down
+                                <br>8: right
+                                <br>9: down
+                                <br>10: push left
+                                <br>11: left
+                                <br>12: down
+                                <br>13: left
+                                <br>14: up
+                                <br>15: push up
+                                <br>16: up
+                                <br>17: right
+
+                            </p>
+                        </div>
+                    </details-content>
+                </details>
+
+                <details>
+                    <summary>
+                        <div class="icon">+</div>
+                        <h2>Level 3 solution</h2>
+                    </summary>
+                    <details-content>
+                        <div>
+                            <p>
+                                52 moves:<br>
+                                1: left<br>
+                                2: up<br>
+                                3: left<br>
+                                4: down<br>
+                                5: left<br>
+                                6: up<br>
+                                7: right<br>
+                                8: up<br>
+                                9: left<br>
+                                10: up<br>
+                                11: right<br>
+                                12: down<br>
+                                13: left<br>
+                                14: up<br>
+                                15: right<br>
+                                16: down<br>
+                                17: left<br>
+                                18: up<br>
+                                19: left<br>
+                                20: up<br>
+                                21: left<br>
+                                22: up<br>
+                                23: right<br>
+                                24: down<br>
+                                25: right<br>
+                                26: up<br>
+                                27: left<br>
+                                28: up<br>
+                                29: right<br>
+                                30: down<br>
+                                31: right<br>
+                                32: up<br>
+                                33: right<br>
+                                34: down<br>
+                                35: right<br>
+                                36: push down<br>
+                                37: down<br>
+                                38: left<br>
+                                39: down<br>
+                                40: right<br>
+                                41: up<br>
+                                42: left<br>
+                                43: push left<br>
+                                44: up<br>
+                                45: left<br>
+                                46: up<br>
+                                47: left<br>
+                                48: down<br>
+                                49: push down<br>
+                                50: down<br>
+                                51: right<br>
+                                52: up
+                            </p>
+                        </div>
+                    </details-content>
+                </details>
+            </div>
+            <p>
+                This was the code I used for the solver, it prints out quite a lot of extra stuff for debugging
+                purposes.
+                Code:
+            <pre><code class="language-python line-numbers">
+import json
+from collections import deque
+import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
+import matplotlib.animation as animation
+import numpy as np
+import sys
+from pathlib import Path
+
+
+##########################
+# Tile Definitions
+##########################
+
+# Floor tiles:
+WALL       = 1
+IND_WALK   = 2    # Indestructible walking floor
+WALK_1     = 3    # Walking floor with 1 health
+WALK_2     = 4    # Walking floor with 2 health
+IND_SLIDE  = 9    # Indestructible sliding floor
+SLIDE_1    = 10   # Sliding floor with 1 health
+SLIDE_2    = 11   # Sliding floor with 2 health
+START      = 44   # Start tile (treated like IND_WALK)
+EXIT       = 45   # Exit tile (treated like IND_WALK)
+DESTROYED  = 50   # Destroyed floor (landing here is forbidden)
+
+PLAYER_MARKER = 100
+BOULDER_MARKER = 101
+
+BOULDER_WALK  = 20  # Boulder on a walking floor
+BOULDER_SLIDE = 21  # Boulder on a sliding floor
+
+FLOOR_TILES = frozenset({IND_WALK, WALK_1, WALK_2, IND_SLIDE, SLIDE_1, SLIDE_2, START, EXIT})
+DESTRUCTIBLE_TILES = frozenset({WALK_1, WALK_2, SLIDE_1, SLIDE_2})
+
+
+tile_colors = {
+    WALL: 'black',
+    IND_WALK: 'lightgray',
+    WALK_1: 'orange',
+    WALK_2: 'red',
+    IND_SLIDE: 'cyan',
+    SLIDE_1: 'blue',
+    SLIDE_2: 'navy',
+    START: 'green',
+    EXIT: 'gold',
+    DESTROYED: 'brown',
+    PLAYER_MARKER: 'lime',
+    BOULDER_MARKER: 'magenta'
+}
+
+
+# Directions:
+DIRS = {
+    "up":    (-1, 0),
+    "down":  (1, 0),
+    "left":  (0, -1),
+    "right": (0, 1)
+}
+
+##########################
+# Puzzle Loading & Object Extraction
+##########################
+
+def load_puzzle(filename):
+    with open(filename, 'r') as f:
+        puzzle = json.load(f)
+    width = puzzle["width"]
+    height = puzzle["height"]
+    flat_data = puzzle["layers"][0]["data"]
+    board = [flat_data[row * width:(row + 1) * width] for row in range(height)]
+    return board, width, height
+
+def board_to_tuple(board):
+    return tuple(tuple(row) for row in board)
+
+def board_to_list(board):
+    return [list(row) for row in board]
+
+def extract_objects(board):
+    board_list = board_to_list(board)
+    boulders = set()
+    height = len(board_list)
+    width = len(board_list[0]) if height > 0 else 0
+    for row in range(height):
+        for col in range(width):
+            if board_list[row][col] == BOULDER_WALK:
+                boulders.add((row, col, BOULDER_WALK))
+                board_list[row][col] = IND_WALK
+            if board_list[row][col] == BOULDER_SLIDE:
+                boulders.add((row, col, BOULDER_SLIDE))
+                board_list[row][col] = IND_SLIDE   # IND_SLIDE = 9 (indestructible sliding floor)
+    return board_to_tuple(board_list), frozenset(boulders)
+
+##########################
+# Floor helpers and damage
+##########################
+
+def damage(tile):
+    if tile == WALK_2:
+        return WALK_1
+    elif tile == WALK_1:
+        return DESTROYED
+    elif tile == SLIDE_2:
+        return SLIDE_1
+    elif tile == SLIDE_1:
+        return DESTROYED
+    else:
+        return tile
+
+def is_sliding(tile):
+    return tile in {IND_SLIDE, SLIDE_1, SLIDE_2}
+
+def is_walking(tile):
+    return tile in {IND_WALK, WALK_1, WALK_2, START, EXIT}
+
+def is_floor(tile):
+    return tile in FLOOR_TILES
+
+##########################
+# Movement
+##########################
+
+def simulate_player_move(player, floor, boulders, direction, width, height):
+
+    board = board_to_list(floor)
+    row, col = player
+    row_step, col_step = direction
+    next_row, next_col = row + row_step, col + col_step
+    if not (0 <= next_row < height and 0 <= next_col < width):
+        return None
+
+    for (boulder_row, boulder_col, _) in boulders:
+        if (next_row, next_col) == (boulder_row, boulder_col):
+            return None
+    tile = board[next_row][next_col]
+    if not is_floor(tile):
+        return None
+    landing_pos = (next_row, next_col)
+    slide_path = [landing_pos]
+    if is_sliding(tile):
+        while True:
+            cand_row, cand_col = landing_pos[0] + row_step, landing_pos[1] + col_step
+            if not (0 <= cand_row < height and 0 <= cand_col < width):
+                break
+            if any((cand_row, cand_col) == (boulder_row, boulder_col)
+                   for (boulder_row, boulder_col, _) in boulders):
+                break
+            cand_tile = board[cand_row][cand_col]
+            if not is_floor(cand_tile):
+                break
+            landing_pos = (cand_row, cand_col)
+            slide_path.append(landing_pos)
+            if is_walking(cand_tile):
+                break
+
+    print(f"[simulate_player_move] Sliding path: {slide_path}")
+
+    for (path_row, path_col) in slide_path[:-1]:
+        current_tile = board[path_row][path_col]
+        if current_tile in DESTRUCTIBLE_TILES:
+            damaged_tile = damage(current_tile)
+            if damaged_tile == DESTROYED:
+                print(f"[simulate_player_move] Damage would destroy cell at ({path_row},{path_col}); move invalid.")
+                return None
+            board[path_row][path_col] = damaged_tile
+    new_floor = board_to_tuple(board)
+    print(f"[simulate_player_move] Player will land at: {landing_pos}")
+    return (landing_pos, new_floor, boulders)
+
+
+def simulate_push_move(player, floor, boulders, direction, width, height):
+    print(f"[simulate_push_move] Player: {player}, Direction: {direction}")
+    board = board_to_list(floor)
+    row, col = player
+    row_step, col_step = direction
+    boulder_coord = (row + row_step, col + col_step)
+    pushed_boulder = None
+    for boulder in boulders:
+        if (boulder[0], boulder[1]) == boulder_coord:
+            pushed_boulder = boulder
+            break
+    if pushed_boulder is None:
+        print(f"[simulate_push_move] No boulder at {boulder_coord}.")
+        return None
+    print(f"[simulate_push_move] Found boulder at {pushed_boulder[:2]} with type {pushed_boulder[2]}")
+    boulder_row, boulder_col, boulder_type = pushed_boulder
+    boulder_pos = (boulder_row, boulder_col)
+    slide_path = []
+    while True:
+        cand_row, cand_col = boulder_pos[0] + row_step, boulder_pos[1] + col_step
+        if not (0 <= cand_row < height and 0 <= cand_col < width):
+            break
+        if any((cand_row, cand_col) == (other_row, other_col)
+               for (other_row, other_col, _) in boulders
+               if (other_row, other_col) != (boulder_row, boulder_col)):
+            break
+        cand_tile = board[cand_row][cand_col]
+        if not is_floor(cand_tile):
+            break
+        boulder_pos = (cand_row, cand_col)
+        slide_path.append(boulder_pos)
+        if is_walking(cand_tile):
+            break
+    if boulder_pos == (boulder_row, boulder_col):
+        return None
+    for (path_row, path_col) in slide_path[:-1]:
+        current_tile = board[path_row][path_col]
+        if current_tile in DESTRUCTIBLE_TILES:
+            damaged_tile = damage(current_tile)
+            if damaged_tile == DESTROYED:
+                return None
+            board[path_row][path_col] = damaged_tile
+    new_floor = board_to_tuple(board)
+    final_tile = new_floor[boulder_pos[0]][boulder_pos[1]]
+    new_boulder_type = BOULDER_SLIDE if is_sliding(final_tile) else BOULDER_WALK
+    new_boulder = (boulder_pos[0], boulder_pos[1], new_boulder_type)
+    new_boulders = set(boulders)
+    new_boulders.remove(pushed_boulder)
+    new_boulders.add(new_boulder)
+    print(f"[simulate_push_move] Returning new boulder state: {new_boulder}, new pos: {boulder_pos}")
+    return (player, new_floor, frozenset(new_boulders))
+
+##########################
+# BFS Solver (with Push Moves Enqueued First)
+##########################
+
+def bfs_solve(initial_player, floor, boulders, width, height, max_steps=1000):
+    start_state = (initial_player, floor, boulders)
+    queue = deque()
+    queue.append((start_state, 0, []))
+    visited = set()
+    visited.add(start_state)
+
+    while queue:
+        state, steps, moves = queue.popleft()
+        player, current_floor, current_boulders = state
+        print(f"[BFS] Current state: player={player}, steps={steps}, moves={moves}")
+
+        if current_floor[player[0]][player[1]] == EXIT:
+            print(f"[BFS] Exit reached with state: {state}")
+            return steps, moves
+
+        if steps >= max_steps:
+            continue
+
+        for move_name, direction in DIRS.items():
+            print(f"[BFS] Attempting push move '{move_name}' from state: player={player}, boulders={current_boulders}")
+            new_state = simulate_push_move(player, current_floor, current_boulders, direction, width, height)
+            if new_state is not None:
+                print(f"[BFS] Push move '{move_name}' returned new state: {new_state}")
+                if new_state not in visited:
+                    print(f"[BFS] Enqueuing new state from push move: {new_state}")
+                    visited.add(new_state)
+                    queue.append((new_state, steps + 1, moves + [f"push {move_name}"]))
+            else:
+                print(f"[BFS] Push move '{move_name}' failed.")
+
+        for move_name, direction in DIRS.items():
+            print(f"[BFS] Attempting normal move '{move_name}' from state: player={player}, boulders={current_boulders}")
+            new_state = simulate_player_move(player, current_floor, current_boulders, direction, width, height)
+            if new_state is not None:
+                print(f"[BFS] Normal move '{move_name}' returned new state: {new_state}")
+                if new_state not in visited:
+                    print(f"[BFS] Enqueuing new state from normal move: {new_state}")
+                    visited.add(new_state)
+                    queue.append((new_state, steps + 1, moves + [move_name]))
+            else:
+                print(f"[BFS] Normal move '{move_name}' failed.")
+
+    return None
+
+##########################
+# Vizualisation
+##########################
+
+def combine_state(floor, player, boulders):
+    grid = np.array(floor, dtype=int).copy()
+    player_row, player_col = player
+    grid[player_row, player_col] = PLAYER_MARKER
+
+    for boulder_row, boulder_col, _ in boulders:
+        grid[boulder_row, boulder_col] = BOULDER_MARKER
+    return grid
+
+def create_colormap(tile_colors):
+    tile_values = sorted(tile_colors.keys())
+    color_list = [tile_colors[value] for value in tile_values]
+    cmap = mcolors.ListedColormap(color_list)
+
+    boundaries = tile_values + [tile_values[-1] + 1]
+    norm = mcolors.BoundaryNorm(boundaries, cmap.N)
+    return cmap, norm
+
+cmap, norm = create_colormap(tile_colors)
+
+def draw_state(state_grid, title=''):
+    plt.figure(figsize=(6, 6))
+    plt.imshow(state_grid, cmap=cmap, norm=norm)
+    plt.title(title)
+    plt.colorbar()  # optional
+    plt.show()
+
+def animate_solution(states, interval=1000):
+    fig, ax = plt.subplots(figsize=(6, 6))
+
+    state_grid = combine_state(states[0][0], states[0][1], states[0][2])
+    im = ax.imshow(state_grid, cmap=cmap, norm=norm)
+    ax.set_title("Step 0")
+
+    def update(frame):
+        floor, player, boulders = states[frame]
+        state_grid = combine_state(floor, player, boulders)
+        im.set_data(state_grid)
+        ax.set_title(f"Step {frame}")
+        return im,
+
+    ani = animation.FuncAnimation(fig, update, frames=len(states), interval=interval, blit=True, repeat=True)
+    plt.show()
+
+
+##########################
+# Main Driver
+##########################
+
+def main(argv):
+    if len(sys.argv) < 2:
+        print("Error: No level file specified.")
+        print(f"Usage: python {sys.argv[0]} <level_file.txt>")
+        sys.exit(1)
+
+    filename = Path(sys.argv[1])
+    
+    board, width, height = load_puzzle(filename)
+    board = board_to_tuple(board)
+    floor, boulders = extract_objects(board)
+    start = None
+    for row in range(height):
+        for col in range(width):
+            if floor[row][col] == START:
+                start = (row, col)
+                break
+        if start is not None:
+            break
+    if start is None:
+        print("Error: Start tile not found.")
+        return
+    result = bfs_solve(start, floor, boulders, width, height)
+    if result is None:
+        print("No solution found within the maximum steps.")
+    else:
+        steps, move_seq = result
+        print(f"Solution found in {steps} moves:")
+        print(", ".join(move_seq))
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
+        </code></pre>
+            </p>
+        </div>
+    </details>
+
+</article>

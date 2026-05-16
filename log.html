@@ -3,7 +3,10 @@
 <!-- To add an article: create a fragment file at articles/log/YYYY-MM-DD-slug.html and add one iframe line below (newest first). -->
 <!-- Image and video paths in fragments are relative to the page they're injected into (content.html). -->
 <br><br><br><br>
+
 <iframe src="articles/log/2026-05-14-Claude-website-update.html"
+    onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
+<iframe src="articles/log/2025-02-10-Maze_Solver.html"
     onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
 <iframe src="articles/log/2025-01-27-GGJ-2025.html"
     onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
@@ -12,8 +15,6 @@
 <iframe src="articles/log/2022-03-20-UnrealGAS.html"
     onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
 <iframe src="articles/log/2021-02-02-houdini-and-more-mucking-about.html"
-    onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
-<iframe src="articles/log/2021-01-20-houdini-basics.html"
     onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
 <iframe src="articles/log/2021-01-19-world-creator-2-desert-dunes.html"
     onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
