@@ -148,9 +148,9 @@
             </div>
             <p>
                 This was the code I used for the solver, it prints out quite a lot of extra stuff for debugging
-                purposes.
-                Code:
-            <pre><code class="language-python line-numbers">
+                purposes.<br><br>
+                <h1>Code</h1>
+            <pre class="line-numbers"><code class="language-python">
 import json
 from collections import deque
 import matplotlib.pyplot as plt
@@ -234,7 +234,7 @@ def extract_objects(board):
     board_list = board_to_list(board)
     boulders = set()
     height = len(board_list)
-    width = len(board_list[0]) if height > 0 else 0
+    width = len(board_list[0]) if height &gt; 0 else 0
     for row in range(height):
         for col in range(width):
             if board_list[row][col] == BOULDER_WALK:
@@ -280,7 +280,7 @@ def simulate_player_move(player, floor, boulders, direction, width, height):
     row, col = player
     row_step, col_step = direction
     next_row, next_col = row + row_step, col + col_step
-    if not (0 <= next_row < height and 0 <= next_col < width):
+    if not (0 &lt;= next_row &lt; height and 0 &lt;= next_col &lt; width):
         return None
 
     for (boulder_row, boulder_col, _) in boulders:
@@ -294,7 +294,7 @@ def simulate_player_move(player, floor, boulders, direction, width, height):
     if is_sliding(tile):
         while True:
             cand_row, cand_col = landing_pos[0] + row_step, landing_pos[1] + col_step
-            if not (0 <= cand_row < height and 0 <= cand_col < width):
+            if not (0 &lt;= cand_row &lt; height and 0 &lt;= cand_col &lt; width):
                 break
             if any((cand_row, cand_col) == (boulder_row, boulder_col)
                    for (boulder_row, boulder_col, _) in boulders):
@@ -342,7 +342,7 @@ def simulate_push_move(player, floor, boulders, direction, width, height):
     slide_path = []
     while True:
         cand_row, cand_col = boulder_pos[0] + row_step, boulder_pos[1] + col_step
-        if not (0 <= cand_row < height and 0 <= cand_col < width):
+        if not (0 &lt;= cand_row &lt; height and 0 &lt;= cand_col &lt; width):
             break
         if any((cand_row, cand_col) == (other_row, other_col)
                for (other_row, other_col, _) in boulders
@@ -394,7 +394,7 @@ def bfs_solve(initial_player, floor, boulders, width, height, max_steps=1000):
             print(f"[BFS] Exit reached with state: {state}")
             return steps, moves
 
-        if steps >= max_steps:
+        if steps &gt;= max_steps:
             continue
 
         for move_name, direction in DIRS.items():
@@ -477,9 +477,9 @@ def animate_solution(states, interval=1000):
 ##########################
 
 def main(argv):
-    if len(sys.argv) < 2:
+    if len(sys.argv) &lt; 2:
         print("Error: No level file specified.")
-        print(f"Usage: python {sys.argv[0]} <level_file.txt>")
+        print(f"Usage: python {sys.argv[0]} &lt;level_file.txt&gt;")
         sys.exit(1)
 
     filename = Path(sys.argv[1])

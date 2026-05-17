@@ -18,9 +18,11 @@
 
     <!-- stylesheet -->
     <link href="style.css" rel="stylesheet">
+    <link href="packages/prism/prism.css" rel="stylesheet">
 
     <!-- Basic script functionality -->
     <script src="basic.js"></script>
+    <script src="packages/prism/prism.js"></script>
 
 
 </head>
@@ -104,7 +106,7 @@
             <section id="contact">
                 <!-- HOME -->
                 Best way of reaching me right now is either through <a
-                    href="https://de.linkedin.com/in/mellhage">LinkedIn</a> or by sending me a <a
+                    href="https://linkedin.com/in/mellhage">LinkedIn</a> or by sending me a <a
                     href="mailto:m.mellhage@gmail.com">email.</a></p>
 
             </section>
@@ -120,6 +122,24 @@
 
             </section>
         </main>
+
+        <!-- Articles are injected asynchronously via nested iframes; re-run Prism
+             highlighting whenever new content lands in the page. -->
+        <script>
+            (function () {
+                var observer, pending;
+                function highlight() {
+                    observer.disconnect();
+                    if (window.Prism) { Prism.highlightAll(); }
+                    observer.observe(document.body, { childList: true, subtree: true });
+                }
+                observer = new MutationObserver(function () {
+                    clearTimeout(pending);
+                    pending = setTimeout(highlight, 100);
+                });
+                observer.observe(document.body, { childList: true, subtree: true });
+            })();
+        </script>
 </body>
 
 </html>
