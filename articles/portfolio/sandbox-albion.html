@@ -15,54 +15,45 @@
             <details-content>
                 <div>
                     <p>
-                        This tool was created for Albion Online to improve the workflow of level designers,
-                        unfortunately I cannot share screenshots or videos of it but will
-                        provide a description of the issue and solution.
-                        <br>
                     <h2>Background</h2>
                     <p>
 
-                        The game takes place in one single world without instancing, this is great for immersion
-                        but not so much for scalability without a
-                        robust system. The game world consists of hundreds of 1x1km maps with loading zones in
-                        between, early during the games development
-                        each of these maps were designed and built by hand, each asset placed by hand.<br><br>
+                        The game takes place in one single world without instancing, this is great for immersion but not so much for
+                        scalability without a robust system. The game world consists of hundreds of 1x1km maps with loading zones in
+                        between, early during the games development each of these maps were designed and built by hand, each asset placed by
+                        hand.<br><br>
 
-                        As the game went through a phase of heavy growth (10x+ increase of playerbase) this was
-                        deemed to not be sustainable anymore.<br><br>
+                        As the game went through a phase of heavy growth (10x+ increase of playerbase) this was deemed to not be sustainable
+                        anymore.<br><br>
 
-                        <center><img class="img" src="img/work/old_style.jpg" alt="old setup" loading="lazy">
+                        <center><img class="img" src="img/work/Albion/old_style.jpg" alt="old setup" loading="lazy">
                         </center>
-                    <div class="img-text">Old level setup</div>
+                    <div class="img-text">Old monolithic level setup</div>
                     <p>
 
                     <h2>Templates and Layers</h2>
                     <p>
                         The solution to this was the creation of two systems: templates and layers.<br>
-                        Templates purpose was to allow for levels to instead be assembled
-                        by already built pieces of levels. The main component was what we called the "main
-                        template" which had slots for other templates but generally
-                        not a lot of gameplay, it was the glue that tied the whole level together. Each main
-                        template also had layers baked in, these contained
-                        variations of the levels as well as potential roads.<br><br>
+                        Templates purpose was to allow for levels to instead be assembled by already built pieces of levels. The main
+                        component was what we called the "main template" which had slots for other templates but generally not a lot of
+                        gameplay, it was the glue that tied the whole level together. Each main template also had layers baked in, these
+                        contained variations of the levels as well as potential roads.<br><br>
 
-                        <center><img class="img" src="img/work/main_template.png" alt="main template"
+                        <center><img class="img" src="img/work/Albion/main_template.png" alt="main template"
                                 loading="lazy"></center>
                     <div class="img-text">Main template</div>
                     <p>
 
                         <br><br>
-                        After that came the border templates, these also used the layer system which decided
-                        where each exit was located.<br><br>
+                        After that came the border templates, these also used the layer system which decided where each exit was
+                        located.<br><br>
 
-                        <center><img class="img" src="img/work/border_templates.png" alt="border templates"
-                                loading="lazy"></center>
+                        <center><img class="img" src="img/work/Albion/border_templates.png" alt="border templates" loading="lazy"></center>
                     <div class="img-text">Border templates</div>
                     <p>
 
                         <br><br>
-                        The holes in the main template were what the majority of the content of the game took
-                        place:
+                        The holes in the main template were what the majority of the content of the game took place:
                     <ul>
                         <li>Monster camps</li>
                         <li>Castles & Guild territories</li>
@@ -71,45 +62,36 @@
                         <li>Resource hotspots</li>
                     </ul><br>
 
-                    <center><img class="img" src="img/work/content_templates.jpg" alt="content templates"
-                            loading="lazy"></center>
+                    <center><img class="img" src="img/work/content_templates.jpg" alt="content templates" loading="lazy"></center>
                     <div class="img-text">Content templates</div>
                     <p>
 
                         <br><br>
-                        After that came roads, which existed to guide players to the different exits of the
-                        level, they were tied together with tiny 4x4 meter crossing
-                        templates.
+                        After that came roads, which existed to guide players to the different exits of the level, they were tied together
+                        with tiny 4x4 meter crossing templates.
 
                         <br><br>
                         The result was something like the following (minimap):<br><br>
 
-                        <center><img class="img" src="img/work/minimap.png" alt="completed level minimap"
-                                loading="lazy"></center>
+                        <center><img class="img" src="img/work/minimap.png" alt="completed level minimap" loading="lazy"></center>
                     <div class="img-text">Complete templated level</div>
                     <p>
 
                         <br><br>
                     <h1>The remaining problem and following solution</h1>
                     <p>
-                        Our new system with templates and layers put us in a vastly improved position compared
-                        to our early fully hand-crafted solution.
-                        The one remaining issue was that it wasn't fast enough to assemble the levels due to
-                        unity struggling with moving many thousands
-                        of objects around at once to assemble the levels.<br><br>
+                        Our new system with templates and layers put us in a vastly improved position compared to our early fully
+                        hand-crafted solution. The one remaining issue was that it wasn't fast enough to assemble the levels due to unity
+                        struggling with moving many thousands of objects around at once to assemble the levels.<br><br>
 
-                        The solution became a toolset I developed which fetched the location of all slots in a
-                        main template as well as the centerpoint
-                        of each other template. The data was was dumped in a google sheet, one tab for the data
-                        and one for the assembler. <br>
-                        The level designer would be able to use dropdowns and see a preview of each template
-                        within the sheet.
-                        It also used djikstras (pathfinding) alghoritm to decide the possible road setup layers
-                        depending on what exits were selected. <br>
-                        Finally the designer could select export to get a level JSON to add to the unity
-                        project.
-                        The process going from 15-30 minutes to less than a minute while being a lot less error
-                        prone.
+                        The solution became a toolset I developed which fetched the location of all slots in a main template as well as the
+                        centerpoint of each other template. The data was was dumped in a google sheet, one tab for the data and one for the
+                        assembler. <br>
+                        The level designer would be able to use dropdowns and see a preview of each template within the sheet. It also used
+                        djikstras (pathfinding) alghoritm to decide the possible road setup layers depending on what exits were selected.
+                        <br>
+                        Finally the designer could select export to get a level JSON to add to the unity project. The process going from
+                        15-30 minutes to less than a minute while being a lot less error prone.
                         <br><br>
                     </p>
                 </div>
@@ -125,20 +107,15 @@
             <details-content>
                 <div>
                     <p>
-                        Another issue that arose during Albions development was related to asset management, as
-                        each environmental prop had 9+ versions
-                        (For different tiers + biome variations) plus meta files. Each time one asset needed to
-                        be moved this meant that the
-                        artists had to go into 9 folders to rename 18 different files. The tool created allowed
-                        them to select one of the files and
-                        input the new name.
-                        <br>The tool would then return the suggested actions which the user could accept or deny
-                        and lastly
-                        save all changes done to a logfile. The main challenge was that certain parts of some
-                        asset strings had to be excluded
-                        so a lot of regex had to be applied to different parts of the folder structures.<br><br>
+                        Another issue that arose during Albions development was related to asset management, as each environmental prop had
+                        9+ versions (For different tiers + biome variations) plus meta files. Each time one asset needed to be moved this
+                        meant that the artists/designer had to go into 9 folders to rename 18 different files. The tool created allowed them to
+                        select one of the files and input the new name.
+                        <br>The tool would then return the suggested actions which the user could accept or deny and lastly save all changes
+                        done to a logfile. The main challenge was that certain parts of some asset strings had to be excluded so a lot of
+                        regex had to be applied to different parts of the folder structures.<br><br>
 
-                        <center><img class="img" src="img/work/AssetMover.png" alt="Screenshot of tool"
+                        <center><img class="img" src="img/work/Albion/AssetMover.png" alt="Screenshot of tool"
                                 loading="lazy"></center>
                     </p>
                 </div>

@@ -5,38 +5,38 @@
         </summary>
         <div class="article-content">
             <p class="p2">
-                A few years ago as a level designer at Sandbox Interactive it drew me nuts how we at first built the
-                world, most every rock and tree were placed by hand in the method of one click = one asset placed, it
-                didn't seem very efficient use of our teams time or resources, eventually we effectivized the process
-                but a lot of time went down that down into manually building everything by hand.
+                A few years ago, as a level designer at Sandbox Interactive, I felt how inefficient our initial world-building pipeline was.
+                Nearly every rock and tree was placed by hand - one click meant one asset placed. While we eventually optimized the process,
+                a considerable amount of time and resources had already been spent manually building the environment.
 
                 <br><br>
-                Scroll forward a couple years and I am better aware of how much our wrists could have been
-                spared, I just hope the majority of teams doing these types of tasks these days quickly come to
-                realize how helpful procedural scattering of objects can be as a first pass and I feel that I'm
-                myself yet only to scrape the barest surface.<br>
+                Looking back, I realize how much manual labor and wrist strain could have been spared. That experience sparked an
+                appreciation for smoothing out the level production pipeline and eventually procedural workflows. I became highly motivated
+                to understand procedural scattering as a foundation for asset placement, even though I at this point feel I am still just
+                scratching the surface of what is possible.<br>
 
-                Spent a few days testing out various tools and aspects of Houdini both for placements
-                and basic mesh generating, as a friend and I are currently prototyping a game in a desert
-                environment I've been hoping to be able to output a lot more in lesser time by sprinkling rocks
-                and vegetion automatically.<br><br>
+                Recently, I spent some time testing out various tools and aspects of Houdini for both asset placement and basic mesh
+                generation. Since a friend and I are currently prototyping a game set in a vast desert environment, my goal is to output a
+                lot more content in less time by procedurally distributing rocks and vegetation.<br><br>
 
-                My current plan is to space bigger cliffs and similar in the center with a bunch of smaller
-                intersecting cliffs around them and rocks below as seen below. The red cubes are automatically
-                placed using a mask created by curvature, slope and height of the terrain while the yellow
-                surrounding cubes are placed using the red cubes as source points. The purple on the other hand
-                is generated surrounding the first mask which created the red cubes, not the best explanation so
-                below is a video, excuse the poor quality.
+                My current plan is to space out larger cliffs in the center, surrounded by smaller intersecting cliffs and finally scattered
+                rocks. The red cubes are automatically placed using a mask created by the curvature, slope, and height of the terrain. The
+                yellow surrounding cubes are then placed using the red cubes as source points. Meanwhile, the purple cubes generate around
+                the initial mask that created the red ones. It is easier to show than tell, so below is a quick video demonstrating the
+                logic.
                 <br><br>
 
                 <video class="vid-log2" controls preload="none">
                     <source src="vid/log/6/cube_placements.mp4" type="video/mp4">
                     Your browser does not support the video tag.
                 </video>
+                Naturally the scattering would need to be wastly improved for a real product, more centered around slopes and multiplied by
+                a noise to avoid having the same amount of assets in every slope. But the basic idea is there, and I am excited to continue
+                exploring the possibilities of procedural asset placement.
 
                 <br><br>
-                I have also had time to explore the labs tools for building trees and they seem real neat! Below
-                is a tree set up to generate along a curve.<br><br>
+                I also took some time to explore the Labs tools for building trees, and the seem incredibly useful. Below is a setup where a
+                tree generates along a curve.<br><br>
 
                 <video class="vid-log2" controls preload="none">
                     <source src="vid/log/6/viewport_tree.mp4" type="video/mp4">
@@ -44,9 +44,9 @@
                 </video>
 
                 <br><br>
-                Furthermore some time was spent getting accustomed to ZBrush as well as trying out quixel mixer
-                for texturing, definitely prefer this way of texturing over how I learned to do it manually with
-                photoshop. Hope to create a few more and refined pieces to use for cliffs in my terrain.
+                Furthermore, I spent some time getting re-accustomed to ZBrush and testing out Quixel Mixer for texturing. I definitely prefer
+                this texturing workflow over the manual Photoshop methods I originally learned long ago. I plan to create a few more pieces
+                to use for the cliffs in my experiments.
 
                 <br><br>
                 <center>

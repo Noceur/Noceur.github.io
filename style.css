@@ -153,7 +153,7 @@ a:hover {
 }
 
 section h1 {
-  font-size: 1em;
+  font-size: 1.2em;
   margin: 0 0 1em 0;
 }
 
@@ -168,12 +168,15 @@ section h1::before {
   border-radius: 1px;
 }
 
+h2 {
+  font-size: 1.1em;
+}
+
 h2, h3, h4 {
-  -webkit-user-select: none; /* Safari */        
+  -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
-  font-size: 1em;
   font-weight: 600;
   margin: 1.6em 0 .6em 0;
   transition: 0.3s;

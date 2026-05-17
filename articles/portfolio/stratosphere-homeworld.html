@@ -1,43 +1,55 @@
 <article>
     <h2 class="post-title">
-        <label name="+" for="showcase_homeworld">+</label><label for="showcase_homeworld">Homeworld Mobile /
+        <label name="+" for="showcase_homeworld">+</label><label for="showcase_homeworld">Homeworld Mobile / The Desolation /
             Dawn of Ages - Stratosphere Games</label><small></small>
         <input id="showcase_homeworld" style="display:none" type="checkbox" onclick="showText(this)">
     </h2>
     <div style="display:none">
-
+        <h2 class="p2">Homeworld Mobile</h2>
         <p class="p2">
-            For Homeworld Mobile I mainly worked on the tutorial and narrative missions as well how
-            they were connected to the overall player progression. The logic was made using a
-            in-house node-based tool similar to blueprints.
+            At Stratosphere games I mainly worked on Homeworld Mobile where I was the sole level designer. The main focus was on the
+            tutorial and narrative missions as well how they were connected to the overall player progression./unlocks The logic was made
+            using a in-house node-based tool similar to blueprints.
             <br><br>
             <a href="https://www.youtube.com/watch?v=xGGi3GBuzUg">Playthrough of the video of all
                 the story missions can be seen at YouTube.</a>
             <br><br>
         </p>
+        <h2 class="p2">The Desolation - Minor involvement </h2>
+        <p class="p2">
+            The Desolation is a coop looter shooter for Mobile and PC where I worked on some of the early level designs/FTUE planning before my
+            departure from the company.
+            <br><br>
+            <a href="https://www.youtube.com/watch?v=Zq6A7YyTMwM">An early access trailer can be seen at YouTube.</a>
+            <br><br>
+        </p>
 
+        <h2 class="p2">Maya batch rig exporter</h2>
+        <p class="p2">
+                        I also developed a rig exporter tool which was requested by an animator working on Dawn of Ages, the issue that
+                        needed to be solved was that certain actions had to be constantly repeated each time a rig needed to be exported. As
+                        a lot of rigs constantly needed changes a batch exporting tool was requested which removed certain bones and the
+                        controls while keeping the users personal export settings intact.
+                        <br><br>
+                        The tool was made in Maya using Python and had export profiles saved in JSONs so the settings could easily be shared
+                        or changed depending on what rig the animator was working on.
+        </h2>
         <details>
             <summary>
                 <div class="icon">+</div>
-                <h2>Maya rig batch exporter</h2>
+                <h2>Technical details</h2>
                 <br>
             </summary>
             <details-content>
                     <p>
-                        This tool was requested by the animator at one of the companies I worked for, the issue
-                        that needed to be solved
-                        was that certain actions had to be constantly repeated each time a rig needed to be
-                        exported.
-                        As a lot of rigs constantly needed changes a batch exporting tool was requested which
-                        removed certain bones,
-                        the controls while keeping the users personal export settings intact.
-                        <br><br>
-                        The tool was made in Maya using Python and had export profiles saved in JSONs so the
-                        settings could easily be shared or
-                        changed depending on what rig the animator was working on.
+                        This tool was requested by the animator at Dawn of Ages, the issue that needed to be solved was that certain actions
+                        had to be constantly repeated each time a rig needed to be exported. As a lot of rigs constantly needed changes a
+                        batch exporting tool was requested which removed certain bones, the controls while keeping the users personal export
+                        settings intact.
+
                         <br>
 
-                        <center><img class="img" src="img/work/batch_exporter.png" alt="house mesh"
+                        <center><img class="img" src="img/work/Stratosphere/batch_exporter.png" alt="house mesh"
                                 loading="lazy" width="50%" height="50%"></center>
                     <div class="img-text">Tool interface</div><br>
                     <p>
@@ -45,18 +57,16 @@
                         <br><br>
                     <h1>Usage</h1>
                     <p>
-                        <b>"Profile name":</b><br> The name for the specific export that is later shown in the
-                        dropdown to allow modifying the rules.<br>
+                        <b>"Profile name":</b><br> The name for the specific export that is later shown in the dropdown to allow modifying
+                        the rules.<br>
                         <br>
-                        <b>"Add objects to save":</b><br> Objects selected (and children) were added to a list,
-                        these were the objects to be exported for the specific profile. This was a additive
-                        option so any objects selected when clicking the button a second time were appended to
-                        the list.<br>
-                        <b>"Add objects to delete":</b><br> Objects to be excluded from the list i.e. certain
-                        bones or the rig controls.<br>
+                        <b>"Add objects to save":</b><br> Objects selected (and children) were added to a list, these were the objects to be
+                        exported for the specific profile. This was a additive option so any objects selected when clicking the button a
+                        second time were appended to the list.<br>
+                        <b>"Add objects to delete":</b><br> Objects to be excluded from the list i.e. certain bones or the rig controls.<br>
                         <b>"Profile save location":</b><br> Where the fbx file should be exported to.<br>
-                        <b>"Wipe new profile data":</b><br> To wipe the current "save" and "delete" data from
-                        the profile if one wishes to set it up again.<br>
+                        <b>"Wipe new profile data":</b><br> To wipe the current "save" and "delete" data from the profile if one wishes to
+                        set it up again.<br>
 
                         Next section dealt with the already saved profiles.
                         <b>"Profile":</b><br> The active profile to use the commands below at.<br>
@@ -74,10 +84,9 @@
                     </ul>
                     <p>
                         <br>
-                        <b>"Export all profile objects":</b> Ran the above for all created profiles in the
-                        specific JSON.<br>
-                        <b>"Select profile objects":</b> Selected all meshes in specific profile excluding and
-                        unwanted objects, used to figure out issues with profile.<br>
+                        <b>"Export all profile objects":</b> Ran the above for all created profiles in the specific JSON.<br>
+                        <b>"Select profile objects":</b> Selected all meshes in specific profile excluding and unwanted objects, used to
+                        figure out issues with profile.<br>
                         <b>"Delete profile":</b> Self explanatory.
                         <br><br>
                         Settings actions section existed to save or load different profiles to a JSON.
