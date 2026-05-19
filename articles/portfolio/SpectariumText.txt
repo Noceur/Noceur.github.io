@@ -1,0 +1,41 @@
+Make a flashy showreel. Infinite scrolling seamless of some of the games I worked on.
+
+Add an image for each title on top of each section
+
+https://nemekkawalsky.wordpress.com/
+
+A dungeon is built out of zones. Each dungeon has a start zone and a exit zone, anything in between there are regular zones, scenario zones or adapter zones (which exists as a way to bridge gaps when the zone borders do not match).
+
+Zones
+    General zone creation steps: Blockout -> Tile layout (+ blockers) -> enemies/gameplay logic -> testing -> decoration -> custom navmesh -> playtest
+    The different zones are built slightly different, partially for technical reasons and partially for wanting different things out of them.
+    For Norse which was our first Biome we used a tile based system where tiles were 5x5, 10x10, 10x20 or 20x20. Since an art requirement included semi long directional soft shadows we couldn't have baked light as we ran into issues where zones got stitched to the next one. We also opted for no dynamic due to performance reasons. The solution became a system where we vertex painted the terrain shadows into the tiles themselves, it meant we had to add extra verticies to the tiles. It also meant since each tile could exist in 4 rotations there was a version at rotation 0, 90, 180 and 270. Other than that we also had some shadows that could be manually placed under trees, since they didn't affect gameplay and had no colliders they could stretch across zone borders.
+    To make this manageable I had to set up some custom tools to automatically swap tiles out as they rotated.
+    For Mayan which was an interior biome we had floor tiles at 2x2 and walls at 2 units separated as we tried to get a equal quality without the cumbersome Norse system (it was also far easier to get away from this in an interior Biome). Far less building pieces. We also wanted to have a much more claustrophobic interior feel. The floor tiles texture was based on world position. One issue that arose was of course that walls could obscure the camera view which could not be rotated. To tackle this a few different systems were made, cutout around the playercharacter, enemies being visible through walls as a silhouette of red color and walls being split up into a top element and a bottom "stub" element.
+    The Watcher Biome which was our last and what is used for the FTUE we had a bright interior theme where we went mostly by the same rules although we had plenty of different floor tiles which did not use world position. The reasoning being that we wanted to put more effort into individual bigger stones and make patterns in the floors. We also had the option for trim close to the walls. [TRIM IMAGE] [TILE IMAGE].
+    For the project roughly 150 zones were produced so far.
+    Decoration is mainly done using compositions which is just a collection of prefabs. For a big part of the project the shape was not considered much during creation but our future plans were to standardize per biome so we could swap between different sub-themes.
+
+    Encounters could be either placed manually, points set and then dynamically enemies selected within the defined list per point (for FTUE and similar) or a dynamic spawn system with even density across the whole dungeon with plans to extend this with a "dungeon graph" for variable density in different areas.
+
+    Zones had a visual mesh and a walkable mesh which was for the client and then a navmesh that was used on both client and server.
+
+
+Dungeons
+    Assembled out of zones, hand assembled in a scriptable object. Made a visual tool that process the prefabs based on position in relation to the "starter" zone and creates a scriptable object. The dungeon object has a few meta data fields such as weather and biome.
+
+    Long term the majority of these would be generated from templates (dungeon graphs).
+
+
+
+Tools
+    Pipeline
+        Zone and dungeon creation tools.
+
+    Macro
+        For efficiently building levels I usually use a macro pad and custom scripts. In the case of Myths this worked by allowing me to placing tiles based on rotation with something in the shape of a numpad. [INSERT IMAGE OF LAYOUT AND BUTTON FUNCTION]
+
+
+
+    Asset palette
+        Tool created which lets you preview a spread of assets and finally placing them once they are placed to the users satisfaction.
