@@ -1,0 +1,12 @@
+<!-- Intro Log tab content. Iframe-injected into index.html's
+     <section class="panel" data-tab="intro">. -->
+
+<iframe src="articles/intro/inception.html"
+    onload="this.insertAdjacentHTML('afterend',(this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
+
+<div class="intro-grid">
+    <iframe src="articles/intro/skills.html"
+        onload="this.insertAdjacentHTML('afterend',(this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
+    <iframe src="articles/intro/commitments.html"
+        onload="this.insertAdjacentHTML('afterend',(this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
+</div>
