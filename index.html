@@ -21,11 +21,18 @@
 
 <body>
     <!-- ============================================================
-         META BAR
+         Tab routing radios. Hidden, no scroll trigger. Labels below
+         flip the :checked state and body:has() drives panel visibility.
          ============================================================ -->
-    <div class="meta-bar">
-        Last updated: 20/05/2026
-    </div>
+    <input type="radio" name="tab" id="r-intro" class="tab-route" checked>
+    <input type="radio" name="tab" id="r-portfolio" class="tab-route">
+    <input type="radio" name="tab" id="r-journals" class="tab-route">
+    <input type="radio" name="tab" id="r-contact" class="tab-route">
+
+    <!-- ============================================================
+         META BAR — left edge of viewport, not the centered shell
+         ============================================================ -->
+    <div class="meta-bar">Updated: 20/05/2026</div>
 
     <main class="shell">
         <!-- ============================================================
@@ -35,52 +42,51 @@
             <h1 class="site-title">Maximilian Mellhage</h1>
             <p class="site-sub">
                 Technical Level Designer &amp; Tools Programmer // Former Level Designer at
-                <a href="#tab-portfolio">Sandbox Interactive</a>,
-                <a href="#tab-portfolio">Stratosphere Games</a> &amp;
-                <a href="#tab-portfolio">Spectarium</a>.
+                <span class="studio">Sandbox Interactive</span>,
+                <span class="studio">Stratosphere Games</span> &amp;
+                <span class="studio">Spectarium</span>.
             </p>
         </header>
 
         <!-- ============================================================
-             TABS — purely CSS-driven via :target + :has()
+             TABS — clicking a label flips the corresponding radio
              ============================================================ -->
         <nav class="tabs" aria-label="Sections">
-            <a class="tab" href="#tab-intro">
-                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M4 4h6a4 4 0 0 1 4 4v12a3 3 0 0 0-3-3H4z"/>
-                    <path d="M20 4h-6a4 4 0 0 0-4 4v12a3 3 0 0 1 3-3h7z"/>
-                </svg>
+            <label class="tab" for="r-intro">
+                <span class="ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/></svg>
+                </span>
                 Intro Log
-            </a>
-            <a class="tab" href="#tab-portfolio">
-                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <polygon points="12,3 22,8 12,13 2,8"/>
-                    <polyline points="2,12 12,17 22,12"/>
-                    <polyline points="2,16 12,21 22,16"/>
-                </svg>
+            </label>
+            <label class="tab" for="r-portfolio">
+                <span class="ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16"><path d="M14.12 10.163 1.547 5.176a.5.5 0 0 1 0-.352l6.149-2.43a1 1 0 0 1 .608 0l6.15 2.43a.5.5 0 0 1 0 .352l-.243.097-1.297.51-4.85 1.918a1.5 1.5 0 0 1-1.094 0L4.146 5.844zm0 4.376L1.547 9.552a.5.5 0 0 1 .035-.927l3.213-1.27 4.13 1.632a2 2 0 0 0 1.46 0l4.131-1.632 3.213 1.27a.5.5 0 0 1 .035.927zM1.547 12.928a.5.5 0 0 0 .035.927L8.42 16.32a1 1 0 0 0 .608 0l6.844-2.464a.5.5 0 0 0 .035-.927l-3.213-1.27-4.13 1.632a2 2 0 0 1-1.46 0l-4.131-1.632z"/></svg>
+                </span>
                 Portfolio Works
-            </a>
-            <a class="tab" href="#tab-journals">
-                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <polyline points="4,7 9,12 4,17"/>
-                    <line x1="12" y1="17" x2="20" y2="17"/>
-                </svg>
+            </label>
+            <label class="tab" for="r-journals">
+                <span class="ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16"><path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/><path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/><path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/></svg>
+                </span>
                 Technical Journals
-            </a>
-            <a class="tab" href="#tab-contact">
-                <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/>
-                </svg>
+            </label>
+            <label class="tab" for="r-contact">
+                <span class="ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/></svg>
+                </span>
                 Contact
-            </a>
+            </label>
         </nav>
 
         <!-- ============================================================
              PANEL: INTRO LOG (default)
              ============================================================ -->
-        <section id="tab-intro" class="panel">
+        <section class="panel" data-tab="intro">
             <article class="card">
-                <h2 class="card-title"><span class="dot"></span>Digital Logbook Inception</h2>
+                <h2 class="card-title">
+                    <span class="dot" aria-hidden="true"></span>
+                    Digital Logbook Inception
+                </h2>
                 <p>
                     Welcome. I am a <span class="accent">Technical Level Designer</span> deeply focused on
                     optimizing content generation workflows and building custom programmatic toolsets for
@@ -104,7 +110,13 @@
 
             <div class="intro-grid">
                 <article class="card">
-                    <h2 class="card-title purple"><span class="dot"></span>Skills &amp; Technologies</h2>
+                    <h2 class="card-title purple">
+                        <span class="glyph" aria-hidden="true">
+                            <!-- Bootstrap Icons: cpu (MIT) -->
+                            <svg viewBox="0 0 16 16"><path d="M5 0a.5.5 0 0 1 .5.5V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2h1V.5a.5.5 0 0 1 1 0V2A2.5 2.5 0 0 1 14 4.5h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14v1h1.5a.5.5 0 0 1 0 1H14a2.5 2.5 0 0 1-2.5 2.5v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14h-1v1.5a.5.5 0 0 1-1 0V14A2.5 2.5 0 0 1 2 11.5H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2v-1H.5a.5.5 0 0 1 0-1H2A2.5 2.5 0 0 1 4.5 2V.5A.5.5 0 0 1 5 0m-.5 3A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13h7a1.5 1.5 0 0 0 1.5-1.5v-7A1.5 1.5 0 0 0 11.5 3zM5 6.5A1.5 1.5 0 0 1 6.5 5h3A1.5 1.5 0 0 1 11 6.5v3A1.5 1.5 0 0 1 9.5 11h-3A1.5 1.5 0 0 1 5 9.5zM6.5 6a.5.5 0 0 0-.5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-.5-.5z"/></svg>
+                        </span>
+                        Skills &amp; Technologies
+                    </h2>
                     <ul class="kv-list">
                         <li><span class="label">Level Editing:</span> Unity, Unreal Engine 5, Tiled Editor, Graph Tooling.</li>
                         <li><span class="label">Procedural Systems:</span> Houdini Engine (HDAs), Flip Book fluids, Vellum mesh wrappings.</li>
@@ -114,7 +126,13 @@
                 </article>
 
                 <article class="card">
-                    <h2 class="card-title"><span class="dot"></span>Core Commitments</h2>
+                    <h2 class="card-title">
+                        <span class="glyph" aria-hidden="true">
+                            <!-- Bootstrap Icons: ui-checks (MIT) -->
+                            <svg viewBox="0 0 16 16"><path d="M7 2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zM2 1a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2zm0 8a2 2 0 0 0-2 2v2a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2v-2a2 2 0 0 0-2-2zm.854-3.646a.5.5 0 0 1-.708 0l-1-1a.5.5 0 1 1 .708-.708l.646.647 1.646-1.647a.5.5 0 1 1 .708.708zm0 8a.5.5 0 0 1-.708 0l-1-1a.5.5 0 0 1 .708-.708l.646.647 1.646-1.647a.5.5 0 0 1 .708.708zM7 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-7a.5.5 0 0 1-.5-.5zm0-5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0 8a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/></svg>
+                        </span>
+                        Core Commitments
+                    </h2>
                     <ul class="kv-list">
                         <li>Reducing level build overhead from 30 minutes to &lt;60s using programmatic Excel and Node setups.</li>
                         <li>Eradicating designer wrist strain and carpal tunnel via macro paddings and automation.</li>
@@ -128,35 +146,35 @@
         <!-- ============================================================
              PANEL: PORTFOLIO WORKS
              ============================================================ -->
-        <section id="tab-portfolio" class="panel">
-            <!-- Showreel (CSS-only marquee, ducked behind a fade) -->
+        <section class="panel" data-tab="portfolio">
+            <!-- Showreel -->
             <div class="showreel" aria-hidden="true">
                 <div class="showreel-track">
-                    <img src="img/work2/Albion/Albion_01.jpg" alt="" loading="lazy">
-                    <img src="img/work/Spectarium/Dungeons/Dungeons_Norse.png" alt="" loading="lazy">
-                    <img src="img/work2/DawnOfAges/DawnOfAges_01.jpg" alt="" loading="lazy">
-                    <img src="img/work/Spectarium/Dungeons/Dungeons_Mayan.png" alt="" loading="lazy">
-                    <img src="img/work2/Homeworld/Homeworld_maxres.jpg" alt="" loading="lazy">
-                    <img src="img/work2/Albion/Albion_04.jpg" alt="" loading="lazy">
-                    <img src="img/work/Spectarium/Dungeons/Dungeon_Surtr.png" alt="" loading="lazy">
-                    <img src="img/work2/DawnOfAges/DawnOfAges_03.jpg" alt="" loading="lazy">
-                    <img src="img/work2/Desolation/Desolation_hq.jpg" alt="" loading="lazy">
-                    <img src="img/work2/Albion/Albion_06.jpg" alt="" loading="lazy">
+                    <img src="img/work2/Albion/Albion_01.jpg" alt="">
+                    <img src="img/work/Spectarium/Dungeons/Dungeons_Norse.png" alt="">
+                    <img src="img/work2/DawnOfAges/DawnOfAges_01.jpg" alt="">
+                    <img src="img/work/Spectarium/Dungeons/Dungeons_Mayan.png" alt="">
+                    <img src="img/work2/Homeworld/Homeworld_maxres.jpg" alt="">
+                    <img src="img/work2/Albion/Albion_04.jpg" alt="">
+                    <img src="img/work/Spectarium/Dungeons/Dungeon_Surtr.png" alt="">
+                    <img src="img/work2/DawnOfAges/DawnOfAges_03.jpg" alt="">
+                    <img src="img/work2/Desolation/Desolation_hq.jpg" alt="">
+                    <img src="img/work2/Albion/Albion_06.jpg" alt="">
                     <!-- Duplicate set for seamless loop -->
-                    <img src="img/work2/Albion/Albion_01.jpg" alt="" loading="lazy" aria-hidden="true">
-                    <img src="img/work/Spectarium/Dungeons/Dungeons_Norse.png" alt="" loading="lazy" aria-hidden="true">
-                    <img src="img/work2/DawnOfAges/DawnOfAges_01.jpg" alt="" loading="lazy" aria-hidden="true">
-                    <img src="img/work/Spectarium/Dungeons/Dungeons_Mayan.png" alt="" loading="lazy" aria-hidden="true">
-                    <img src="img/work2/Homeworld/Homeworld_maxres.jpg" alt="" loading="lazy" aria-hidden="true">
-                    <img src="img/work2/Albion/Albion_04.jpg" alt="" loading="lazy" aria-hidden="true">
-                    <img src="img/work/Spectarium/Dungeons/Dungeon_Surtr.png" alt="" loading="lazy" aria-hidden="true">
-                    <img src="img/work2/DawnOfAges/DawnOfAges_03.jpg" alt="" loading="lazy" aria-hidden="true">
-                    <img src="img/work2/Desolation/Desolation_hq.jpg" alt="" loading="lazy" aria-hidden="true">
-                    <img src="img/work2/Albion/Albion_06.jpg" alt="" loading="lazy" aria-hidden="true">
+                    <img src="img/work2/Albion/Albion_01.jpg" alt="" aria-hidden="true">
+                    <img src="img/work/Spectarium/Dungeons/Dungeons_Norse.png" alt="" aria-hidden="true">
+                    <img src="img/work2/DawnOfAges/DawnOfAges_01.jpg" alt="" aria-hidden="true">
+                    <img src="img/work/Spectarium/Dungeons/Dungeons_Mayan.png" alt="" aria-hidden="true">
+                    <img src="img/work2/Homeworld/Homeworld_maxres.jpg" alt="" aria-hidden="true">
+                    <img src="img/work2/Albion/Albion_04.jpg" alt="" aria-hidden="true">
+                    <img src="img/work/Spectarium/Dungeons/Dungeon_Surtr.png" alt="" aria-hidden="true">
+                    <img src="img/work2/DawnOfAges/DawnOfAges_03.jpg" alt="" aria-hidden="true">
+                    <img src="img/work2/Desolation/Desolation_hq.jpg" alt="" aria-hidden="true">
+                    <img src="img/work2/Albion/Albion_06.jpg" alt="" aria-hidden="true">
                 </div>
             </div>
 
-            <!-- ====================== STUDIO: SPECTARIUM ====================== -->
+            <!-- ====================== SPECTARIUM ====================== -->
             <article class="studio-card">
                 <p class="studio-caption">Spectarium Games</p>
                 <h2 class="studio-title">Myths</h2>
@@ -202,7 +220,7 @@
                             <b>Watcher</b> &mdash; brighter interior that ditched worldspace texturing for
                             deliberate per-tile patterns and trim seams. Carried the FTUE.
                         </p>
-                        <img src="img/work/Spectarium/Zones/Zone_Mayan10.png" alt="Mayan zone close-up" loading="lazy">
+                        <img src="img/work/Spectarium/Zones/Zone_Mayan10.png" alt="Mayan zone close-up">
                     </div>
                 </details>
 
@@ -235,7 +253,7 @@
                             scenarios into connected zones, lock a starting biome, guarantee a miniboss before
                             an exit.
                         </p>
-                        <img src="img/work/Spectarium/PCG_Talk/PCG_Variants.png" alt="Variant chunk layout" loading="lazy">
+                        <img src="img/work/Spectarium/PCG_Talk/PCG_Variants.png" alt="Variant chunk layout">
                     </div>
                 </details>
 
@@ -252,7 +270,7 @@
                             rotation in a numpad shape. Strongly recommended if you would like to keep your
                             wrists.
                         </p>
-                        <img src="img/work/Spectarium/MacroPad.jpg" alt="Macro pad layout" loading="lazy">
+                        <img src="img/work/Spectarium/MacroPad.jpg" alt="Macro pad layout">
                     </div>
                 </details>
 
@@ -274,7 +292,7 @@
                 </details>
             </article>
 
-            <!-- ====================== STUDIO: SANDBOX INTERACTIVE ====================== -->
+            <!-- ====================== SANDBOX INTERACTIVE ====================== -->
             <article class="studio-card">
                 <p class="studio-caption">Sandbox Interactive</p>
                 <h2 class="studio-title">Albion Online</h2>
@@ -301,7 +319,7 @@
                             layers connected by 4&times;4m crossing templates so any two chosen exits could be
                             assembled cleanly.
                         </p>
-                        <img src="img/work/Albion/main_template.png" alt="Main template with content slots" loading="lazy">
+                        <img src="img/work/Albion/main_template.png" alt="Main template with content slots">
                     </div>
                 </details>
 
@@ -321,7 +339,7 @@
                             fed Dijkstra to compute the road-layer combinations, and an <em>export</em> button
                             that emitted level JSON for Unity to consume.
                         </p>
-                        <img src="img/work/Albion/minimap.png" alt="Complete templated level" loading="lazy">
+                        <img src="img/work/Albion/minimap.png" alt="Complete templated level">
                     </div>
                 </details>
 
@@ -339,7 +357,7 @@
                             work was a regex layer that knew which parts of each path were substitutable and which
                             were load-bearing.
                         </p>
-                        <img src="img/work/Albion/AssetMover.png" alt="Asset mover tool screenshot" loading="lazy">
+                        <img src="img/work/Albion/AssetMover.png" alt="Asset mover tool screenshot">
                     </div>
                 </details>
 
@@ -362,7 +380,7 @@
                 </details>
             </article>
 
-            <!-- ====================== STUDIO: STRATOSPHERE GAMES ====================== -->
+            <!-- ====================== STRATOSPHERE ====================== -->
             <article class="studio-card">
                 <p class="studio-caption">Stratosphere Games</p>
                 <h2 class="studio-title">Homeworld Mobile &amp; Technical Arts</h2>
@@ -426,7 +444,7 @@
                             settings are pushed/popped around the studio-forced ones so nothing in their
                             session is mutated when the run finishes.
                         </p>
-                        <img src="img/work/Stratosphere/batch_exporter.png" alt="Tool interface" loading="lazy">
+                        <img src="img/work/Stratosphere/batch_exporter.png" alt="Tool interface">
                         <a class="read-more" href="case-stratosphere.html">Full case study &amp; source code &rarr;</a>
                     </div>
                 </details>
@@ -434,80 +452,130 @@
         </section>
 
         <!-- ============================================================
-             PANEL: TECHNICAL JOURNALS
+             PANEL: TECHNICAL JOURNALS — accordion entries
              ============================================================ -->
-        <section id="tab-journals" class="panel">
+        <section class="panel" data-tab="journals">
             <div class="status-line">
                 <span class="label">// Stream</span>
                 Personal experiments, technical breakdowns and notes-to-self. Mostly Houdini, procedural
                 content and the occasional game jam.
             </div>
 
-            <article class="journal-entry">
-                <div class="timestamp">2025/02/10</div>
-                <h2><a href="articles/log/2025-02-10-Maze_Solver.html">Maze Solver &mdash; Python pathfinding sandbox</a></h2>
-                <p>A small Python sandbox for visualising classic maze-solving algorithms (DFS, BFS, A*) on procedurally generated grids.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2025/02/10</span>
+                    <span class="j-title">Maze Solver &mdash; Python pathfinding sandbox</span>
+                </summary>
+                <div class="detail-body">
+                    <p>A small Python sandbox for visualising classic maze-solving algorithms (DFS, BFS, A*) on procedurally generated grids. Includes step-by-step playback, heuristic comparisons and a few oddball maze generators (recursive backtracking, growing tree, Wilson&rsquo;s).</p>
+                    <a class="read-more" href="articles/log/2025-02-10-Maze_Solver.html">Open full entry &rarr;</a>
+                </div>
+            </details>
 
-            <article class="journal-entry">
-                <div class="timestamp">2025/01/27</div>
-                <h2><a href="articles/log/2025-01-27-GGJ-2025.html">Global Game Jam 2025 &mdash; postmortem</a></h2>
-                <p>What worked, what didn&rsquo;t, and the procedural prototype that almost shipped before the deadline.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2025/01/27</span>
+                    <span class="j-title">Global Game Jam 2025 &mdash; postmortem</span>
+                </summary>
+                <div class="detail-body">
+                    <p>What worked, what didn&rsquo;t, and the procedural prototype that almost shipped before the deadline. Notes on scope discipline, the cost of fancy procedural systems under 48-hour pressure, and what I&rsquo;d cut next time.</p>
+                    <a class="read-more" href="articles/log/2025-01-27-GGJ-2025.html">Open full entry &rarr;</a>
+                </div>
+            </details>
 
-            <article class="journal-entry">
-                <div class="timestamp">2023/04/15</div>
-                <h2><a href="articles/log/2023-04-15-houdini-shrinkwrap-cliff.html">Houdini &mdash; shrinkwrap cliffs</a></h2>
-                <p>Wrapping noise-driven cliff geometry onto an underlying landscape so the silhouette stays controllable.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2023/04/15</span>
+                    <span class="j-title">Houdini &mdash; shrinkwrap cliffs</span>
+                </summary>
+                <div class="detail-body">
+                    <p>Wrapping noise-driven cliff geometry onto an underlying landscape so the silhouette stays controllable. A small HDA, a few VEX snippets, and the trade-offs between attribute transfer and ray-cast wrapping.</p>
+                    <a class="read-more" href="articles/log/2023-04-15-houdini-shrinkwrap-cliff.html">Open full entry &rarr;</a>
+                </div>
+            </details>
 
-            <article class="journal-entry">
-                <div class="timestamp">2022/03/20</div>
-                <h2><a href="articles/log/2022-03-20-UnrealGAS.html">Unreal Gameplay Ability System &mdash; first impressions</a></h2>
-                <p>Notes on getting GAS working in a small prototype, the parts that paid off, and the parts that didn&rsquo;t.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2022/03/20</span>
+                    <span class="j-title">Unreal Gameplay Ability System &mdash; first impressions</span>
+                </summary>
+                <div class="detail-body">
+                    <p>Notes on getting GAS working in a small prototype, the parts that paid off (replicated effects, gameplay tags as a glue language), and the parts that didn&rsquo;t (the boilerplate required for the simplest abilities).</p>
+                    <a class="read-more" href="articles/log/2022-03-20-UnrealGAS.html">Open full entry &rarr;</a>
+                </div>
+            </details>
 
-            <article class="journal-entry">
-                <div class="timestamp">2021/03/05</div>
-                <h2><a href="articles/log/2021-03-05-further-procedural-workflows.html">Further procedural workflows</a></h2>
-                <p>Iteration on the earlier World Creator pipeline &mdash; Houdini integration, asset libraries, and lessons from the first prototype.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2021/03/05</span>
+                    <span class="j-title">Further procedural workflows</span>
+                </summary>
+                <div class="detail-body">
+                    <p>Iteration on the earlier World Creator pipeline &mdash; Houdini integration, asset libraries, and lessons from the first prototype.</p>
+                    <a class="read-more" href="articles/log/2021-03-05-further-procedural-workflows.html">Open full entry &rarr;</a>
+                </div>
+            </details>
 
-            <article class="journal-entry">
-                <div class="timestamp">2021/02/02</div>
-                <h2><a href="articles/log/2021-02-02-houdini-and-cliffs.html">Houdini and cliffs</a></h2>
-                <p>First pass at procedurally generating cliff geometry that holds up under close-camera inspection.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2021/02/02</span>
+                    <span class="j-title">Houdini and cliffs</span>
+                </summary>
+                <div class="detail-body">
+                    <p>First pass at procedurally generating cliff geometry that holds up under close-camera inspection. Layered noise, stratification masks and a small height-driven detail layer.</p>
+                    <a class="read-more" href="articles/log/2021-02-02-houdini-and-cliffs.html">Open full entry &rarr;</a>
+                </div>
+            </details>
 
-            <article class="journal-entry">
-                <div class="timestamp">2021/01/19</div>
-                <h2><a href="articles/log/2021-01-19-world-creator-2-desert-dunes.html">World Creator 2 &mdash; desert dunes</a></h2>
-                <p>Stylised desert generation in World Creator 2 and exporting the result into Unreal.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2021/01/19</span>
+                    <span class="j-title">World Creator 2 &mdash; desert dunes</span>
+                </summary>
+                <div class="detail-body">
+                    <p>Stylised desert generation in World Creator 2 and exporting the result into Unreal. Notes on dune-frequency control and the awkwardness of preserving stylised silhouettes after erosion.</p>
+                    <a class="read-more" href="articles/log/2021-01-19-world-creator-2-desert-dunes.html">Open full entry &rarr;</a>
+                </div>
+            </details>
 
-            <article class="journal-entry">
-                <div class="timestamp">2021/01/18</div>
-                <h2><a href="articles/log/2021-01-18-world-creator-2-chile.html">World Creator 2 &mdash; Chile reference</a></h2>
-                <p>Recreating the Andes from reference photography. Heightmap tuning, biome layering, foliage scatter.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2021/01/18</span>
+                    <span class="j-title">World Creator 2 &mdash; Chile reference</span>
+                </summary>
+                <div class="detail-body">
+                    <p>Recreating the Andes from reference photography. Heightmap tuning, biome layering, foliage scatter and a couple of detours into per-pixel masking for snow caps.</p>
+                    <a class="read-more" href="articles/log/2021-01-18-world-creator-2-chile.html">Open full entry &rarr;</a>
+                </div>
+            </details>
 
-            <article class="journal-entry">
-                <div class="timestamp">2021/01/17</div>
-                <h2><a href="articles/log/2021-01-17-world-creator-2-learning-the-ropes.html">World Creator 2 &mdash; learning the ropes</a></h2>
-                <p>Getting started with World Creator 2: terrain primitives, erosion stack, what surprised me.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2021/01/17</span>
+                    <span class="j-title">World Creator 2 &mdash; learning the ropes</span>
+                </summary>
+                <div class="detail-body">
+                    <p>Getting started with World Creator 2: terrain primitives, erosion stack, what surprised me, and how it compares against Houdini-based pipelines for fast iteration on stylised terrain.</p>
+                    <a class="read-more" href="articles/log/2021-01-17-world-creator-2-learning-the-ropes.html">Open full entry &rarr;</a>
+                </div>
+            </details>
 
-            <article class="journal-entry">
-                <div class="timestamp">2021/01/14</div>
-                <h2><a href="articles/log/2021-01-14-git-init-website.html">git init &mdash; this website</a></h2>
-                <p>The reasoning behind a hand-rolled minimal-JS portfolio over a CMS. Why barebones HTML/CSS still works in 2026.</p>
-            </article>
+            <details class="journal-entry">
+                <summary>
+                    <span class="timestamp">2021/01/14</span>
+                    <span class="j-title">git init &mdash; this website</span>
+                </summary>
+                <div class="detail-body">
+                    <p>The reasoning behind a hand-rolled minimal-JS portfolio over a CMS. Why barebones HTML/CSS still works in 2026, and the constraints that keep the bundle under 40 KB.</p>
+                    <a class="read-more" href="articles/log/2021-01-14-git-init-website.html">Open full entry &rarr;</a>
+                </div>
+            </details>
         </section>
 
         <!-- ============================================================
              PANEL: CONTACT
              ============================================================ -->
-        <section id="tab-contact" class="panel">
+        <section class="panel" data-tab="contact">
             <article class="contact-card">
                 <h2>// Reach out</h2>
                 <div class="channel">
@@ -517,10 +585,6 @@
                 <div class="channel">
                     <div class="key">LinkedIn</div>
                     <div class="val"><a href="https://linkedin.com/in/mellhage">linkedin.com/in/mellhage</a></div>
-                </div>
-                <div class="channel">
-                    <div class="key">GitHub</div>
-                    <div class="val"><a href="https://github.com/Noceur">github.com/Noceur</a></div>
                 </div>
                 <div class="channel">
                     <div class="key">Location</div>
@@ -541,6 +605,22 @@
             <span>HTML + CSS, no frameworks</span>
         </div>
     </main>
+
+    <!-- ============================================================
+         Image preload strip — referenced eagerly so the browser
+         caches every Portfolio Works image while the user is reading
+         the Intro Log. Sits at 1px in the corner with zero opacity.
+         No JS. No layout impact. Images expanded later render instantly.
+         ============================================================ -->
+    <div class="img-preloads" aria-hidden="true">
+        <img src="img/work/Spectarium/Zones/Zone_Mayan10.png" alt="">
+        <img src="img/work/Spectarium/PCG_Talk/PCG_Variants.png" alt="">
+        <img src="img/work/Spectarium/MacroPad.jpg" alt="">
+        <img src="img/work/Albion/main_template.png" alt="">
+        <img src="img/work/Albion/minimap.png" alt="">
+        <img src="img/work/Albion/AssetMover.png" alt="">
+        <img src="img/work/Stratosphere/batch_exporter.png" alt="">
+    </div>
 </body>
 
 </html>
