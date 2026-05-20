@@ -38,6 +38,7 @@
             <!-- <a href="#archive">Project archive</a> -->
             <a href="#contact">Contact</a>
             <a href="#portfolio">Portfolio</a>
+            <a href="#portfolio2">Portfolio 2</a>
         </nav>
     </header>
 
@@ -65,6 +66,16 @@
                 <section id="portfolio"></section>
                 <!-- ANOTHER PAGE -->
                 <iframe src="portfolio.html"
+                    onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
+                <p>
+                </p>
+
+            </section>
+
+            <!-- portfolio2 -->
+            <section id="portfolio2">
+                <!-- ALTERNATIVE PORTFOLIO -->
+                <iframe src="portfolio2.html"
                     onload="this.insertAdjacentHTML('afterend', (this.contentDocument.body||this.contentDocument).innerHTML);this.remove()"></iframe>
                 <p>
                 </p>

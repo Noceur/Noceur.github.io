@@ -1059,3 +1059,276 @@ article > details[open] > summary.post-title::before {
 article > details[open] > .article-content {
     animation: fadein var(--fadetime);
 }
+
+
+/* =============================================================
+   Portfolio 2 — showreel + Gorman-style project cards
+   ============================================================= */
+
+.portfolio2 {
+    --p2-accent: var(--highlight);
+    --p2-card-bg: #1a1a1a;
+    --p2-border: #2a2a2a;
+}
+
+.portfolio2 .p2-intro {
+    margin-bottom: 2em;
+}
+
+.portfolio2 .p2-intro h1 {
+    font-size: 1.6em;
+    margin-bottom: .6em;
+}
+
+.portfolio2 .p2-section-heading {
+    margin: 2.4em 0 1em 0;
+    font-size: 1.2em;
+    color: var(--titlecolor);
+}
+
+.portfolio2 .p2-section-heading::before {
+    content: "";
+    display: inline-block;
+    width: 3px;
+    height: .9em;
+    background: var(--highlight);
+    margin-right: .6em;
+    vertical-align: -1px;
+    border-radius: 1px;
+}
+
+/* ------- Showreel marquee ------- */
+
+.p2-showreel {
+    position: relative;
+    overflow: hidden;
+    margin: 1.5em 0 2.5em 0;
+    border-top: 1px solid var(--p2-border);
+    border-bottom: 1px solid var(--p2-border);
+    height: 220px;
+    -webkit-mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+    mask-image: linear-gradient(to right, transparent 0, #000 7%, #000 93%, transparent 100%);
+}
+
+.p2-showreel-track {
+    display: flex;
+    gap: 1em;
+    width: max-content;
+    height: 100%;
+    align-items: center;
+    animation: p2-marquee 80s linear infinite;
+    will-change: transform;
+}
+
+.p2-showreel-track img {
+    height: 200px;
+    width: auto;
+    max-width: none;
+    object-fit: cover;
+    border-radius: 3px;
+    flex: 0 0 auto;
+    filter: saturate(.9) brightness(.9);
+    transition: filter .3s ease;
+}
+
+.p2-showreel:hover .p2-showreel-track {
+    animation-play-state: paused;
+}
+
+.p2-showreel:hover .p2-showreel-track img {
+    filter: saturate(1) brightness(1);
+}
+
+@keyframes p2-marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .p2-showreel-track {
+        animation: none;
+    }
+    .p2-showreel {
+        overflow-x: auto;
+    }
+}
+
+/* ------- Project cards ------- */
+
+.portfolio2-card {
+    background: var(--p2-card-bg);
+    border: 1px solid var(--p2-border);
+    border-top: 3px solid var(--p2-accent);
+    border-radius: 6px;
+    padding: 1.5em;
+    margin: 2em 0;
+    max-width: 100%;
+    transition: border-color .3s ease, transform .3s ease, box-shadow .3s ease;
+}
+
+.portfolio2-card:hover {
+    border-color: var(--p2-border);
+    border-top-color: var(--p2-accent);
+    box-shadow: 0 10px 30px -20px var(--p2-accent);
+    transform: translateY(-2px);
+}
+
+/* Per-project accent tokens */
+.portfolio2-card[data-accent="myths"]    { --p2-accent: #ffc400; } /* amber */
+.portfolio2-card[data-accent="albion"]   { --p2-accent: #6fbf73; } /* forest green */
+.portfolio2-card[data-accent="homeworld"]{ --p2-accent: #5cc8d6; } /* cyan */
+
+/* Hero region: large image left, 2x2 thumb grid right */
+
+.portfolio2-card .p2-hero {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: .8em;
+    margin-bottom: 1.2em;
+}
+
+.portfolio2-card .p2-hero-img {
+    width: 100%;
+    height: 100%;
+    min-height: 240px;
+    max-height: 360px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--p2-border);
+}
+
+.portfolio2-card .p2-thumbs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .6em;
+}
+
+.portfolio2-card .p2-thumbs img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 3px;
+    border: 1px solid var(--p2-border);
+    aspect-ratio: 16 / 9;
+    transition: transform .3s ease, border-color .3s ease;
+}
+
+.portfolio2-card .p2-thumbs img:hover {
+    border-color: var(--p2-accent);
+    transform: scale(1.02);
+}
+
+/* Meta row: title + studio/role + tagline + chips */
+
+.portfolio2-card .p2-meta {
+    margin-bottom: .8em;
+}
+
+.portfolio2-card .p2-title {
+    font-size: 1.5em;
+    font-weight: 700;
+    margin: 0 0 .25em 0;
+    color: var(--titlecolorHilight);
+}
+
+.portfolio2-card .p2-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: .8em;
+    background: var(--p2-accent);
+    margin-right: .5em;
+    vertical-align: -1px;
+    border-radius: 1px;
+}
+
+.portfolio2-card .p2-sub {
+    font-size: .9em;
+    color: var(--titlecolor);
+    margin-bottom: .8em;
+    letter-spacing: .02em;
+}
+
+.portfolio2-card .p2-tag {
+    margin: 0 0 .8em 0;
+    max-width: 65ch;
+    color: var(--textcolor);
+}
+
+.portfolio2-card .p2-chips {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 .8em 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4em;
+}
+
+.portfolio2-card .p2-chips li {
+    font-size: .78em;
+    padding: .25em .7em;
+    border: 1px solid var(--p2-border);
+    border-radius: 999px;
+    color: var(--titlecolor);
+    background: rgba(255,255,255,.02);
+    margin: 0;
+}
+
+.portfolio2-card .p2-chips li::marker {
+    content: none;
+}
+
+/* Details / case study toggle within a card */
+
+.portfolio2-card .p2-details {
+    padding: 0;
+    margin-top: .5em;
+    border-top: 1px solid var(--p2-border);
+    padding-top: .6em;
+}
+
+.portfolio2-card .p2-details > summary {
+    padding-left: 0;
+}
+
+.portfolio2-card .p2-details > summary h2 {
+    margin: .6em 0;
+    color: var(--titlecolor);
+    transition: color .3s ease;
+}
+
+.portfolio2-card .p2-details[open] > summary h2 {
+    color: var(--p2-accent);
+}
+
+/* ------- Responsive ------- */
+
+@media only screen and (max-width: 680px) {
+    .portfolio2-card {
+        padding: 1em;
+    }
+    .portfolio2-card .p2-hero {
+        grid-template-columns: 1fr;
+    }
+    .portfolio2-card .p2-thumbs {
+        grid-template-columns: 1fr 1fr 1fr 1fr;
+    }
+    .portfolio2-card .p2-thumbs img {
+        aspect-ratio: 1 / 1;
+    }
+    .p2-showreel {
+        height: 160px;
+    }
+    .p2-showreel-track img {
+        height: 140px;
+    }
+    .portfolio2-card .p2-title {
+        font-size: 1.3em;
+    }
+}
+
+@media only screen and (max-width: 420px) {
+    .portfolio2-card .p2-thumbs {
+        grid-template-columns: 1fr 1fr;
+    }
+}

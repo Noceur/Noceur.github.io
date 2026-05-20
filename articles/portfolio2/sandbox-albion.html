@@ -1,0 +1,181 @@
+<article class="portfolio2-card" data-accent="albion">
+    <div class="p2-hero">
+        <img class="p2-hero-img" src="img/work2/Albion/Albion_01.jpg"
+            alt="Albion Online in-game scene" loading="lazy">
+        <div class="p2-thumbs">
+            <img src="img/work2/Albion/Albion_03.jpg" alt="Albion Online environment" loading="lazy">
+            <img src="img/work2/Albion/Albion_04.jpg" alt="Albion Online environment" loading="lazy">
+            <img src="img/work/Albion/minimap.png" alt="Completed templated level minimap" loading="lazy">
+            <img src="img/work/Albion/AssetMover.png" alt="Asset mover regex-driven rename tool" loading="lazy">
+        </div>
+    </div>
+
+    <div class="p2-meta">
+        <h2 class="p2-title">Albion Online</h2>
+        <div class="p2-sub">Sandbox Interactive &middot; Level Pipeline &amp; Tools</div>
+        <p class="p2-tag">
+            A single-world MMO where every map was hand-built &mdash; until a 10&times; playerbase made that
+            stop scaling. I worked on the template-based level system and the tools that let one designer
+            assemble a level in under a minute instead of half an hour.
+        </p>
+        <ul class="p2-chips">
+            <li>Unity</li>
+            <li>Hundreds of 1&times;1km maps</li>
+            <li>Templates &amp; layers</li>
+            <li>Sheets-driven assembler</li>
+            <li>Dijkstra road routing</li>
+        </ul>
+    </div>
+
+    <details class="p2-details">
+        <summary>
+            <div class="icon">+</div>
+            <h2>Case study</h2>
+        </summary>
+        <details-content>
+
+            <h1>Problem</h1>
+            <p>
+                Albion Online takes place in a single un-instanced world made of hundreds of 1&times;1km
+                hand-built maps stitched together by loading zones. Great for immersion. Not so great when
+                the playerbase grows tenfold and every prop on every map was placed by hand.
+                <br><br>
+                The old workflow was a designer painting a level from scratch in Unity, asset by asset.
+                Throughput was bounded by headcount, every map was a one-off, and Unity itself slowed to a
+                crawl when a level designer tried to move large numbers of objects around the scene.
+            </p>
+            <center>
+                <img class="img" src="img/work/Albion/old_style.jpg" alt="Old monolithic level setup" loading="lazy">
+            </center>
+            <div class="img-text">Old monolithic level setup &mdash; everything authored in place.</div>
+
+            <h1>Approach</h1>
+            <p>
+                Two systems took the brunt of the rebuild: <b>templates</b> and <b>layers</b>. Templates let
+                levels be assembled out of pre-built chunks instead of from a blank scene; layers let those
+                chunks vary across instances without re-authoring them.
+            </p>
+
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>The template stack</h2>
+                </summary>
+                <details-content>
+                    <p>
+                        The <b>main template</b> was the glue. It defined the silhouette of the level and
+                        carried slots for everything else &mdash; it didn&rsquo;t hold a lot of gameplay
+                        itself but baked in layers for variation and the optional roads underneath.
+                    </p>
+                    <center>
+                        <img class="img" src="img/work/Albion/main_template.png" alt="Main template" loading="lazy">
+                    </center>
+                    <div class="img-text">Main template &mdash; the structural backbone of the level.</div>
+
+                    <p>
+                        <b>Border templates</b> defined where exits lived on each side of the map. They also
+                        used the layer system so the same border could host different exit configurations.
+                    </p>
+                    <center>
+                        <img class="img" src="img/work/Albion/border_templates.png" alt="Border templates" loading="lazy">
+                    </center>
+                    <div class="img-text">Border templates &mdash; layered exit configurations.</div>
+
+                    <p>
+                        The holes in the main template were filled by <b>content templates</b>. This is where
+                        the majority of the game actually took place:
+                    </p>
+                    <ul>
+                        <li>Monster camps</li>
+                        <li>Castles &amp; guild territories</li>
+                        <li>Treasures</li>
+                        <li>Dungeon entrances</li>
+                        <li>Resource hotspots</li>
+                    </ul>
+                    <center>
+                        <img class="img" src="img/work/Albion/content_templates.jpg" alt="Content templates" loading="lazy">
+                    </center>
+                    <div class="img-text">Content templates &mdash; the gameplay-bearing chunks.</div>
+
+                    <p>
+                        On top of all of that, a <b>road system</b> guided players between exits. Roads were
+                        layers within the main template, connected by tiny 4&times;4m crossing templates so
+                        the path between any two chosen exits could be assembled cleanly.
+                    </p>
+                </details-content>
+            </details>
+
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>The remaining problem &mdash; and the Sheets-driven assembler</h2>
+                </summary>
+                <details-content>
+                    <p>
+                        Templates and layers solved the authoring problem, but they didn&rsquo;t solve the
+                        <em>assembly</em> problem. Stitching templates together still meant moving thousands
+                        of objects around in Unity at once, and the editor wasn&rsquo;t happy doing that.
+                        <br><br>
+                        The tool I built side-stepped the editor entirely. It pulled the location of every
+                        slot in a main template, the centerpoint of every available content template, and
+                        dumped the whole thing into a Google Sheet &mdash; one tab for the data, one tab as
+                        the assembler UI.
+                        <br><br>
+                        Inside that sheet, the level designer had:
+                    </p>
+                    <ul>
+                        <li>Dropdowns per slot, each showing a thumbnail preview of the template.</li>
+                        <li>Exit pickers that fed into Dijkstra to compute the road-layer combinations that
+                            connect the selected exits.</li>
+                        <li>An <em>export</em> button that emitted a level JSON for the Unity project to consume.</li>
+                    </ul>
+                    <center>
+                        <img class="img" src="img/work/Albion/minimap.png" alt="Complete templated level" loading="lazy">
+                    </center>
+                    <div class="img-text">Complete templated level &mdash; assembled, exported, ready to load.</div>
+                </details-content>
+            </details>
+
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>Asset mover &mdash; a smaller tool that paid off daily</h2>
+                </summary>
+                <details-content>
+                    <p>
+                        A neighbouring problem: each environmental prop had nine-plus variants (tier
+                        &times; biome) plus their meta files. Renaming or moving one asset meant walking nine
+                        folders and touching eighteen files. Artists and designers hated it.
+                        <br><br>
+                        The asset mover let the user select any one of those files and type the new name. The
+                        tool returned a preview of the suggested actions across every related variant, the
+                        user accepted or rejected, and a log file recorded the final operations. The bulk of
+                        the work was a layer of regex that knew which parts of each path were the
+                        substitutable bits and which were the load-bearing structural bits.
+                    </p>
+                    <center>
+                        <img class="img" src="img/work/Albion/AssetMover.png" alt="Asset mover tool screenshot" loading="lazy">
+                    </center>
+                </details-content>
+            </details>
+
+            <h1>Result</h1>
+            <p>
+                Level assembly dropped from <b>15&ndash;30 minutes to under a minute</b>, and was substantially
+                less error-prone since the templates and layers carried the constraints rather than relying on
+                the designer to remember them. The asset mover removed an entire class of rename mistakes from
+                the day-to-day art workflow.
+            </p>
+
+            <h1>Reflection</h1>
+            <p>
+                The Sheets layer was deliberately temporary &mdash; it was the fastest path to a working
+                tool, and it let non-engineers iterate on the assembly experience without code reviews. Long
+                term the natural next step was to fold the same dropdown-and-preview UI into a native Unity
+                editor window, drop the export round-trip, and lean harder into auto-generated road layers
+                when more exits opened up.
+            </p>
+
+        </details-content>
+    </details>
+</article>
