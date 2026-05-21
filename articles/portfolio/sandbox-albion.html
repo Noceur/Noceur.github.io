@@ -4,9 +4,12 @@
     <p class="studio-sub">Level Design &middot; Pipeline &amp; Tools &middot; Huge non-instanced MMO world &middot; Hundreds of 1x1km maps</p>
     <img src="img/work/PortfolioCarousel/4_AlbionOnline.png"
     <p class="studio-blurb">
-        Albion Online is a PC first cross-platform sandbox MMORPG featuring a completely player-driven economy and a classless, gear-based combat
-        system. The game requires highly scalable environments to support both intricate PvE dungeon encounters and massive, full-loot guild
-        wars over territorial control across distinct, resource-driven biomes.
+        TODO: ADD PART ABOUT TEMPLATES BEING SQUARE AS A MISTAKE
+
+        I worked at Sandbox Interactive as a Level Designer with technical focus on 'Albion Online'. A PC-first, cross-platform sandbox MMORPG
+        featuring a completely player-driven economy and a classless, gear-based combat system. My work focused on developing highly
+        scalable environments to support both intricate PvE dungeon encounters and massive, full-loot guild wars over territorial control
+        across distinct, resource-driven biomes. Released July 2017.
     </p>
 
 
@@ -15,19 +18,26 @@
         <summary>The monolithic old level system</summary>
         <div class="detail-body">
             <p>
-                Albion Online takes place in a single un-instanced world made of hundreds of
-                1&times;1km hand-built maps stitched together by loading zones. Great for immersion.
-                Not so great when the playerbase grows tenfold and every prop on every map was placed
-                by hand.
+                Albion Online takes place in a single un-instanced world made of hundreds of 1x1km hand-built maps stitched together by
+                loading zones. This means that if the game gets crowded you have to create more land. Great for immersion. Not so great when
+                the playerbase grows tenfold.
             </p>
             <p>
-                The old workflow was a designer painting a level from scratch in Unity, asset by asset. Throughput was bounded by headcount,
-                every map was a one-off or repeated which players noticed.
+                The old workflow was that a level designer assembled level by level by manually placing 4x4 unit ground tiles and then
+                filling it up with assets one after another, one click per asset, no painting, no compositions. Throughput was heavily bound
+                by headcount, every map was a one-off or repeated which players noticed.
+            </p>
+            <p>
+                In very early alpha that was fine. Scope was limited, the audience was small, and peaks
+                sat around <b>1,000 CCU</b>. Once marketing ramped up during beta and the game grew toward a few
+                thousand concurrent players, the cracks started showing: content demand outpaced what
+                a hand-built per-map workflow could supply, and the repetition got louder the more
+                eyes were on it. Without change launch would be catastrophic.
             </p>
             <center>
                 <img class="img" src="img/work/Albion/old_style.jpg" alt="Old monolithic level setup" loading="lazy">
             </center>
-            <div class="img-text">Old monolithic level setup &mdash; everything authored in place.</div>
+            <div class="img-text">Old monolithic level setup - everything authored in place.</div>
         </div>
     </details>
 
@@ -45,13 +55,13 @@
                 <div class="detail-body">
                     <p>
                         The <b>main template</b> was the glue. It defined the silhouette of the level and
-                        carried slots for everything else &mdash; it didn&rsquo;t hold a lot of gameplay
+                        carried slots for everything else - it didn't hold a lot of gameplay
                         itself but baked in layers for variation and the optional roads underneath.
                     </p>
                     <center>
                         <img class="img" src="img/work/Albion/main_template.png" alt="Main template" loading="lazy">
                     </center>
-                    <div class="img-text">Main template &mdash; the structural backbone of the level.</div>
+                    <div class="img-text">Main template - the structural backbone of the level.</div>
 
                     <p>
                         <b>Border templates</b> defined where exits lived on each side of the map. They also
@@ -60,15 +70,14 @@
                     <center>
                         <img class="img" src="img/work/Albion/border_templates.png" alt="Border templates" loading="lazy">
                     </center>
-                    <div class="img-text">Border templates &mdash; layered exit configurations.</div>
-
+                    <div class="img-text">Border templates - layered exit configurations.</div>
                     <p>
-                        The holes in the main template were filled by <b>content templates</b>. This is where
+                        The other spaces in the main template were filled by <b>content templates</b>. This is where
                         the majority of the game actually took place:
                     </p>
                     <ul>
                         <li>Monster camps</li>
-                        <li>Castles &amp; guild territories</li>
+                        <li>Castles & guild territories</li>
                         <li>Treasures</li>
                         <li>Dungeon entrances</li>
                         <li>Resource hotspots</li>
@@ -76,11 +85,11 @@
                     <center>
                         <img class="img" src="img/work/Albion/content_templates.jpg" alt="Content templates" loading="lazy">
                     </center>
-                    <div class="img-text">Content templates &mdash; the gameplay-bearing chunks.</div>
+                    <div class="img-text">Content templates - the gameplay-bearing chunks.</div>
 
                     <p>
                         On top of all of that, a <b>road system</b> guided players between exits. Roads were
-                        layers within the main template, connected by tiny 4&times;4m crossing templates so
+                        layers within the main template, connected by tiny 4x4m crossing templates so
                         the path between any two chosen exits could be assembled cleanly.
                     </p>
                 </div>
@@ -90,14 +99,14 @@
                 <summary>The Sheets-driven assembler</summary>
                 <div class="detail-body">
                     <p>
-                        Templates and layers solved the authoring problem, but they didn&rsquo;t solve the
+                        Templates and layers solved the authoring problem, but they didn't solve the
                         <em>assembly</em> problem. Stitching templates together still meant moving thousands
-                        of objects around in Unity at once, and the editor wasn&rsquo;t happy doing that.
+                        of objects around in Unity at once, and the editor wasn't happy doing that.
                     </p>
                     <p>
                         The tool I built side-stepped the editor entirely. It pulled the location of every
                         slot in a main template, the centerpoint of every available content template, and
-                        dumped the whole thing into a Google Sheet &mdash; one tab for the data, one tab as
+                        dumped the whole thing into a Google Sheet - one tab for the data, one tab as
                         the assembler UI.
                     </p>
                     <p>Inside that sheet, the level designer had:</p>
@@ -119,6 +128,11 @@
                 Level assembly dropped from <b>15&ndash;30 minutes to under a minute</b>, and was
                 substantially less error-prone since the templates and layers carried the constraints
                 rather than relying on the designer to remember them.
+            </p>
+            <p>
+                By launch the game was peaking over <b>40,000 CCU</b>, and having the templated
+                workflow in place is what made keeping an audience that size fed with fresh,
+                non-repetitive content actually tractable.
             </p>
 
             <h1>Reflection</h1>

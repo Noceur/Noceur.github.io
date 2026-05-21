@@ -383,10 +383,18 @@ body:has(#r-contact:checked)   .panel[data-tab="contact"] {
 .studio-card details > .detail-body p:last-child { margin-bottom: 0; }
 
 .detail-body img {
-    margin: 14px 0;
+    margin: 14px 0 0;
     border: 1px solid var(--card-line-2);
     border-radius: 4px;
     max-width: 100%;
+}
+
+.detail-body .img-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    font-style: italic;
+    margin: 4px 0 18px;
 }
 
 .detail-body .chip-row {
