@@ -1,24 +1,27 @@
 <article class="studio-card">
     <p class="studio-caption">Stratosphere Games</p>
-    <h2 class="studio-title">Homeworld Mobile &amp; Technical Support</h2>
-    <p class="studio-sub">Technical Level Designer on Homeworld Mobile &middot; FTUE LD for The Desolation &middot; Python tooling on Dawn
+    <h2 class="studio-title">Homeworld Mobile &amp; Technical Arts</h2>
+    <p class="studio-sub">Sole LD on Homeworld Mobile &middot; minor on The Desolation &middot; Python tooling on Dawn
         of Ages</p>
     <img src="img/work/PortfolioCarousel/1_HomeworldMobile_Medium.png"
     <p class="studio-blurb">
-    Technical Level Designer at Stratosphere Games (2021–2023)
-
-    I worked at Stratosphere Games as a Technical Level Designer on 'Homeworld Mobile'; an MMO real-time strategy game that translates the
-    franchise’s iconic 3D fleet-command mechanics into a new cross-platform experience. My work focused on developing expansive, fully navigable
-    3D space environments designed to support large-scale cooperative PvE engagements, complex resource management, and real-time tactical fleet
-    battles. Released October 2022.
+        Homeworld Mobile takes the iconic 3D fleet-command mechanics of the classic PC Homeworld franchise and translates them into a
+        massively multiplayer online experience. Set in a newly discovered galaxy, players are tasked with leading expeditions into the
+        unknown, managing resource operations, and directing fleets in real-time space battles. Players start by choosing a specific
+        faction, each offering its own background narrative, distinct ship designs, and unique strategic advantages. 
+        <br><br>
+        In addition to solo progression and exploration, the game strongly emphasizes social and cooperative gameplay mechanics. Players can
+        form alliances, participate in large-scale PvE engagements against pirate and alien threats, and trade resources in a player-driven
+        market. The core gameplay loop involves upgrading the mothership, researching new technologies, and building out a diversified fleet
+        of strike crafts, corvettes, and capital ships to secure dominance in the deepest reaches of space.
     </p>
 
     <details>
         <summary>Homeworld Mobile &mdash; tutorial &amp; narrative missions</summary>
         <div class="detail-body">
-            <h1>Challenge</h1>
+            <h1>Problem</h1>
             <p>
-                A mobile entry in the Homeworld universe needed a tutorial path and a strong cinematic
+                A mobile entry in the Homeworld universe needed a tutorial path and a cinematic
                 narrative arc that played cleanly off the standalone systems for combat, progression
                 and unlocks. Onboarding had to teach without lecturing; narrative missions had to
                 trigger reliably from a player&rsquo;s state at any point in their progression.
@@ -60,9 +63,9 @@
         <div class="detail-body">
             <h1>Problem</h1>
             <p>
-                An animator on Dawn of Ages was extensively burning time repeating the same FBX export
-                setup for every rig change. The action list per export was generally the same every time: strip
-                out the control rig, strip out specific bones, push the studio's FBX settings,
+                An animator on Dawn of Ages was burning through hours repeating the same FBX export
+                setup for every rig change. The action list per export was the same every time: strip
+                out the control rig, strip out specific bones, push the studio&rsquo;s FBX settings,
                 export, then put the user&rsquo;s settings back &mdash; multiplied by however many
                 rigs needed re-exporting that day.
             </p>
@@ -89,47 +92,49 @@
                 JSON profile format meant new rigs got their own setup without code changes, and the
                 file could be shared across the team.
             </p>
+        </div>
+    </details>
 
-            <details>
-                <summary>Usage cheatsheet &mdash; Maya exporter UI</summary>
-                <div class="detail-body">
-                    <p>
-                        <b>Profile name</b> &mdash; the label that later appears in the dropdown.<br>
-                        <b>Add objects to save</b> &mdash; selected objects (and their children) added to the
-                        per-profile export list. Additive: clicking again appends.<br>
-                        <b>Add objects to delete</b> &mdash; objects excluded from the export, typically the
-                        control rig or specific bones.<br>
-                        <b>Profile save location</b> &mdash; target FBX path.<br>
-                        <b>Wipe new profile data</b> &mdash; clear the in-progress save/delete lists.
-                    </p>
-                    <p>Then per existing profile:</p>
-                    <p><b>Export profile objects</b> runs one profile end-to-end:</p>
-                    <ul>
-                        <li>Open an undo chunk so the scene can be restored after.</li>
-                        <li>Select the kept objects (with hierarchy).</li>
-                        <li>Delete the unwanted objects.</li>
-                        <li>Push the user&rsquo;s FBX settings, set the studio/tool settings.</li>
-                        <li>Export the FBX.</li>
-                        <li>Pop the user&rsquo;s settings back and undo the scene mutations.</li>
-                    </ul>
-                    <p>
-                        <b>Export all profile objects</b> &mdash; the same loop across every profile in the
-                        active JSON.<br>
-                        <b>Select profile objects</b> &mdash; selects the kept mesh set without exporting,
-                        useful for debugging a profile that mis-fires.<br>
-                        <b>Delete profile</b> &mdash; self-explanatory.
-                    </p>
-                    <p>
-                        Settings actions save or load the whole profile collection to a JSON, so artists can
-                        share their export configs.
-                    </p>
-                </div>
-            </details>
+    <details>
+        <summary>Usage cheatsheet &mdash; Maya exporter UI</summary>
+        <div class="detail-body">
+            <p>
+                <b>Profile name</b> &mdash; the label that later appears in the dropdown.<br>
+                <b>Add objects to save</b> &mdash; selected objects (and their children) added to the
+                per-profile export list. Additive: clicking again appends.<br>
+                <b>Add objects to delete</b> &mdash; objects excluded from the export, typically the
+                control rig or specific bones.<br>
+                <b>Profile save location</b> &mdash; target FBX path.<br>
+                <b>Wipe new profile data</b> &mdash; clear the in-progress save/delete lists.
+            </p>
+            <p>Then per existing profile:</p>
+            <p><b>Export profile objects</b> runs one profile end-to-end:</p>
+            <ul>
+                <li>Open an undo chunk so the scene can be restored after.</li>
+                <li>Select the kept objects (with hierarchy).</li>
+                <li>Delete the unwanted objects.</li>
+                <li>Push the user&rsquo;s FBX settings, set the studio/tool settings.</li>
+                <li>Export the FBX.</li>
+                <li>Pop the user&rsquo;s settings back and undo the scene mutations.</li>
+            </ul>
+            <p>
+                <b>Export all profile objects</b> &mdash; the same loop across every profile in the
+                active JSON.<br>
+                <b>Select profile objects</b> &mdash; selects the kept mesh set without exporting,
+                useful for debugging a profile that mis-fires.<br>
+                <b>Delete profile</b> &mdash; self-explanatory.
+            </p>
+            <p>
+                Settings actions save or load the whole profile collection to a JSON, so artists can
+                share their export configs.
+            </p>
+        </div>
+    </details>
 
-            <details>
-                <summary>Code &mdash; Maya exporter (Python)</summary>
-                <div class="detail-body">
-                    <pre class="line-numbers"><code class="language-python">
+    <details>
+        <summary>Code &mdash; Maya exporter (Python)</summary>
+        <div class="detail-body">
+            <pre class="line-numbers"><code class="language-python">
 import maya.cmds as cmds
 import maya.mel as mel
 import os
@@ -295,8 +300,6 @@ def exportFBX(exportFileName, min_time=False, max_time=False):
 
 myWindow = MR_Window()
 </code></pre>
-                </div>
-            </details>
         </div>
     </details>
 </article>
