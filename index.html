@@ -62,7 +62,7 @@
         <header class="site-header">
             <h1 class="site-title">Maximilian Mellhage</h1>
             <p class="site-sub">
-                Technical Level Designer with a sprinkle of Tools Programming // Former Level Designer at
+                Technical Level Designer with a sprinkle of tools programming // Former Level Designer at
                 <span class="studio">Sandbox Interactive</span>,
                 <span class="studio">Stratosphere Games</span> &amp;
                 <span class="studio">Spectarium</span>.
@@ -111,29 +111,7 @@
         <section class="panel" data-tab="intro"     data-include="IntroLog.html"></section>
         <section class="panel" data-tab="portfolio" data-include="PortfolioWorks.html"></section>
         <section class="panel" data-tab="journals"  data-include="TechnicalJournals.html"></section>
-
-        <!-- Contact stays inline — six lines of markup, no per-entry structure. -->
-        <section class="panel" data-tab="contact">
-            <article class="contact-card">
-                <h2>// Reach out</h2>
-                <div class="channel">
-                    <div class="key">Email</div>
-                    <div class="val"><a href="mailto:m.mellhage@gmail.com">m.mellhage@gmail.com</a></div>
-                </div>
-                <div class="channel">
-                    <div class="key">LinkedIn</div>
-                    <div class="val"><a href="https://linkedin.com/in/mellhage">linkedin.com/in/mellhage</a></div>
-                </div>
-                <div class="channel">
-                    <div class="key">Location</div>
-                    <div class="val">Gothenburg / remote-friendly / willing to travel frequently</div>
-                </div>
-                <div class="channel">
-                    <div class="key">Status</div>
-                    <div class="val"><span class="accent">// Open to interesting work</span></div>
-                </div>
-            </article>
-        </section>
+        <section class="panel" data-tab="contact"   data-include="Contact.html"></section>
 
         <!-- ============================================================
              FOOT
@@ -149,10 +127,10 @@
 
     <!-- ============================================================
          Tiny enhancement script. Three jobs:
-         1. fetch+inline the tab wrapper files (IntroLog/PortfolioWorks/
-            TechnicalJournals) so their nested iframe-injection
-            cascades happen in the parent document directly, avoiding
-            the nested-iframe race.
+         1. fetch+inline the tab wrapper files (IntroLog, PortfolioWorks,
+            TechnicalJournals, Contact) so any iframe-injection cascades
+            happen in the parent document directly, avoiding the
+            nested-iframe race.
          2. Auto-inject a "↑ Collapse" button at the end of each
             expanded article/studio body after iframe injection finishes.
          3. Re-run Prism whenever new <pre><code> lands in the page.
