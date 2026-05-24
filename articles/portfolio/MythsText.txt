@@ -1,0 +1,77 @@
+Intro/role
+    I am currently working at Spectarium Games as a Technical Level Designer on the live service action RPG 'Myths'. A fast-paced, four-player co-op
+    dungeon crawler where shifting ancient mythologies collide with dynamic, evolving boss encounters. Soft-launched in Early Access 2026.
+Problems
+	Art requirements - Long shadows, Soft edges, no visual seams between zones
+	Scalability - both with creating content as well as delivery to players
+	Workflow - When I joined the game was a singleplayer prototype which we needed to reconstruct with a live service operation in mind. It only had a single level that was made in one single piece, each enemy was hand placed.
+
+Approach
+	In short - Together with tech and enviornment art we decided for tile based system, our first biome was Norse and we had . Using these
+	tiles we then assembled what we call zones, pieces of a dungeon which was later used to assemble the dungeons themselves. The positions
+	and order of the zones were stored in a scriptable object which also contained biome information and weather effects. In depth
+		Tiles
+			Biome difference - When we first started building the game there was a high artistic standard to meet, showing off a prototype
+			which couldn't scale meant we had to figure out how to convert that into a system that could. Norse was our first biome, since
+			we couldn't have dynamic light due to performance reasons and at the same time we were unable to bake the lights into the zones
+			since they needed to seamlessly stitch together and be __ and we decided to create quite large tiles in order to fit the shadows.
+		Zones - The zones existed in different types with different functionality, start zones which were always void of enemies. Regular
+		zones contained the bread and butter, and were the majority of the content players would run through. Exits were the end of the
+		dungeon and generally contained some more challenging opponent. Scenario zones were events, cursed chests where you had to defeat
+		waves of enemies, kill spawn points or do something in a limited time for additional rewards. Finally we had adapter zones were
+		simply were a way of solving the issue of having different sized exits on some zones. It required us to set up some rules for each
+		type of dungeon however, thematically if you had a Mayan themed dungeon you might want smaller paths that are side tunnels in a
+		bigger structure and they need to feel different. So a adpater zone with south -> north pathway going from slim to a large exit
+		might have a entrance that is small then the "normal" path would be blocked by rubble and instead go into a grander path where there
+		the fake entrance to the zone is blocked by a closed gate but it continues in a grand manner that then lead into the next zone with
+		a big entrance. [INSERT IMAGE HERE (img/work/Spectarium/AdapterZone.png)] 
+		There were a few special zones as well, such as the archive (the players base) and the boss zones, these were for the most part not constructed out of tiles.
+			Meshes - A zone had 3 meshes
+				Visual - This is what the player saw, only lives on the client. [INSERT IMAGE HERE]
+				Walkable mesh - Every piece of floor and pile of walkable decorations had this set up, it was simple the mesh used for player 
+				placement in height (without it a player was always stuck at y=0). It only lived on the client. [INSERT IMAGE HERE]
+				Navmesh - Was a custom flat mesh I created per zone (as our game as far as our server knew was 2D). [INSERT IMAGE HERE]
+			Data objects - The data for each zone was stored in a scriptable object. 
+				Enemies - Enemies could either be manually placed as forced spawns or using a dynamic spawn
+				system, if the dynamic spawn system was used then it would place them anywhere on the navmesh where there was no dynamic
+				spawn blocker placed. 
+				Logic - We had default logic that always deployed on a zone, this was for the sake of having traps or
+				damage zones that should always exist in a specific zone. There was additionally other layers of logic that could be
+				enabled, these were described in scenario graphs and only one graph per zone could be active at a time. It was simple a node
+				based object which referenced data fields in the zone (so the same scenario zone could be shared among several zones as long
+				as the logic was the same).  
+				Exits - Each zone also had the exits defined, this was used by the stitching alghoritm to piece the navmesh together at runtime.
+		Dungeons - The dungeons were defined as scriptable data objects, if it was a regular dungeon or one containing a boss, it defined
+		which zones, if any of the zones had scenarios, the position of them and the weather of the dungeon (which was just post processing
+		effects). The idea in the future was to generate these on the fly since we had all the data required to do so.
+			Assembly - The assembly process slowly improved, at first it had to be done by entering the the zones into a list and their x,
+			y, z cordinates. I later made a small script that allowed me to visually drag them into place, which also helped to make sure
+			they made sense thematically. The long term plan I created for the future assembly process for the project will be described in a later section.
+		Biomes - Each biome in the game represented a real world mythology and on top of it we had a invented meta mythology (called "Watchers"). 
+			Norse - This was our first biome, it was made complicated by being an exterior zone and art requirements that demanded long soft
+			shadows while not baking per zone for issues laid out in a different section. In the end each the default tile was set up as
+			10x10 units (meters) object but we had open grass tiles that were 5x5 to allow us more flexibility in how wide our zone walls
+			were intended to be set up. We also had 20x10 and 20x20 tiles that helped us break up the rather easily seen patterns our tiles
+			made. Due to the requirements we had decided to make the ground shadows part of the terrain shader, this meant the environment
+			art team had to slice out two lines of verticies (start and end of shadow). As a result we had 4 versions of each tile depending
+			on rotation. [INSERT IMAGE HERE - NorseTileShadow.png] The objects like additional rocks or trees also not part of the tile but objects placed on top, this meant that
+			they had separate shadow objects that were on the ground. The different type of tiles we had were wall, innercorner,
+			outercorner, diagonal and open (which is just a grass plane). [INSERT IMAGE HERE - NorseTiles.png] The colliders always met in the center of the
+			tile. 
+			Mayan - Being our second theme, interior and designed to be claustrophobic (norse had wide space) we decided to try to
+			skip the directional light. As a result we tried to fake ambient occlusion in the corners of the room and built the zone out of
+			floor tiles which had a world position texture and then placed walls on top of that. The new issue we ran into is the classical
+			ARPG one, walls blocking a non-rotating camera. As a result we set each wall up with a stub which indicated a wall but was very
+			low, and a high section which I could then disable. 
+			Watcher - The challenge for our third biome was trying to create an interior that felt very different from Mayan. We opted for 
+			not using world position textures for the floors, this allowed me to set up more patterns in the floor with stone tiles of different 
+			sizes. [INSERT IMAGE HERE - WatcherFlooring2.png]. Unfortunately work stopped before we got to finish the biome (or game for that matter).
+		Bosses & special zones 
+		Macros & tools - For this project I set up over 40 custom tools. Most of them related to assembling the the
+		visual zone, such as snapping, rotating based on object type automatic replacements based on themes, controlled object randomization.
+		Other tools were for navmesh setups, walkable mesh setup, zone/dungeon data setup (including batch processing) and error reporting among other things.
+		[INSERT IMAGE HERE - MythsTools3.png]
+		With the use of a macro keyboard and scripts the time to set up a zone (minus paper design) went from around a day to under an hour (including decoration) for the first draft. 
+		[INSERT ZONE BUILDING VIDEO HERE]   
+			Dungeon graph - Insert information about dungeon graph and where I would have liked to take the project. Also write a few lines about Variations based on theme decided in the graph and the micro variations here.
+Result - While I unfortunately never got to finish the game there was plenty of challenges along the way and many learnings. 

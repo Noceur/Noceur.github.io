@@ -1,35 +1,35 @@
 <article class="studio-card">
     <p class="studio-caption">Stratosphere Games</p>
-    <h2 class="studio-title">Homeworld Mobile &amp; Technical Support</h2>
-    <p class="studio-sub">Technical Level Designer on Homeworld Mobile &middot; FTUE LD for The Desolation &middot; Python tooling on Dawn
+    <h2 class="studio-title">Homeworld Mobile & Technical Support</h2>
+    <p class="studio-sub">Technical Level Designer on Homeworld Mobile · FTUE LD for The Desolation · Python tooling on Dawn
         of Ages</p>
     <img src="img/work/PortfolioCarousel/1_HomeworldMobile_Medium.png"
     <p class="studio-blurb">
-    Technical Level Designer at Stratosphere Games (2021–2023)
+    Technical Level Designer at Stratosphere Games (2021-2023)
 
     I worked at Stratosphere Games as a Technical Level Designer on 'Homeworld Mobile'; an MMO real-time strategy game that translates the
-    franchise’s iconic 3D fleet-command mechanics into a new cross-platform experience. My work focused on developing expansive, fully navigable
+    franchise's iconic 3D fleet-command mechanics into a new cross-platform experience. My work focused on developing expansive, fully navigable
     3D space environments designed to support large-scale cooperative PvE engagements, complex resource management, and real-time tactical fleet
     battles. Released October 2022.
     </p>
 
     <details>
-        <summary>Homeworld Mobile &mdash; tutorial &amp; narrative missions</summary>
+        <summary>Homeworld Mobile - tutorial & narrative missions</summary>
         <div class="detail-body">
             <h1>Challenge</h1>
             <p>
                 A mobile entry in the Homeworld universe needed a tutorial path and a strong cinematic
                 narrative arc that played cleanly off the standalone systems for combat, progression
                 and unlocks. Onboarding had to teach without lecturing; narrative missions had to
-                trigger reliably from a player&rsquo;s state at any point in their progression.
+                trigger reliably from a player's state at any point in their progression.
             </p>
 
             <h1>Approach</h1>
             <p>
                 I was the sole level designer on the project and focused on the tutorial and the
                 narrative-mission chain. All mission logic was authored in an in-house node-based
-                tool similar in spirit to Unreal Blueprints &mdash; nodes for triggers, fleet spawns,
-                camera moves, narrative beats, and unlock gates &mdash; with the unlock-gate nodes
+                tool similar in spirit to Unreal Blueprints - nodes for triggers, fleet spawns,
+                camera moves, narrative beats, and unlock gates - with the unlock-gate nodes
                 wiring missions directly into the global progression graph.
             </p>
 
@@ -43,11 +43,11 @@
     </details>
 
     <details>
-        <summary>The Desolation &mdash; minor involvement</summary>
+        <summary>The Desolation - minor involvement</summary>
         <div class="detail-body">
             <p>
                 A co-op looter shooter for mobile and PC. I worked on some of the early level designs
-                and the FTUE planning before my departure from the company &mdash; not enough
+                and the FTUE planning before my departure from the company - not enough
                 involvement to claim ownership, but enough that some of the early-game structure rode
                 through to launch. The early-access trailer is
                 <a href="https://www.youtube.com/watch?v=Zq6A7YyTMwM">on YouTube</a>.
@@ -56,31 +56,31 @@
     </details>
 
     <details>
-        <summary>Dawn of Ages &mdash; Maya batch rig exporter</summary>
+        <summary>Dawn of Ages - Maya batch rig exporter</summary>
         <div class="detail-body">
             <h1>Problem</h1>
             <p>
                 An animator on Dawn of Ages was extensively burning time repeating the same FBX export
                 setup for every rig change. The action list per export was generally the same every time: strip
                 out the control rig, strip out specific bones, push the studio's FBX settings,
-                export, then put the user&rsquo;s settings back &mdash; multiplied by however many
+                export, then put the user's settings back - multiplied by however many
                 rigs needed re-exporting that day.
             </p>
 
             <h1>Approach</h1>
             <p>
                 A Maya tool in Python with JSON-defined <em>profiles</em>. Each profile stores its
-                own &ldquo;objects to keep,&rdquo; &ldquo;objects to delete&rdquo; and target path,
+                own "objects to keep," "objects to delete" and target path,
                 so a single button runs the full sequence per rig, or all of them in batch. The tool
-                wraps every export in an undo chunk and pushes/pops the user&rsquo;s personal FBX
-                settings around the studio-forced ones, so nothing in the artist&rsquo;s session is
+                wraps every export in an undo chunk and pushes/pops the user's personal FBX
+                settings around the studio-forced ones, so nothing in the artist's session is
                 mutated when the run finishes.
             </p>
             <center>
                 <img class="img" src="img/work/Stratosphere/batch_exporter.png" alt="Tool interface" loading="lazy"
                     width="50%" height="50%">
             </center>
-            <div class="img-text">Tool interface &mdash; profile setup at the top, per-profile actions below.</div>
+            <div class="img-text">Tool interface - profile setup at the top, per-profile actions below.</div>
 
             <h1>Result</h1>
             <p>
@@ -91,16 +91,16 @@
             </p>
 
             <details>
-                <summary>Usage cheatsheet &mdash; Maya exporter UI</summary>
+                <summary>Usage cheatsheet - Maya exporter UI</summary>
                 <div class="detail-body">
                     <p>
-                        <b>Profile name</b> &mdash; the label that later appears in the dropdown.<br>
-                        <b>Add objects to save</b> &mdash; selected objects (and their children) added to the
+                        <b>Profile name</b> - the label that later appears in the dropdown.<br>
+                        <b>Add objects to save</b> - selected objects (and their children) added to the
                         per-profile export list. Additive: clicking again appends.<br>
-                        <b>Add objects to delete</b> &mdash; objects excluded from the export, typically the
+                        <b>Add objects to delete</b> - objects excluded from the export, typically the
                         control rig or specific bones.<br>
-                        <b>Profile save location</b> &mdash; target FBX path.<br>
-                        <b>Wipe new profile data</b> &mdash; clear the in-progress save/delete lists.
+                        <b>Profile save location</b> - target FBX path.<br>
+                        <b>Wipe new profile data</b> - clear the in-progress save/delete lists.
                     </p>
                     <p>Then per existing profile:</p>
                     <p><b>Export profile objects</b> runs one profile end-to-end:</p>
@@ -108,16 +108,16 @@
                         <li>Open an undo chunk so the scene can be restored after.</li>
                         <li>Select the kept objects (with hierarchy).</li>
                         <li>Delete the unwanted objects.</li>
-                        <li>Push the user&rsquo;s FBX settings, set the studio/tool settings.</li>
+                        <li>Push the user's FBX settings, set the studio/tool settings.</li>
                         <li>Export the FBX.</li>
-                        <li>Pop the user&rsquo;s settings back and undo the scene mutations.</li>
+                        <li>Pop the user's settings back and undo the scene mutations.</li>
                     </ul>
                     <p>
-                        <b>Export all profile objects</b> &mdash; the same loop across every profile in the
+                        <b>Export all profile objects</b> - the same loop across every profile in the
                         active JSON.<br>
-                        <b>Select profile objects</b> &mdash; selects the kept mesh set without exporting,
+                        <b>Select profile objects</b> - selects the kept mesh set without exporting,
                         useful for debugging a profile that mis-fires.<br>
-                        <b>Delete profile</b> &mdash; self-explanatory.
+                        <b>Delete profile</b> - self-explanatory.
                     </p>
                     <p>
                         Settings actions save or load the whole profile collection to a JSON, so artists can
@@ -127,7 +127,7 @@
             </details>
 
             <details>
-                <summary>Code &mdash; Maya exporter (Python)</summary>
+                <summary>Code - Maya exporter (Python)</summary>
                 <div class="detail-body">
                     <pre class="line-numbers"><code class="language-python">
 import maya.cmds as cmds
