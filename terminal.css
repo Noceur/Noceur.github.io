@@ -110,6 +110,23 @@ img, video { max-width: 100%; height: auto; display: block; }
     padding: 40px 32px 96px;
 }
 
+/* ---------- Mobile chrome: tighten horizontal padding so articles use more screen ---------- */
+@media (max-width: 720px) {
+    :root {
+        /* cascades to .card, .studio-card, .contact-card (all use padding: ... var(--pad-card)) */
+        --pad-card: 16px;
+    }
+    .shell {
+        padding: 24px 14px 72px;
+    }
+    .panel[data-tab="journals"] summary.post-title {
+        padding: 14px 16px;
+    }
+    .panel[data-tab="journals"] .article-content {
+        padding: 14px 16px 18px;
+    }
+}
+
 /* ---------- Site header ---------- */
 .site-header { margin-bottom: 32px; }
 
