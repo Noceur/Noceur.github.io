@@ -136,6 +136,9 @@ img, video { max-width: 100%; height: auto; display: block; }
 /* Studio names — coloured spans, NOT links */
 .site-sub .studio { color: var(--accent); }
 
+/* Studio names — coloured spans, NOT links */
+.site-sub .role { color: var(--accent); }
+
 /* ---------- Tabs (radio-driven, no scroll) ---------- */
 .tabs {
     display: flex;

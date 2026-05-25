@@ -62,10 +62,11 @@
         <header class="site-header">
             <h1 class="site-title">Maximilian Mellhage</h1>
             <p class="site-sub">
-                Technical Level Designer with a sprinkle of tools programming // Former Level Designer at
+                <span class="role">Technical Level Designer</span> with a sprinkle of tools programming 
+                <!-- // Former Level Designer at
                 <span class="studio">Sandbox Interactive</span>,
                 <span class="studio">Stratosphere Games</span> &amp;
-                <span class="studio">Spectarium</span>.
+                <span class="studio">Spectarium</span>. -->
             </p>
         </header>
 
@@ -142,6 +143,33 @@
                 fetch(el.dataset.include)
                     .then(function (r) { return r.text(); })
                     .then(function (html) { el.innerHTML = html; });
+            });
+
+            // ----- deep-linking: sync URL hash <-> selected tab -----
+            // Valid hashes: #intro, #portfolio, #journals, #contact
+            function applyHashToTab() {
+                var name = (location.hash || '').replace(/^#/, '');
+                if (!name) return;
+                var radio = document.getElementById('r-' + name);
+                if (radio && radio.classList.contains('tab-route')) radio.checked = true;
+            }
+            applyHashToTab();
+            window.addEventListener('hashchange', applyHashToTab);
+            document.querySelectorAll('.tab-route').forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    if (!radio.checked) return;
+                    var name = radio.id.replace(/^r-/, '');
+                    // 'intro' is the default landing tab — keep its URL clean (no #intro).
+                    var target = name === 'intro'
+                        ? location.pathname + location.search
+                        : '#' + name;
+                    if ((location.hash || location.pathname + location.search) !== target) {
+                        // Use replaceState so tab clicks don't clutter browser history.
+                        // Back/forward still works across explicit hash navigations from outside.
+                        if (history.replaceState) history.replaceState(null, '', target);
+                        else if (name !== 'intro') location.hash = name;
+                    }
+                });
             });
 
             // ----- shared lightbox (lazy-built on first open, reused after) -----
