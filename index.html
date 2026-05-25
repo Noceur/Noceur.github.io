@@ -1,63 +1,325 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)index.html -->
 <html lang="en">
 
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Maximilian Mellhage — Digital Logbook</title>
+    <meta name="description" content="Technical Level Designer & Tools Programmer. Portfolio, technical journals and case studies.">
 
-    <title>Maximilian Mellhage</title>
-    <meta name="description" content="3D, Programming and Level design, things I dabble in.">
-
-    <!-- Recommended minimum -->
-    <meta property="og:title" content="Maximilian Mellhage">
-    <meta property="og:description" content="Portfolio and project log website">
+    <meta property="og:title" content="Maximilian Mellhage — Digital Logbook">
+    <meta property="og:description" content="Portfolio and project log of a Technical Level Designer & Tools Programmer.">
     <meta property="og:image" content="img/site-image.jpg">
     <meta name="twitter:card" content="summary_large_image">
 
-    <!-- stylesheet -->
-    <link href="style.css" rel="stylesheet">
-    <link href="packages/prism/prism.css" rel="stylesheet" />
+    <!-- Fonts: non-blocking <link> instead of @import in CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@500;700&display=swap">
 
-    <!-- Basic script functionality -->
-    <script src="basic.js"></script>
-    <script src="packages/prism/prism.js"></script>
+    <!-- Portfolio image preloads: standards-correct background fetching -->
+    <link rel="preload" as="image" href="img/work/Spectarium/Zones/Zone_Mayan10.png">
+    <link rel="preload" as="image" href="img/work/Spectarium/Dungeons/Dungeons_Watcher2.png">
+    <link rel="preload" as="image" href="img/work/Spectarium/PCG_Talk/PCG_Variants.png">
+    <link rel="preload" as="image" href="img/work/Spectarium/MacroPad.jpg">
+    <link rel="preload" as="image" href="img/work/Albion/main_template.png">
+    <link rel="preload" as="image" href="img/work/Albion/content_templates.jpg">
+    <link rel="preload" as="image" href="img/work/Albion/minimap.png">
+    <link rel="preload" as="image" href="img/work/Albion/AssetMover.png">
+    <link rel="preload" as="image" href="img/work/Stratosphere/batch_exporter.png">
 
+    <link href="terminal.css" rel="stylesheet">
 
+    <!-- Prism syntax highlighting for embedded Python code blocks -->
+    <link href="packages/prism/prism.css" rel="stylesheet">
+    <script src="packages/prism/prism.js" defer></script>
 </head>
 
 <body>
-    <header>
+    <!-- Scroll anchor for the floating "↑ Top" pill -->
+    <a id="top"></a>
 
-        <h1>
-            <a href="#home">Maximilian Mellhage</a>
-        </h1>
-        <nav>
-            <a href="content.html#log">Log</a>
-            <!-- <a href="#archive">Project archive</a> -->
-            <a href="content.html#contact">Contact</a>
-            <!-- <a href="#photos">Photos</a> -->
-            <!-- <a href="#portfolio">Portfolio</a> -->
+    <!-- ============================================================
+         Tab routing radios. Hidden, no scroll trigger. Labels below
+         flip the :checked state and body:has() drives panel visibility.
+         ============================================================ -->
+    <input type="radio" name="tab" id="r-intro" class="tab-route" checked>
+    <input type="radio" name="tab" id="r-portfolio" class="tab-route">
+    <input type="radio" name="tab" id="r-journals" class="tab-route">
+    <input type="radio" name="tab" id="r-contact" class="tab-route">
+
+    <!-- ============================================================
+         META BAR — left edge of viewport, not the centered shell
+         ============================================================ -->
+    <div class="meta-bar">Updated: 20/05/2026</div>
+
+    <main class="shell">
+        <!-- ============================================================
+             SITE HEADER
+             ============================================================ -->
+        <header class="site-header">
+            <h1 class="site-title">Maximilian Mellhage</h1>
+            <p class="site-sub">
+                <span class="role">Technical Level Designer</span> with a sprinkle of tools programming 
+                <!-- // Former Level Designer at
+                <span class="studio">Sandbox Interactive</span>,
+                <span class="studio">Stratosphere Games</span> &amp;
+                <span class="studio">Spectarium</span>. -->
+            </p>
+        </header>
+
+        <!-- ============================================================
+             TABS — clicking a label flips the corresponding radio
+             ============================================================ -->
+        <nav class="tabs" aria-label="Sections">
+            <label class="tab" for="r-intro">
+                <span class="ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16"><path d="M1 2.828c.885-.37 2.154-.769 3.388-.893 1.33-.134 2.458.063 3.112.752v9.746c-.935-.53-2.12-.603-3.213-.493-1.18.12-2.37.461-3.287.811zm7.5-.141c.654-.689 1.782-.886 3.112-.752 1.234.124 2.503.523 3.388.893v9.923c-.918-.35-2.107-.692-3.287-.81-1.094-.111-2.278-.039-3.213.492zM8 1.783C7.015.936 5.587.81 4.287.94c-1.514.153-3.042.672-3.994 1.105A.5.5 0 0 0 0 2.5v11a.5.5 0 0 0 .707.455c.882-.4 2.303-.881 3.68-1.02 1.409-.142 2.59.087 3.223.877a.5.5 0 0 0 .78 0c.633-.79 1.814-1.019 3.222-.877 1.378.139 2.8.62 3.681 1.02A.5.5 0 0 0 16 13.5v-11a.5.5 0 0 0-.293-.455c-.952-.433-2.48-.952-3.994-1.105C10.413.809 8.985.936 8 1.783"/></svg>
+                </span>
+                Intro
+            </label>
+            <label class="tab" for="r-portfolio">
+                <span class="ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16"><path d="M14.12 10.163 1.547 5.176a.5.5 0 0 1 0-.352l6.149-2.43a1 1 0 0 1 .608 0l6.15 2.43a.5.5 0 0 1 0 .352l-.243.097-1.297.51-4.85 1.918a1.5 1.5 0 0 1-1.094 0L4.146 5.844zm0 4.376L1.547 9.552a.5.5 0 0 1 .035-.927l3.213-1.27 4.13 1.632a2 2 0 0 0 1.46 0l4.131-1.632 3.213 1.27a.5.5 0 0 1 .035.927zM1.547 12.928a.5.5 0 0 0 .035.927L8.42 16.32a1 1 0 0 0 .608 0l6.844-2.464a.5.5 0 0 0 .035-.927l-3.213-1.27-4.13 1.632a2 2 0 0 1-1.46 0l-4.131-1.632z"/></svg>
+                </span>
+                Professional work
+            </label>
+            <label class="tab" for="r-journals">
+                <span class="ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16"><path d="M5 10.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 0 1h-2a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m0-2a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5"/><path d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2"/><path d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z"/></svg>
+                </span>
+                Personal projects
+            </label>
+            <label class="tab" for="r-contact">
+                <span class="ico" aria-hidden="true">
+                    <svg viewBox="0 0 16 16"><path d="M3.654 1.328a.678.678 0 0 0-1.015-.063L1.605 2.3c-.483.484-.661 1.169-.45 1.77a17.6 17.6 0 0 0 4.168 6.608 17.6 17.6 0 0 0 6.608 4.168c.601.211 1.286.033 1.77-.45l1.034-1.034a.678.678 0 0 0-.063-1.015l-2.307-1.794a.68.68 0 0 0-.58-.122l-2.19.547a1.75 1.75 0 0 1-1.657-.459L5.482 8.062a1.75 1.75 0 0 1-.46-1.657l.548-2.19a.68.68 0 0 0-.122-.58zM1.884.511a1.745 1.745 0 0 1 2.612.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z"/></svg>
+                </span>
+                Contact
+            </label>
         </nav>
-    </header>
 
-    <div id="fade_text">
-    <intro>
-        <p>
-            This site exists for me to keep a digital logbook and share some of my projects, the website itself being
-            one of them. <br>
-            The website is still missing the majority of my experiments and projects but I'm making an effort to change
-            that soon&#8482;.
-            <br><br>
-            The goal with the website project itself was minimal JS, no libraries and extremely light weight
-            (currently barebone html, css and js together consumes &#60;20kb) while still looking nice. <br>
-            Enjoy the so far mostly empty but very performant page!
-            <br><br>
-            You'll find information about some of my smaller projects over at the <a href="content.html#log">log</a> for now.
-        </p>
-    </intro>
-    </div>
+        <!-- ============================================================
+             PANELS — each tab file is fetched once and its HTML is
+             inlined here. The tab files themselves use the standard
+             iframe-injection pattern to pull in per-article fragments
+             from articles/. Using fetch instead of <iframe> for the
+             outer wrapper avoids the nested-iframe race where an inner
+             fragment can occasionally double-inject.
+             Adding/editing content = touch a fragment under articles/.
+             ============================================================ -->
+        <section class="panel" data-tab="intro"     data-include="IntroLog.html"></section>
+        <section class="panel" data-tab="portfolio" data-include="PortfolioWorks.html"></section>
+        <section class="panel" data-tab="journals"  data-include="TechnicalJournals.html"></section>
+        <section class="panel" data-tab="contact"   data-include="Contact.html"></section>
+
+        <!-- ============================================================
+             FOOT
+             ============================================================ -->
+        <div class="foot">
+            <span>// Digital Logbook v2</span>
+            <span>HTML + CSS, some JS, <b>no frameworks</b></span>
+        </div>
+    </main>
+
+    <!-- Floating "↑ Top" pill. Uses native anchor scroll to #top. -->
+    <a href="#top" class="jump-top" aria-label="Jump to top">&uarr; Top</a>
+
+    <!-- ============================================================
+         Tiny enhancement script. Three jobs:
+         1. fetch+inline the tab wrapper files (IntroLog, PortfolioWorks,
+            TechnicalJournals, Contact) so any iframe-injection cascades
+            happen in the parent document directly, avoiding the
+            nested-iframe race.
+         2. Auto-inject a "↑ Collapse" button at the end of each
+            expanded article/studio body after iframe injection finishes.
+         3. Re-run Prism whenever new <pre><code> lands in the page.
+         ============================================================ -->
+    <script>
+        (function () {
+            // ----- 1) inline tab wrapper files -----
+            document.querySelectorAll('[data-include]').forEach(function (el) {
+                fetch(el.dataset.include)
+                    .then(function (r) { return r.text(); })
+                    .then(function (html) { el.innerHTML = html; });
+            });
+
+            // ----- deep-linking: sync URL hash <-> selected tab -----
+            // Valid hashes: #intro, #portfolio, #journals, #contact
+            function applyHashToTab() {
+                var name = (location.hash || '').replace(/^#/, '');
+                if (!name) return;
+                var radio = document.getElementById('r-' + name);
+                if (radio && radio.classList.contains('tab-route')) radio.checked = true;
+            }
+            applyHashToTab();
+            window.addEventListener('hashchange', applyHashToTab);
+            document.querySelectorAll('.tab-route').forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    if (!radio.checked) return;
+                    var name = radio.id.replace(/^r-/, '');
+                    // 'intro' is the default landing tab — keep its URL clean (no #intro).
+                    var target = name === 'intro'
+                        ? location.pathname + location.search
+                        : '#' + name;
+                    if ((location.hash || location.pathname + location.search) !== target) {
+                        // Use replaceState so tab clicks don't clutter browser history.
+                        // Back/forward still works across explicit hash navigations from outside.
+                        if (history.replaceState) history.replaceState(null, '', target);
+                        else if (name !== 'intro') location.hash = name;
+                    }
+                });
+            });
+
+            // ----- shared lightbox (lazy-built on first open, reused after) -----
+            var lightbox = null;
+            var lightboxState = { images: [], index: 0 };
+            function buildLightbox() {
+                lightbox = document.createElement('div');
+                lightbox.className = 'img-lightbox';
+                lightbox.innerHTML =
+                    '<button type="button" class="img-lightbox-prev" aria-label="Previous image">&lsaquo;</button>' +
+                    '<img class="img-lightbox-img" alt="">' +
+                    '<button type="button" class="img-lightbox-next" aria-label="Next image">&rsaquo;</button>' +
+                    '<button type="button" class="img-lightbox-close" aria-label="Close">&times;</button>';
+                document.body.appendChild(lightbox);
+                // swap the lightbox image without flashing the previous one.
+                // We replace the entire <img> element each time — the old element (with its
+                // cached bitmap) is removed from the DOM so it can never paint, and the new
+                // element stays visibility:hidden until its decode promise resolves.
+                // (Firefox doesn't reliably honour visibility:hidden on an img during a
+                // display:none → display:flex transition, hence the element-swap approach.)
+                var setLightboxImg = function (src) {
+                    var fresh = document.createElement('img');
+                    fresh.className = 'img-lightbox-img';
+                    fresh.alt = '';
+                    fresh.onclick = function (e) { e.stopPropagation(); };
+                    fresh.style.visibility = 'hidden';
+                    fresh.src = src;
+                    var current = lightbox.querySelector('.img-lightbox-img');
+                    if (current) current.parentNode.replaceChild(fresh, current);
+                    else lightbox.appendChild(fresh);
+                    var reveal = function () { fresh.style.visibility = ''; };
+                    if (fresh.decode) {
+                        fresh.decode().then(reveal, reveal);
+                    } else {
+                        fresh.onload = reveal;
+                        fresh.onerror = reveal;
+                    }
+                };
+                var lbStep = function (delta) {
+                    var n = lightboxState.images.length;
+                    if (!n) return;
+                    lightboxState.index = (lightboxState.index + delta + n) % n;
+                    setLightboxImg(lightboxState.images[lightboxState.index]);
+                };
+                // expose to the outer scope so openLightbox can use it too
+                lightbox._setImg = setLightboxImg;
+                lightbox.querySelector('.img-lightbox-prev').onclick = function (e) { e.stopPropagation(); lbStep(-1); };
+                lightbox.querySelector('.img-lightbox-next').onclick = function (e) { e.stopPropagation(); lbStep(1); };
+                lightbox.querySelector('.img-lightbox-close').onclick = function (e) { e.stopPropagation(); closeLightbox(); };
+                lightbox.onclick = function () { closeLightbox(); }; // backdrop
+                document.addEventListener('keydown', function (e) {
+                    if (!lightbox.classList.contains('open')) return;
+                    if (e.key === 'Escape') closeLightbox();
+                    else if (e.key === 'ArrowLeft') lbStep(-1);
+                    else if (e.key === 'ArrowRight') lbStep(1);
+                });
+            }
+            function openLightbox(images, startIndex) {
+                if (!lightbox) buildLightbox();
+                lightboxState.images = images.slice();
+                lightboxState.index = startIndex || 0;
+                lightbox._setImg(lightboxState.images[lightboxState.index]);
+                var hasMany = lightboxState.images.length > 1;
+                lightbox.querySelector('.img-lightbox-prev').style.display = hasMany ? '' : 'none';
+                lightbox.querySelector('.img-lightbox-next').style.display = hasMany ? '' : 'none';
+                lightbox.classList.add('open');
+            }
+            function closeLightbox() {
+                if (lightbox) lightbox.classList.remove('open');
+            }
+
+            // path helpers — convention: append "_sm" before the extension for inline display variants
+            function smallSrc(src) { return src.replace(/(\.[^.]+)(?:[?#].*)?$/, '_sm$1'); }
+            function fullSrc(src) { return src.replace(/_sm(\.[^.]+)(?:[?#].*)?$/, '$1'); }
+
+            // ----- 2) collapse buttons + 3) Prism rehighlight -----
+            var pendingPrism;
+            function enhance(root) {
+                root.querySelectorAll('article details > .article-content, article.studio-card details > .detail-body').forEach(function (body) {
+                    if (body.querySelector(':scope > .collapse-link')) return;
+                    var btn = document.createElement('button');
+                    btn.className = 'collapse-link';
+                    btn.type = 'button';
+                    btn.innerHTML = '&uarr; Collapse';
+                    btn.onclick = function () {
+                        var d = btn.closest('details');
+                        d.open = false;
+                        d.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    };
+                    body.appendChild(btn);
+                });
+
+                // sync each img-compare slider's initial --pos to its `value` attribute
+                root.querySelectorAll('.img-compare-range').forEach(function (input) {
+                    var container = input.parentElement;
+                    if (container) container.style.setProperty('--pos', input.value + '%');
+                });
+
+                // wire any standalone .img-zoomable image to open in the shared lightbox
+                // the inline src is the _sm variant; lightbox shows the full-res original
+                root.querySelectorAll('.img-zoomable').forEach(function (img) {
+                    if (img.dataset.zoomReady) return;
+                    img.dataset.zoomReady = '1';
+                    img.addEventListener('click', function () {
+                        openLightbox([fullSrc(img.currentSrc || img.src)], 0);
+                    });
+                });
+
+                // wire each img-carousel: prev/next stepping + click-to-enlarge
+                root.querySelectorAll('.img-carousel').forEach(function (carousel) {
+                    if (carousel.dataset.carouselReady) return;
+                    carousel.dataset.carouselReady = '1';
+                    var images;
+                    try { images = JSON.parse(carousel.dataset.images || '[]'); }
+                    catch (e) { images = []; }
+                    if (!images.length) return;
+                    var img = carousel.querySelector('.img-carousel-img');
+                    var step = function (delta) {
+                        var i = (parseInt(carousel.dataset.index, 10) || 0);
+                        i = (i + delta + images.length) % images.length;
+                        carousel.dataset.index = i;
+                        // inline display uses the _sm variant; lightbox opens the full-res original (data-images array)
+                        img.src = smallSrc(images[i]);
+                    };
+                    var prev = carousel.querySelector('.img-carousel-prev');
+                    var next = carousel.querySelector('.img-carousel-next');
+                    if (prev) prev.onclick = function () { step(-1); };
+                    if (next) next.onclick = function () { step(1); };
+                    img.onclick = function () {
+                        openLightbox(images, parseInt(carousel.dataset.index, 10) || 0);
+                    };
+                });
+
+                if (window.Prism) {
+                    clearTimeout(pendingPrism);
+                    pendingPrism = setTimeout(function () { Prism.highlightAll(); }, 80);
+                }
+            }
+
+            new MutationObserver(function (muts) {
+                muts.forEach(function (m) {
+                    m.addedNodes.forEach(function (n) {
+                        if (n.nodeType === 1) enhance(n);
+                    });
+                });
+            }).observe(document.body, { childList: true, subtree: true });
+
+            enhance(document);
+        })();
+    </script>
 </body>
 
 </html>

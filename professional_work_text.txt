@@ -1,0 +1,44 @@
+Name
+Genre
+Role
+
+Time working on title
+
+Game description
+
+Responsibilities
+
+Content created - levels, biomes, tools etc
+
+Additional topics:
+	
+Teammembers to thank?
+
+
+
+
+
+
+
+
+
+Myths
+Co-op, Action RPG
+Senior Technical Level Designer
+
+September 2023 - May 2026
+
+Myths is a fast-paced action RPG and four-player dungeon crawler where ancient mythologies collide. Players battle through shifting
+realms—from Norse tundras to Mayan temples—hunting down legendary bosses. The core gameplay is driven by a unique absorption mechanic: as
+players defeat these mythical foes, their characters and gear physically and mechanically absorb the boss's powers, allowing for evolving,
+highly personalized combat builds.
+
+Once I joined the team I was the sole level designer and had to set up the level pipeline mostly from scratch.
+
+Responsibilities
+	* Blocking out all the playable space for the game as the sole level designer for the project.
+	* Art collaboration - Together with the environment art team and tech art figure out how technically what was required to hit the art requirements.
+	* Pipeline - Responsible for figuring out and setting up the level design pipeline.
+	* Tech requirements - Together with the tech team 
+	* Long term solution - Procedural solution
+	* Mentoring

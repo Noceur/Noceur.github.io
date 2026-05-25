@@ -1,0 +1,98 @@
+<article>
+    <details>
+        <summary class="post-title">More Terrains & Procedural Workflows
+            <small><time>05.03.2021</time></small>
+        </summary>
+        <div class="article-content">
+            <p class="p2">
+                Continuing my exploration into procedural generation, I've been diving deeper into asset assembly and mesh generation with
+                Houdini. The non-destructive nature that allows for easy revisions and ability to easily reuse and apply subnetworks/HDAs
+                has the potiential to be an amazing time saver (at cost of extra overhead setup) while also ensuring a more even base level
+                quality.
+                <br><br>
+            </p>
+
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>Terrains & World creator</h2><br>
+                </summary>
+                <details-content>
+                    <p>
+                        However while it provides great tools for scattering assets and as a procedural powerhouse my current opinion
+                        is that it lacks in terms of terrains. The workflow and steps required to properly handle the heightfields
+                        themselves felt a bit unintuitive and I feel it hampers creativity.
+                        <br><br>
+                        <center><img class="img img-zoomable" src="img/log/houdini/houdini_heightfield_3_sm.png" alt="Terrains generated in Houdini"
+                        loading="lazy"></center>
+                    </p>
+                    <div class="img-text">Terrains generated in Houdini</div>
+                    <p>
+                        <br><br>                        
+                        As I noted in a earlier post the easiest path I've tried have been to use World Creator to create the terrain and
+                        process the landscape further with Houdini. The downside is however quite clear as it adds another package to the
+                        pipeline as WC has no chance of replacing Houdini entirely. Without PC AAA experience I can't say for sure but I
+                        would assume most open world games use a similar setup.
+                        <br><br>
+                        <center><img class="img img-zoomable" src="img/log/world_creator/world_creator_terrains_sm.png" alt="terrains created in world creator"
+                        loading="lazy"></center>
+                    </p>
+                    <div class="img-text">Terrains made in world creator 2022</div>
+                    <p>
+                        <br><br>
+                        Here I've taken the terrain created above in World Creator and scattered some very simple meshes representing trees
+                        and generated a mesh for a river. One of my current projects is looking into adjusting the terrain heightmap for
+                        rivers in Houdini instead of just taking the river defined in WC, the reason being that it is easier to create
+                        cascading effects and procedurally placing particle effects among other things. There was a breakdown by Guerilla
+                        Games on their own procedural river workflow which I would like to try and replicate in the future.
+                        <br><br>
+                        <a href="https://www.guerilla-games.com/news/horizon-zero-dawn-procedural-rivers-wires" target="_blank">Horizon Zero Dawn: Procedural Rivers & Wires</a>
+                        <br><br>
+                        <center><img class="img img-zoomable" src="img/log/world_creator/world_creator_scatter_sm.png" alt="houdini scatter objects on terrain"
+                        loading="lazy"></center>
+                    </p>
+                    <div class="img-text">Scattering of objects on terrain from world creator</div>
+                    <p>
+                        <br><br>
+                    </p>
+                </details-content>
+            </details>
+
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>Powerlines & Cables</h2><br>
+                </summary>
+                <details-content>
+                    <p>
+                        The following is some experimentation at creating a cable and a powerline generator, the idea being that you can
+                        draw a curve on a terrain, drag a few sliders and have it output both the powerlines and remove the bigger foliage
+                        that wouldn't be allowed to exist in proximity.
+                        <br><br>
+
+                        <video class="vid-log2" controls preload="none">
+                            <source src="vid/work/pole_generator.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video><br><br>
+
+                        Here the trees have been extracted by the same curve used to generate the powerlines.<br>
+
+                        <center><img class="img img-zoomable" src="img/log/houdini/pole_subtraction_trees_sm.png" alt="Terrain with trees subtracted by tools"
+                        loading="lazy"></center>
+                    </p>
+                    <p>
+                        <br><br>
+                        The next step would be to add a wire solver to create the wires. I already have a solver solution but need a
+                        way of identifying what points on the lines are attached to the poles, something to explore in the future.
+                        <br><br>
+
+                        <video class="vid-log2" controls preload="none">
+                            <source src="vid/work/wires.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video><br>
+                    </p>
+                </details-content>
+            </details>
+        </div>
+    </details>
+</article>

@@ -1,0 +1,134 @@
+<article>
+    <details>
+        <summary class="post-title">Unreal GAS project
+            <small><time>20.03.2022</time></small>
+        </summary>
+        <div class="article-content">
+            <p class="p2">
+                Started a small prototype project to learn Unreal's Gameplay Ability System (GAS) together with a friend. We decided to use
+                asset store characters and animations (after a lot of retargeting work) to speed things up. In the end we had a level with a
+                basic character that could move around and use a couple of abilities, a teleport that worked differently based on if you
+                were aiming or just using it in regular view as well as a fireball and lightning strike ability. Everything working in
+                multiplayer too; GAS really is fantastic for managing cooldowns and spell costs, allowing us to experiment faster with
+                engine features.
+            </p>
+            <video class="vid-log2" controls preload="none">
+                <source src="vid/work/UnrealFireballsGAS.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+                <br><br>
+            <h2 class="h2">Effects</h2>
+            <p class="p2">
+                For the effects I have used a mix of Houdini/Maya for meshes and Substance Designer and
+                Photoshop
+                for the textures.
+                Generally the effects are a mix of various resources, forum posts and tutorials.
+
+                <br><br>
+
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>Lightning bolt</h2><br>
+                </summary>
+                <details-content>
+                    <div>
+                        <p>
+                            The idea was to fit the effects within the art style of the environment/character
+                            models
+                            at hand, heavily stylized.
+                            <br><br>
+                            <video class="vid-log2" controls preload="none">
+                                <source src="vid/work/lightning_strike.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <br><br>
+                            The Houdini mesh generator is very simple but allows for quick creation of
+                            additional
+                            shapes.
+                            <br><br>
+                            <video class="vid-log2" controls preload="none">
+                                <source src="vid/work/bolt_generator_2.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <br><br>
+                            The Substance setup is simply a few shapes squeezed into a line, warped and then
+                            subtracted with some tile samplers.
+                            <br><br>
+                            <center><img class="img img-zoomable" src="img/log/unreal/substance_lightning_2_sm.png" alt="texture setup"
+                                    loading="lazy"></center>
+                        <div class="img-text">Texture setup</div>
+                        <p><br><br>
+                            The Niagara system has a few components:
+                        <ul>
+                            <li>Downward initial lightning bolt</li>
+                            <li>Delayed upward bolt</li>
+                            <li>Delayed ground lightning, 2 separate components</li>
+                            <li>Sparks with and without collisions (CPU/GPU)</li>
+                            <li>Impact rock fragments</li>
+                            <li>Flash and glow</li>
+                        </ul>
+                        <br>
+                        <center><img class="img img-zoomable" src="img/log/unreal/unreal_niagara_lightning_sm.png" alt="Niagara system"
+                                loading="lazy"></center>
+                        <div class="img-text">Niagara system setup</div>
+                        <p><br><br>
+                            The material for the lightning bolt is very simple. The few moving parts of it is
+                            are:
+                        <ul>
+                            <li>A perlin noise that pans over the UV of the texture.</li>
+                            <li>A setting for pan speed.</li>
+                            <li>A cell noise for eroding the material.</li>
+                        </ul>
+                        <p>
+                            Each setting controlled by dynamic parameters from the niagara system.
+                            <center><img class="img img-zoomable" src="img/log/unreal/unreal_material_lightning_sm.png" alt="Material setup"
+                                    loading="lazy"></center>
+                        <div class="img-text">Material setup</div>
+
+
+                        </p>
+                        <br>
+                        <!-- <img class="img-log" src="img/face.jpg" alt="house mesh" loading="lazy">
+                        <div class="img-text">image text.</div><br> -->
+                    </div>
+                </details-content>
+            </details>
+
+            <details>
+                <summary>
+                    <div class="icon">+</div>
+                    <h2>Fireball</h2>
+                </summary>
+                <details-content>
+                    <div>
+                        <p>
+                            <video class="vid-log2" controls preload="none">
+                                <source src="vid/work/fireball_compressed.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video><br>
+                            The effect is made with very simple shapes available in Unreal plus a basic tilable fire texture.<br>
+                            Is split in 3 different niagara systems that are triggered by the ability blueprint and
+                            in turn animation montage: <br>
+                        <ul>
+                            <li>Ground effect: (triggered when casting) by the blueprint.</li>
+                            <li>Fireball spawns from the hand socket with an offset once the gameplay event
+                                triggers
+                                in the animation montage.</li>
+                            <li>Explosion triggers on fireball collision.</li>
+                        </ul><br>
+                        <p>
+                            <center><img class="img" src="img/log/unreal/unreal_niagara_fireball_cast.png" alt="Niagara setup"
+                                    loading="lazy"></center>
+                        <div class="img-text">Niagara system ground cast setup</div>
+                        <p><br>
+                            <center><img class="img" src="img/log/unreal/unreal_niagara_fireball_explosion.png"
+                                    alt="Niagara setup" loading="lazy"></center>
+                        <div class="img-text">Niagara system explosion cast setup</div>
+                        <p>
+
+                        </p>
+                </details-content>
+        </div>
+    </details>
+</article>

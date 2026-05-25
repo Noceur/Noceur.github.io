@@ -1,0 +1,475 @@
+<article class="studio-card">
+    <p class="studio-caption">Spectarium Games</p>
+    <h2 class="studio-title">Myths</h2>
+    <p class="studio-sub">Senior Technical Level Designer · 2023-2026 </p>
+    <img src="img/work/PortfolioCarousel/9_Myths.png" alt="Myths key art" loading="lazy">
+    <p class="studio-blurb">
+        I was until recently working at Spectarium Games as a Technical Level Designer on the live-service action RPG
+        'Myths'. A fast-paced, four-player co-op dungeon crawler where shifting ancient mythologies collide with
+        dynamic, evolving boss encounters. Soft-launched in Early Access 2026.
+    </p>
+
+    <details>
+        <summary>Initial Challenges</summary>
+        <div class="detail-body">
+            <p>
+                When i joined, the game was a single player prototype: a single dungeon, built in one pieces, every enemy placed by hand.
+                For a life service operation, this had to be rebuilt. The goal was a game loop of four to six minutes per dungeon and not
+                too much repetition - brutal cadence for a content pipeline.
+            </p>
+            <p>The main challenges:</p>
+            <ul>
+                <li><b>Art direction</b> pushed to keep the artistic qualities of prototype for the release. For one
+                biome, this meant long, soft, directional shadows with no dynamic light or traditional baking methods baking. And all that
+                on a mobile light budget. </li>
+                <li><b>As for throughput and scalability</b>, we were working with a very manual pipeline.
+                Decoration, data set up, enemy setup and dungeon assembly was all done by hand - completely unsustainable considering the
+                scale of the project.</li>
+            </ul>
+
+            <h1>The approach</h1>
+            <p>
+                I worked closely with the tech and environment art teams to design a <b>tile-based system</b>. <b>Tiles</b> assembled into <b>zones</b> which in turn assembled into <b>dungeons</b>.
+            </p>
+            <p>
+                The pipeline I decided upon was: for the zone creation itself was: <b>blockout → tile layout (plus blockers) → encounters → testing →
+                decoration → custom navmesh → playtest</b>. Depending on my workload I could hand over the decoration step to the
+                environment art team, and take over once that was done for some manual adjustments and continuing with the navmesh work.
+            </p>
+        </div>
+    </details>
+
+    <details>
+        <summary>Zones, Dungeons, and Tools</summary>
+        <div class="detail-body">
+            <details>
+                <summary>Three biomes</summary>
+                <div class="detail-body">
+                    <p>
+                        Each biome was rooted in a real-world mythology, except for one invented meta-mythology -
+                        the <b>Watchers</b> which were sitting on top as a sort of narrative glue. Where the biomes diverged technically was in the
+                        tile system that filled the blockout.
+                    </p>
+
+                    <h2>Norse</h2>
+                    <p>
+                        Norse was our first biome and the one which caused us the most headaches. One of the early requirements was that we
+                        needed long directional shadows, but neither baked lighting nor dynamic lighting solutions were available for
+                        various reasons. The fix was to vertex-paint where the shadows were supposed to fall into the tiles themselves
+                        and then fake the shadow with a shader.<br> 
+                        This meant that the environment art team had to slice two extra rows of vertices into each tile (shadow start and
+                        shadow end), and since a tile could land in four rotations we needed four authored variants per tile (0°, 90°, 180°,
+                        270°). To keep my sanity I made a small tool that auto-swapped tiles to the correct lighting variant as they
+                        rotated.
+                        <br><br>
+                        The default tile size was 10x10 units (meters) - ideally smaller would have been nicer for better control, but the
+                        shadows cast by our cliff side walls needed to fit onto the tile's ground. We also had <b>5x5</b> open-grass tiles
+                        for finer control over wall widths and <b>20x10</b> + <b>20x20</b> tiles to break up the otherwise easily-spotted
+                        grid. Tile types were diagonal, wall, inner-corner, outer-corner and open. Wall colliders always met in the centre
+                        of each tile.                        
+                        <br><br>
+                        Anything that wasn't part of a tile - trees, rocks and other dressings - got a separate floor-shadow object placed
+                        on top of the tile. Those could cross zone borders freely, since they had no colliders and didn't affect gameplay.
+                    </p>
+
+                    <center>
+                        <img class="img" src="img/work/Spectarium/NorseTileShadow.png"
+                            alt="Norse tile shadow vertex slicing" loading="lazy" width="70%">
+                    </center>
+                    <div class="img-text">Same tile with vertex-painted shadows in 4 directions.</div>
+                    <center>
+                        <img class="img" src="img/work/Spectarium/NorseTiles.png"
+                            alt="Norse tile-type lineup" loading="lazy" width="70%">
+                    </center>
+                    <div class="img-text">Tile types: wall, inner-corner, outer-corner, diagonal, open.</div>
+                    <div class="img-carousel" data-index="0"
+                        data-images='[
+                            "img/work/Spectarium/Zones/Zone_Norse20.png",
+                            "img/work/Spectarium/Zones/Zone_Norse16.png",
+                            "img/work/Spectarium/Zones/Zone_Norse17.png",
+                            "img/work/Spectarium/Zones/Zone_Norse19.png",
+                            "img/work/Spectarium/Zones/Zone_Norse15.png"
+                        ]'>
+                        <button type="button" class="img-carousel-prev" aria-label="Previous image">&lsaquo;</button>
+                        <img class="img-carousel-img" src="img/work/Spectarium/Zones/Zone_Norse20_sm.png"
+                            alt="Norse zone variants - click to enlarge" loading="lazy">
+                        <button type="button" class="img-carousel-next" aria-label="Next image">&rsaquo;</button>
+                    </div>
+                    <div class="img-text">Norse zones (without shadows).</div>
+                    <br><br>
+                    <h2>Mayan</h2>
+                    <p>
+                        Our second biome was interior focused, and designed to feel claustrophobic after Norse's wide open spaces. We
+                        dropped directional light entirely, faked ambient occlusion into the corners, and built zones from floor tiles with
+                        <b>worldspace-position texturing</b> so seams between floors disappeared. Walls were placed on top of those floors
+                        rather than baked into them.
+                    </p>
+                    <p>
+                        The new problem here was visibility. The camera couldn't rotate, but interior walls
+                        naturally block sightlines. Walls were authored as a low <b>"stub"</b> piece that always
+                        indicated where the wall lived, and a tall section on top that could be faded out when the
+                        camera needed to see past it. On top of that, two more systems shared the load: a
+                        <b>cutout around the player</b> punched through any wall it overlapped, and enemies behind
+                        walls were drawn as a <b>red silhouette overlay</b> so they couldn't disappear from the
+                        player's read.
+                    </p>
+                    <div class="img-carousel" data-index="0"
+                        data-images='[
+                            "img/work/Spectarium/Zones/Zone_Mayan14.png",
+                            "img/work/Spectarium/Zones/Zone_Mayan13.png",
+                            "img/work/Spectarium/Zones/Zone_Mayan7.png",
+                            "img/work/Spectarium/Zones/Zone_Mayan5.png",
+                            "img/work/Spectarium/Zones/Zone_Mayan10.png",
+                            "img/work/Spectarium/Zones/Zone_Mayan8.png",
+                            "img/work/Spectarium/Zones/Zone_Mayan9.png",
+                            "img/work/Spectarium/Zones/Zone_Mayan11.png"
+                        ]'>
+                        <button type="button" class="img-carousel-prev" aria-label="Previous image">&lsaquo;</button>
+                        <img class="img-carousel-img" src="img/work/Spectarium/Zones/Zone_Mayan14_sm.png"
+                            alt="Mayan zone variants - click to enlarge" loading="lazy">
+                        <button type="button" class="img-carousel-next" aria-label="Next image">&rsaquo;</button>
+                    </div>
+                    <div class="img-text">Mayan zones.</div>
+                    <br><br>
+                    <h2>Watcher</h2>
+                    <p>
+                        The third biome - and the home of the First Time User Experience. Rules followed Mayan, but we dropped the
+                        worldspace-position floor textures so the floors could carry deliberate per-tile patterning with stone tiles of
+                        varying sizes.. To handle the seam where the new floor textures met the walls, we added a <b>trim concept</b>
+                        running along that join. Work stopped before the biome - and the game - fully shipped.
+                    </p>
+                    <div class="img-carousel" data-index="0"
+                        data-images='[
+                            "img/work/Spectarium/Zones/Zone_Watcher24.png",
+                            "img/work/Spectarium/Zones/Zone_Watcher22.png",
+                            "img/work/Spectarium/Zones/Zone_Watcher25.png",
+                            "img/work/Spectarium/Zones/Zone_Watcher23.png"
+                        ]'>
+                        <button type="button" class="img-carousel-prev" aria-label="Previous image">&lsaquo;</button>
+                        <img class="img-carousel-img" src="img/work/Spectarium/Zones/Zone_Watcher24_sm.png"
+                            alt="Watcher zone variants - click to enlarge" loading="lazy">
+                        <button type="button" class="img-carousel-next" aria-label="Next image">&rsaquo;</button>
+                    </div>
+                    <div class="img-text">Watcher zones.</div>
+                    <br><br>
+                    <h2>Special zones</h2>
+                    <p>
+                        Other than the three biomes, we had a few special zones with their own rulesets. The <b>Archive</b> (the players'
+                        base) was built blocked out then entirely decorated by the environment art team, with no tiles at all. <b>Boss
+                        zones</b> were also built without tiles, since they needed to break thematically for the encounter, so the tile
+                        system would have just been a constraint. They also only consisted of a single zone. 
+                    </p>
+
+
+                    <div class="img-compare">
+                        <img class="img-compare-base" src="img/work/Spectarium/Archive.png" alt="The Archive zone - finished"
+                        loading="lazy">
+                        <img class="img-compare-overlay" src="img/work/Spectarium/Archive_Overlay.png" alt="The Archive zone with the
+                        overlay revealed" loading="lazy" aria-hidden="true">
+                        <div class="img-compare-divider" aria-hidden="true"></div>
+                        <input class="img-compare-range" type="range" min="0" max="100" value="10" aria-label="Drag to compare the Archive
+                        zone images" oninput="this.parentElement.style.setProperty('--pos', this.value + '%')">
+                    </div>
+                    <div class="img-text">Drag to hide the annotations.</div>
+                    <div class="img-pair">
+                        <img class="img-zoomable" src="img/work/Spectarium/Zones/Zone_Surtr_sm.png" alt="Surtr boss zone" loading="lazy">
+                        <img class="img-zoomable" src="img/work/Spectarium/Zones/Zone_Camazotz_sm.png" alt="Camazotz boss zone" loading="lazy">
+                    </div>
+                    <div class="img-text">Surtr and Camazotz boss zones.</div>
+                    <p>
+                        Across the three biomes I shipped around <b>150 zones</b>. Decoration leaned on
+                        compositions (collections of prefabs) that could be dropped into a zone as a unit; the
+                        long-term direction was to standardise them per biome so we could swap sub-themes without
+                        reauthoring layouts.
+                    </p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Zone structure</summary>
+                <div class="detail-body">
+                    <h2>Zone types</h2>
+                    <p>
+                        Zones exist in a handful of types with different functions.  <br>
+                        <b>Start zones</b> - The start zone of the dungeon, always enemy free. <br>
+                        <b>Regular zones</b> - Carries the bread-and-butter of the content which the players runs through. <br>
+                        <b>Exit zones</b> - Closes out a dungeon and usually held a tougher encounter. <br>
+                        <b>Scenario zones</b> - Are timed event rooms: cursed chests, wave defence, kill-the-spawn-points, or other
+                        limited-time objectives for additional rewards.
+                    </p>
+                    <p>
+                        <b>Adapter zones</b> - Existed to solve the awkward case where two zones wanted to connect
+                        but had different-sized exits. Adapters also got to do thematic work: a Mayan dungeon might
+                        want narrow side tunnels feeding into a grander structure, so a south→north adapter going
+                        small-to-large could put a small "natural" entrance in front and then block that path with
+                        rubble, while the actual route reads as the grander gated path beyond - the fake gate is
+                        set dressing, the real route opens up into the next zone.
+                    </p>
+                    <center>
+                        <img class="img" src="img/work/Spectarium/Zones/AdapterZone.png"
+                            alt="Adapter zone with rubble-blocked small entrance and a gated grand path"
+                            loading="lazy" width="70%">
+                    </center>
+                    <div class="img-text">An adapter doing thematic transition work - diverts the player from a small exit to a big entrance in the next zone.</div>
+
+
+                    <h2>Three meshes per zone</h2>
+
+                    <p>
+                        <b>Visual mesh.</b> What the player actually sees. Client-only, with no gameplay role. The server never reads it.
+                    </p>
+
+                    <p>
+                        <b>Walkable mesh.</b> Every floor and walkable piece of decoration carried this. The client
+                        sampled it to place the player at the correct Y height as they moved; without it players
+                        were stuck at y=0 and would walk through the world rather than across it. Client-only.
+                    </p>
+                    <div class="img-compare">
+                        <img class="img-compare-base" src="img/work/Spectarium/ZoneWalkable1.png"
+                            alt="A zone without the walkable mesh visualised" loading="lazy">
+                        <img class="img-compare-overlay" src="img/work/Spectarium/ZoneWalkable2.png"
+                            alt="The same zone with the walkable mesh visualised" loading="lazy" aria-hidden="true">
+                        <div class="img-compare-divider" aria-hidden="true"></div>
+                        <input class="img-compare-range" type="range" min="0" max="100" value="50"
+                            aria-label="Drag to compare the walkable mesh views"
+                            oninput="this.parentElement.style.setProperty('--pos', this.value + '%')">
+                    </div>
+                    <div class="img-text">Drag to swap between the two walkable mesh views.</div>
+
+                    <p>
+                        <b>Navmesh.</b> A custom flat mesh created per zone after deco work was completed. As far as the server was
+                        concerned the game was 2D, so the navmesh stayed flat and the stitching algorithm could combine zones cheaply at
+                        runtime.
+                    </p>
+                    <div class="img-compare">
+                        <img class="img-compare-base" src="img/work/Spectarium/ZoneNavMesh1.png"
+                            alt="A zone without the navmesh visualised" loading="lazy">
+                        <img class="img-compare-overlay" src="img/work/Spectarium/ZoneNavMesh2.png"
+                            alt="The same zone with the navmesh visualised" loading="lazy" aria-hidden="true">
+                        <div class="img-compare-divider" aria-hidden="true"></div>
+                        <input class="img-compare-range" type="range" min="0" max="100" value="50"
+                            aria-label="Drag to compare the navmesh views"
+                            oninput="this.parentElement.style.setProperty('--pos', this.value + '%')">
+                    </div>
+                    <div class="img-text">Drag to swap between the two navmesh views.</div>
+
+                    <h2>Zone data (scriptable object)</h2>
+                    <p>
+                        Each zones gameplay data lived in a scriptable object alongside the meshes.
+                    </p>
+                    <p>
+                        <b>Enemies</b> - Could either be manually placed as forced spawns (in the FTUE dungeons for example), or handled by a
+                        dynamic spawn system that placed them anywhere on the navmesh outside of dynamic-spawn-blocker volumes according to
+                        the dungeons set encounter difficulty constraints.
+                    </p>
+                    <p>
+                        <b>Logic</b> - Ran in two layers. A default layer was always active per zone - things like traps and damage zones
+                        that should always be activated were set up here. On top of that, optional <b>scenario graphs</b> could be enabled,
+                        with one active at a time. A scenario graph was a node-based object that referenced data fields on the zone, so the
+                        same scenario graph could be shared across any zone whose data fields matched the graph's contract.
+                    </p>
+                    <p>
+                        <b>Exits</b> - Were defined per zone and consumed by the runtime stitching algorithm to piece
+                        the navmesh together when a dungeon assembled.
+                    </p>
+                </div>
+            </details>
+
+            <details>
+                <summary>Dungeons - scriptable assembly</summary>
+                <div class="detail-body">
+                    <p>
+                        A dungeon is a scriptable data object: whether it was a regular or boss dungeon, the list
+                        of zones it contained, any scenarios attached to those zones, their positions, and the
+                        weather (post-processing effects) for the run.
+                    </p>
+                    <p>
+                        Assembly improved as time went on. At first dungeons were authored by typing zone entries into a list with x/y/z
+                        coordinates. Later, a small tool let me drag the zone prefabs into place in a scene, read their positions relative
+                        to the starter zone, and emit the scriptable object directly - much easier to keep dungeons reading sensibly
+                        thematically when you can visualize them in the scene.
+                    </p>
+                    <p>
+                        Long-term the majority of these would have been generated from <em>dungeon graph</em>
+                        templates - a topic in a later section.
+                    </p>
+                    <div class="img-carousel" data-index="0"
+                        data-images='[
+                            "img/work/Spectarium/Dungeons/Dungeons_Mayan.png",
+                            "img/work/Spectarium/Dungeons/Dungeons_Norse.png",
+                            "img/work/Spectarium/Dungeons/Dungeons_Watcher2.png"
+                        ]'>
+                        <button type="button" class="img-carousel-prev" aria-label="Previous image">&lsaquo;</button>
+                        <img class="img-carousel-img" src="img/work/Spectarium/Dungeons/Dungeons_Mayan_sm.png"
+                            alt="Dungeon assemblies - click to enlarge" loading="lazy">
+                        <button type="button" class="img-carousel-next" aria-label="Next image">&rsaquo;</button>
+                    </div>
+                    <div class="img-text">Assembled dungeons: Mayan, Norse, and a Watcher.</div>
+                </div>
+            </details>
+
+            <details>
+                <summary>Editor tools & macros</summary>
+                <div class="detail-body">
+                    <p>
+                        I produced over <b>40 custom tools</b> for this project. Most were wired to a single zone
+                        authoring task - snapping, rotation, theme-based automatic tile replacements, controlled
+                        per-object randomisation. The rest handled navmesh setup, walkable-mesh setup, zone and
+                        dungeon data setup (including batch processing across many objects at once), and validation.
+                    </p>
+                    <center>
+                        <img class="img img-zoomable" src="img/work/Spectarium/MythsTools3_sm.png"
+                            alt="A subset of the custom Myths editor tools" loading="lazy" width="70%">
+                        <div class="img-text">
+                        A few of the tools with interface I built for Myths.
+                    </div>
+                    </center>
+                    <p>
+                        With those tools plus a macro keyboard (a device I recommend to any level designer who valuest their wrists) and a
+                        layered scripts setup (swap macro layer depending on task), first-draft zone build time dropped from <b>roughly a
+                        day to under an hour</b>.
+                        <br><br>
+                        <center>
+                            <img class="img img-zoomable" src="img/work/Spectarium/MacroLayout_sm.png" alt="Macro pad layout"
+                                loading="lazy" width="60%">
+                            <div class="img-text">
+                                Some of the functions set up for the macro pad.
+                            </div>
+                        </center>                        
+                        <br>
+                        For the Norse theme I laid out the creation to correspond to the macro pads button placement as can be seen above.
+                        This meant the each key produced a certain type of tile, wall, corner or one without a blocker. It also had a wheel
+                        for undo/redo, one for rotation (which swapped the tile to the correct lighting variant) among other things. Below
+                        will show a sped up recording of the process, this is just a demonstration of the process, not an example of the
+                        quality bar.
+                    </p>
+                    <p>
+                        <video class="vid-log2" controls preload="none">
+                            <source src="vid/PCG_Talk/ZoneCreationExample_h264.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </p>
+                    <div class="img-text">
+                        The basic setup process for a zone - visual mesh, walkable mesh, navmesh, and decoration -
+                        using the tools and macros described above. Not intended as a quality bar, just a look at
+                        the process. Recording itself runs ~5 minutes in real-time; the gameplay data setup on top would add
+                        another 3-5 minutes (even for a real example), and dropping it into a dungeon adds roughly another minute.
+                    </div>
+
+                </div>
+            </details>
+        </div>
+    </details>
+
+    <details>
+        <summary>Procedural roadmap & reflection</summary>
+        <div class="detail-body">
+            <p>
+                During a company trip 2025 to Prague, I gave a presentation on procedural dungeon generation and how it could work for Myths.
+                The game was already well into production by then, but the procedural roadmap was still a key topic for the future of the
+                project and the team. I wanted to share my thoughts on how we could tackle this, and what the trade-offs were between different
+                approaches. The version below brings up a few points I brought up without going into details about the constraints we had to
+                deal with. 
+            </p>
+            <details>
+                <summary>Dungeon graph</summary>
+                <div class="detail-body">
+                    <center>
+                        <img class="img img-zoomable" src="img/work/Spectarium/PCG_Talk/PCG_Dungeon_Graph_sm.png"
+                            alt="Dungeon graph slide from the procedural talk" loading="lazy" width="100%">
+                    </center>
+                    <div class="img-text">Slide from procedural talk I held for the team in Prague 2025.</div>
+                    <p>
+                        The Dungeon graph sits at the top of the level hierarchy and reigns over every other aspect of the dungeon. Each
+                        node is a zone with constraints - a theme (or a list of acceptable themes), an encounter density, whether it's
+                        optional or mandatory, fixed or varying and the graph randomises order and contents within those rules. This is
+                        where partial control lives: force two connected zones to host a scenario, lock a starting biome, guarantee a
+                        miniboss appears before an exit, while still letting the rest shuffle (fully randomized or with constraints). Story
+                        or scenario beats can be steered from here too.
+                    </p>
+
+                </div>
+            </details>
+
+            <details>
+                <summary>Decoration hierarchy</summary>
+                <div class="detail-body">
+                    <h2>Variants</h2>
+                    <p>
+                        Variants are the biggest zone-level changes - It acts as layers and could be a whole wall plus its surroundings, a
+                        fancy centerpiece, a pit of gas clouds. A Mayan zone might have two variants for "ritualistic," two for "ornate,"
+                        two for "rubble." The dungeon graph picks the theme; the zone picks one of the matching variants.
+                    </p>
+                    <center>
+                        <img class="img" src="img/work/Spectarium/PCG_Talk/PCG_Variants.png"
+                            alt="Top-down view of a zone composed from variant chunks" loading="lazy">
+                    </center>
+                    <div class="img-text">Large chunks control the majority of a zone's look, varied per theme.
+                    </div>
+                    <p>
+                        <video class="vid-log2" controls preload="none">
+                            <source src="vid/PCG_Talk/Variants_h264.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </p>
+
+                    <h2>Compositions</h2>
+                    <p>
+                        Compositions are what variants are mainly built from. We already used them, but the key shift is <b>standardised
+                        sizes</b> (S, M, L, XL) with distinct shapes to fit corners, walls and central standalone pieces. That makes them
+                        swappable without trouble: The variant choosen for a specific zone through the dungeon graph could be "ritual site"
+                        with a sacrificial stone. A randomiser (based on the dungeon seed) could then swap the ritual stone composition for
+                        a statue composition and shuffle the surrounding props without affecting the zones navmesh.
+                    </p>
+                    <center>
+                        <img class="img"
+                            src="img/work/Spectarium/PCG_Talk/Compositions/PCG_Compositions_Wall.png"
+                            alt="Wall-shaped composition" loading="lazy" width="48%">
+                        <img class="img"
+                            src="img/work/Spectarium/PCG_Talk/Compositions/PCG_Compositions_InnerCorner.png"
+                            alt="Inner-corner composition" loading="lazy" width="48%">
+                    </center>
+                    <div class="img-text">Wall and inner-corner compositions, built to slot into the same anchor
+                        points.</div>
+
+                    <h2>Micro details</h2>
+                    <p>
+                        Micro details are the smallest decorative aspects - props of certain kinds, ideally part
+                        of a composition or standalone. Randomisable per run with no impact on colliders or
+                        navmesh: pebble swaps, bones spawning or not, lanterns on or off. Cheap variety once the
+                        setup is in place.
+                    </p>
+                    <center>
+                        <img class="img" src="img/work/Spectarium/PCG_Talk/PCG_Micro_Details.png"
+                            alt="Close-up of a zone showing scattered debris and small props" loading="lazy">
+                    </center>
+                    <div class="img-text">Uncontrolled changes - zero effort after setup.</div>
+                </div>
+            </details>
+
+
+        </div>
+    </details>
+    <details>
+        <summary>Result & Reflections</summary>
+        <div class="detail-body">
+            <h1>Result</h1>
+            <p>
+                Around <b>150 zones</b> shipped across three biomes for early access. A 100x100m zone layout could be completed in roughly
+                five minutes thanks to the macro pad plus the auto-tile-swap tooling, with full first-draft zone build time dropping from a
+                day to under an hour. This meant zone creation cost was low enough that a single person could keep pace with content demand.
+                Three biomes were completed together with two bosses and unique arenas, with the Watcher biome carrying the FTUE. The
+                procedural-content roadmap was fully documented and work had started on it by the time of my departure.
+            </p>
+
+            <h1>Reflection</h1>
+            <p>
+                The Norse vertex-painted-shadow system was the right answer to the constraints we had, but in hindsight the right move would
+                have been to push back harder on the constraints themselves. I'd also start the dungeon-graph work earlier so the first
+                biome ships on top of it rather than retrofitting later. Additionally standardizing the composition sizes and shapes earlier
+                would have made the later biomes easier to build and set us up better for a procedural workflow.
+            </p>
+
+        </div>
+    </details>
+</article>

@@ -1,0 +1,1162 @@
+/* =============================================================
+   Terminal-theme stylesheet — Maximilian Mellhage portfolio
+   -------------------------------------------------------------
+   Pure HTML + CSS. Tab routing via radio inputs + :has() so tab
+   changes never trigger browser scroll. Accordions are native
+   <details>. The only JS in the site is the iframe-injection
+   one-liner used by every panel + tab fragment, plus a tiny
+   MutationObserver that adds collapse buttons to expanded entries.
+
+   Fonts are loaded via <link> in index.html (non-blocking) — no
+   @import here so the CSS parser doesn't stall on a network round-trip.
+   ============================================================= */
+
+/* ---------- Theme tokens (calibrated against reference screenshot) ---------- */
+:root {
+    --bg:             #141414;          /* warm near-black page bg */
+    --bg-soft:        #181818;
+    --card:           #101010;          /* slightly darker than bg */
+    --card-line:      #262626;
+    --card-line-2:    #333333;
+
+    --text:           #e0e0e0;
+    --text-dim:       #8a8a8a;
+    --text-faint:     #5a5a5a;
+
+    --accent:         #ffb900;          /* primary amber */
+    --accent-soft:    #d8a000;
+    --accent-glow:    rgba(255, 185, 0, 0.18);
+
+    --tab-active-bg:  #201c13;          /* warm brown for active tab */
+    --tab-hover-text: #ffffff;
+
+    --purple:         #a78bfa;
+    --teal:           #5eead4;
+
+    --radius:         6px;
+    --gap:            24px;
+    --pad-card:       28px;
+
+    --font-mono:      'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --font-sans:      'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    --font-display:   'Space Grotesk', 'Inter', system-ui, sans-serif;
+    --font-serif:     'Playfair Display', Georgia, 'Times New Roman', serif;
+
+    --t-fast:         140ms;
+    --t-base:         260ms;
+    --t-slow:         420ms;
+}
+
+/* ---------- Reset / base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    min-height: 100vh;
+    /* extremely subtle horizontal scanlines for CRT-ish texture */
+    background-image:
+        repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent 2px,
+            rgba(255, 255, 255, 0.008) 2px,
+            rgba(255, 255, 255, 0.008) 3px
+        );
+}
+
+a { color: var(--accent); text-decoration: none; transition: color var(--t-fast) ease; }
+a:hover { color: #fff; }
+
+img, video { max-width: 100%; height: auto; display: block; }
+
+/* Routing radios are visually hidden but stay in the DOM so :checked
+   works. Position: fixed so when the user clicks a tab label and the
+   radio gains focus, the browser doesn't scroll the page to find the
+   input. width/height of 1px keeps screen-reader access intact. */
+.tab-route {
+    position: fixed;
+    top: 0; left: 0;
+    width: 1px; height: 1px;
+    opacity: 0;
+    pointer-events: none;
+    /* Don't take focus visibly */
+    clip: rect(0 0 0 0);
+}
+
+/* ---------- Meta bar (full-width, left edge) ---------- */
+.meta-bar {
+    padding: 14px 28px 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+}
+
+.shell {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 40px 32px 96px;
+}
+
+/* ---------- Site header ---------- */
+.site-header { margin-bottom: 32px; }
+
+.site-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 40px;
+    letter-spacing: 0.01em;
+    margin: 0 0 14px;
+    line-height: 1.1;
+    text-transform: uppercase;
+}
+
+.site-sub {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.7;
+    max-width: 640px;
+    margin: 0;
+}
+
+/* Studio names — coloured spans, NOT links */
+.site-sub .studio { color: var(--accent); }
+
+/* Studio names — coloured spans, NOT links */
+.site-sub .role { color: var(--accent); }
+
+/* ---------- Tabs (radio-driven, no scroll) ---------- */
+.tabs {
+    display: flex;
+    gap: 6px;
+    border-bottom: 1px solid var(--card-line);
+    margin: 28px 0 28px;
+    padding: 0;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.tab {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 13px 22px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    cursor: pointer;
+    user-select: none;
+    transition: color var(--t-base) ease, border-color var(--t-base) ease, background var(--t-base) ease;
+}
+
+/* Hover: text smoothly transitions to white, no bg shift. */
+.tab:hover { color: var(--tab-hover-text); }
+
+.tab .ico { width: 16px; height: 16px; display: inline-block; flex: 0 0 auto; }
+.tab .ico svg { width: 100%; height: 100%; fill: currentColor; }
+
+/* Active tab — driven by the corresponding :checked radio */
+body:has(#r-intro:checked)     .tab[for="r-intro"],
+body:has(#r-portfolio:checked) .tab[for="r-portfolio"],
+body:has(#r-journals:checked)  .tab[for="r-journals"],
+body:has(#r-contact:checked)   .tab[for="r-contact"] {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: var(--tab-active-bg);
+}
+
+/* ---------- Panels (radio-controlled) ---------- */
+.panel { display: none; }
+body:has(#r-intro:checked)     .panel[data-tab="intro"],
+body:has(#r-portfolio:checked) .panel[data-tab="portfolio"],
+body:has(#r-journals:checked)  .panel[data-tab="journals"],
+body:has(#r-contact:checked)   .panel[data-tab="contact"] {
+    display: block;
+    animation: fade-in var(--t-slow) ease both;
+}
+
+@keyframes fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .panel { animation: none !important; }
+}
+
+/* ---------- Cards ---------- */
+.card {
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    border-radius: var(--radius);
+    padding: var(--pad-card);
+    margin-bottom: var(--gap);
+}
+
+.card-title {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 18px;
+    margin: 0 0 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.card-title .glyph {
+    flex: 0 0 auto;
+    display: inline-flex;
+    width: 22px; height: 22px;
+    color: var(--accent);
+}
+.card-title .glyph svg { width: 100%; height: 100%; fill: currentColor; }
+.card-title.purple .glyph { color: var(--purple); }
+
+/* Simple dot marker used by cards that don't want a glyph icon */
+.card-title .dot {
+    width: 9px; height: 9px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent-glow);
+    flex: 0 0 auto;
+}
+
+.card p { margin: 0 0 14px; color: var(--text); }
+.card p:last-child { margin-bottom: 0; }
+.card .accent { color: var(--accent); }
+
+/* ---------- Intro Log specific layout ---------- */
+.intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap);
+}
+
+@media (max-width: 720px) {
+    .intro-grid { grid-template-columns: 1fr; }
+}
+
+.kv-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.kv-list li {
+    display: block;
+    margin: 0 0 12px;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.65;
+    position: relative;
+    padding-left: 14px;
+}
+.kv-list li::before {
+    content: '\2022';
+    color: var(--accent);
+    position: absolute;
+    left: 0;
+    top: 0;
+    font-weight: 700;
+}
+.kv-list .label {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* ---------- Portfolio Works tab ---------- */
+.studio-card {
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    border-radius: var(--radius);
+    padding: 32px var(--pad-card);
+    margin-bottom: var(--gap);
+}
+
+.studio-caption {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 10px;
+}
+
+.studio-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    color: var(--accent);
+    font-size: 34px;
+    line-height: 1.1;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+}
+
+.studio-sub {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    margin: 0 0 20px;
+}
+
+.studio-blurb {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.65;
+    margin: 0 0 24px;
+}
+
+/* Accordion list inside a studio */
+.studio-card details {
+    border-top: 1px solid var(--card-line);
+    margin: 0;
+    padding: 0;
+}
+.studio-card > details:first-of-type { border-top-color: var(--card-line-2); }
+
+.studio-card details summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 16px 4px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    user-select: none;
+    transition: color var(--t-base) ease;
+}
+.studio-card details summary::-webkit-details-marker { display: none; }
+.studio-card details summary::marker { content: ''; }
+.studio-card details summary:hover { color: var(--accent); }
+
+.studio-card details summary::before {
+    content: '[+]';
+    color: var(--accent);
+    font-weight: 700;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0;
+    display: inline-block;
+    min-width: 28px;
+    transition: transform var(--t-base) ease;
+}
+.studio-card details[open] > summary::before { content: '[-]'; }
+
+.studio-card details > .detail-body {
+    padding: 4px 4px 22px 38px;
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.7;
+    animation: detail-fade var(--t-base) ease both;
+}
+@keyframes detail-fade {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .studio-card details > .detail-body,
+    .journal-entry details > .detail-body { animation: none !important; }
+}
+
+.studio-card details > .detail-body p { margin: 0 0 12px; }
+.studio-card details > .detail-body p:last-child { margin-bottom: 0; }
+
+.detail-body img {
+    margin: 14px 0 0;
+    border: 1px solid var(--card-line-2);
+    border-radius: 4px;
+    max-width: 100%;
+}
+
+.detail-body .img-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    font-style: italic;
+    margin: 4px 0 18px;
+}
+
+.detail-body .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 12px 0 18px;
+}
+.detail-body .chip {
+    display: inline-block;
+    padding: 4px 10px;
+    border: 1px solid var(--card-line-2);
+    border-radius: 100px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--bg-soft);
+}
+
+.detail-body .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 6px;
+    padding: 8px 14px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background var(--t-fast) ease, color var(--t-fast) ease;
+}
+.detail-body .read-more:hover {
+    background: var(--accent);
+    color: var(--bg);
+}
+
+/* ---------- Showreel strip ---------- */
+.showreel {
+    margin: 0 0 var(--gap);
+    overflow: hidden;
+    border: 1px solid var(--card-line);
+    border-radius: var(--radius);
+    background: var(--card);
+    padding: 14px;
+    position: relative;
+}
+.showreel::before, .showreel::after {
+    content: '';
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 60px;
+    z-index: 2;
+    pointer-events: none;
+}
+.showreel::before { left: 0;  background: linear-gradient(to right, var(--card), transparent); }
+.showreel::after  { right: 0; background: linear-gradient(to left,  var(--card), transparent); }
+
+.showreel-track {
+    display: flex;
+    gap: 10px;
+    width: max-content;
+    animation: scroll-x 60s linear infinite;
+}
+.showreel-track img {
+    height: 120px;
+    width: auto;
+    border-radius: 4px;
+    object-fit: cover;
+    border: 1px solid var(--card-line-2);
+}
+@keyframes scroll-x {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .showreel-track { animation: none; }
+}
+
+/* ---------- Technical Journals ----------------------------------------
+   Each entry comes from articles/log/<date>-<slug>.html as an
+   <article><details><summary class="post-title">…</summary>
+   <div class="article-content">…</div></details></article>.
+   Rules below dress that legacy markup in the terminal theme.
+---------------------------------------------------------------------- */
+.panel[data-tab="journals"] > article {
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+.panel[data-tab="journals"] summary.post-title {
+    list-style: none;
+    cursor: pointer;
+    padding: 14px 22px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--accent);
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+    transition: color var(--t-base) ease;
+}
+.panel[data-tab="journals"] summary.post-title::-webkit-details-marker { display: none; }
+.panel[data-tab="journals"] summary.post-title::marker { content: ''; }
+.panel[data-tab="journals"] summary.post-title:hover { color: #fff; }
+
+/* The date pill inside the legacy summary lives as <small><time>…</time></small> */
+.panel[data-tab="journals"] summary.post-title small,
+.panel[data-tab="journals"] summary.post-title time {
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-left: auto;
+    padding-left: 12px;
+}
+.panel[data-tab="journals"] summary.post-title::after {
+    content: '[+]';
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 700;
+    padding-left: 10px;
+}
+.panel[data-tab="journals"] details[open] > summary.post-title::after { content: '[-]'; }
+
+.panel[data-tab="journals"] .article-content {
+    padding: 16px 22px 22px;
+    border-top: 1px solid var(--card-line);
+    color: var(--text);
+    font-size: 13px;
+    line-height: 1.7;
+    animation: detail-fade var(--t-base) ease both;
+}
+
+/* Legacy paragraph + heading classes used inside fragment bodies */
+.panel[data-tab="journals"] .p2 { margin: 0 0 12px; }
+.panel[data-tab="journals"] .h2,
+.panel[data-tab="journals"] .article-content h2 {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 13px;
+    margin: 20px 0 10px;
+}
+.panel[data-tab="journals"] .article-content h1 {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 14px;
+    margin: 22px 0 10px;
+}
+.panel[data-tab="journals"] .article-content ul { margin: 0 0 14px; padding-left: 20px; }
+.panel[data-tab="journals"] .article-content li { margin-bottom: 6px; }
+.panel[data-tab="journals"] .article-content b,
+.panel[data-tab="journals"] .article-content strong { color: #fff; }
+.panel[data-tab="journals"] .article-content a { color: var(--accent); }
+.panel[data-tab="journals"] .article-content a:hover { color: #fff; }
+
+/* Inline images used by older log fragments */
+.panel[data-tab="journals"] .img,
+.panel[data-tab="journals"] .img-log,
+.panel[data-tab="journals"] .article-content center img,
+.panel[data-tab="journals"] .article-content img.img {
+    border: 1px solid var(--card-line-2);
+    border-radius: 4px;
+    max-width: 100%;
+    margin: 12px auto;
+    display: block;
+}
+.panel[data-tab="journals"] .img-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    margin: -6px 0 18px;
+    font-style: italic;
+}
+.panel[data-tab="journals"] .vid-log2 {
+    width: 100%;
+    max-width: 720px;
+    display: block;
+    margin: 12px auto;
+    border-radius: 4px;
+    border: 1px solid var(--card-line-2);
+}
+.panel[data-tab="journals"] .article-content center { text-align: center; }
+
+/* Nested <details> inside a journal entry (e.g. Maze Solver's three
+   solution accordions, Unreal GAS's per-effect sub-sections) */
+.panel[data-tab="journals"] .article-content details {
+    border-top: 1px dashed var(--card-line);
+    margin: 12px 0 0;
+}
+.panel[data-tab="journals"] .article-content details summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    font-size: 13px;
+    transition: color var(--t-base) ease;
+}
+.panel[data-tab="journals"] .article-content details summary::-webkit-details-marker { display: none; }
+.panel[data-tab="journals"] .article-content details summary::marker { content: ''; }
+.panel[data-tab="journals"] .article-content details summary:hover { color: var(--accent); }
+.panel[data-tab="journals"] .article-content details summary .icon {
+    color: var(--accent);
+    font-weight: 700;
+    min-width: 22px;
+    text-align: center;
+    /* Hide the literal '+' in HTML; the ::before pseudo below
+       drives the marker so it can swap on [open] without HTML edits. */
+    font-size: 0;
+}
+.panel[data-tab="journals"] .article-content details summary .icon::before {
+    content: '[+]';
+    font-size: 13px;
+}
+.panel[data-tab="journals"] .article-content details[open] > summary .icon::before {
+    content: '[-]';
+}
+.panel[data-tab="journals"] .article-content details summary h2 {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: inherit;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+/* Code blocks inside log fragments — Prism rehighlights via the
+   MutationObserver in index.html */
+.panel[data-tab="journals"] pre,
+.panel[data-tab="journals"] .article-content pre {
+    background: var(--bg-soft);
+    border: 1px solid var(--card-line-2);
+    border-radius: 4px;
+    padding: 14px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--text);
+}
+.panel[data-tab="journals"] code { font-family: var(--font-mono); }
+
+@media (max-width: 640px) {
+    .panel[data-tab="journals"] summary.post-title {
+        padding: 12px 16px;
+        font-size: 15px;
+    }
+    .panel[data-tab="journals"] .article-content { padding: 14px 16px; }
+}
+
+/* ---------- Collapse button (auto-injected at end of expanded body) -- */
+.collapse-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 22px;
+    padding: 6px 14px;
+    background: transparent;
+    border: 1px solid var(--card-line-2);
+    color: var(--text-dim);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color var(--t-fast) ease, border-color var(--t-fast) ease;
+}
+.collapse-link:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ---------- Floating "↑ Top" pill ------------------------------------ */
+.jump-top {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    padding: 8px 14px;
+    border: 1px solid var(--card-line-2);
+    background: rgba(20, 20, 20, 0.85);
+    backdrop-filter: blur(4px);
+    color: var(--accent);
+    border-radius: 100px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    opacity: 0.35;
+    transition: opacity var(--t-base) ease, border-color var(--t-base) ease;
+    z-index: 10;
+}
+.jump-top:hover {
+    opacity: 1;
+    border-color: var(--accent);
+    color: #fff;
+}
+
+/* ---------- Contact tab ---------- */
+.contact-card {
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    border-radius: var(--radius);
+    padding: 32px var(--pad-card);
+}
+.contact-card h2 {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: 18px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 18px;
+}
+.contact-card .channel {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--card-line);
+    align-items: baseline;
+}
+.contact-card .channel:first-of-type { border-top: none; }
+.contact-card .channel .key {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+.contact-card .channel .val { font-family: var(--font-mono); font-size: 13px; }
+
+/* ---------- Journals top-of-tab status line ---------- */
+.status-line {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    margin: 0 0 18px;
+    padding-left: 14px;
+    border-left: 2px solid var(--accent);
+    line-height: 1.6;
+}
+.status-line .label {
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 11px;
+    display: block;
+    margin-bottom: 2px;
+}
+
+/* ---------- Generic prose inside case study expansions ---------- */
+.detail-body h1, .detail-body h2 {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 13px;
+    margin: 22px 0 10px;
+}
+.detail-body strong, .detail-body b { color: #fff; }
+.detail-body ul { margin: 0 0 14px; padding-left: 18px; }
+.detail-body li { margin-bottom: 6px; }
+
+/* ---------- Footer ---------- */
+.foot {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--card-line);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-faint);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+/* Portfolio image preloading is handled in <head> with
+   <link rel="preload" as="image" href="…"> — no hidden DOM hack needed. */
+
+/* ---------- Selection ---------- */
+::selection { background: var(--accent); color: var(--bg); }
+
+/* =============================================================
+   Standalone case-study pages — re-use the existing fragments
+   under articles/portfolio2/*.html. terminal.css styles the
+   legacy class names so the standalone pages look native.
+   ============================================================= */
+
+.case-shell { max-width: 920px; margin: 0 auto; padding: 24px 32px 96px; }
+.case-shell .case-nav {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--card-line);
+}
+.case-shell .case-nav a { color: var(--accent); }
+.case-shell .case-nav .sep { color: var(--text-faint); margin: 0 10px; }
+
+article.portfolio2-card {
+    background: var(--card);
+    border: 1px solid var(--card-line);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: var(--gap);
+    animation: fade-in var(--t-slow) ease both;
+}
+
+.p2-hero {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.p2-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--card-line-2);
+    aspect-ratio: 16 / 10;
+}
+.p2-thumbs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.p2-thumbs img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid var(--card-line-2);
+    aspect-ratio: 16 / 10;
+}
+@media (max-width: 720px) {
+    .p2-hero { grid-template-columns: 1fr; }
+    .p2-hero-img { aspect-ratio: 16 / 9; }
+}
+
+.p2-meta { margin-bottom: 20px; }
+.p2-title {
+    font-family: var(--font-display);
+    color: var(--accent);
+    font-size: 30px;
+    margin: 0 0 6px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+.p2-sub {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin-bottom: 14px;
+}
+.p2-tag {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    max-width: 65ch;
+    margin: 0 0 14px;
+}
+.p2-chips {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.p2-chips li {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--bg-soft);
+    border: 1px solid var(--card-line-2);
+    padding: 4px 10px;
+    border-radius: 100px;
+}
+
+article.portfolio2-card details {
+    border-top: 1px solid var(--card-line);
+    margin: 0;
+    padding: 0;
+}
+article.portfolio2-card details details {
+    border-top: 1px dashed var(--card-line);
+    margin-left: 14px;
+}
+article.portfolio2-card details summary {
+    list-style: none;
+    cursor: pointer;
+    padding: 14px 4px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+article.portfolio2-card details summary::-webkit-details-marker { display: none; }
+article.portfolio2-card details summary::marker { content: ''; }
+article.portfolio2-card details summary:hover { color: var(--accent); }
+article.portfolio2-card details summary .icon {
+    color: var(--accent);
+    font-weight: 700;
+    min-width: 22px;
+    text-align: center;
+}
+article.portfolio2-card details summary h2 {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: inherit;
+    font-weight: 500;
+    letter-spacing: 0;
+    text-transform: none;
+}
+
+details-content {
+    display: block;
+    padding: 4px 4px 22px 30px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    animation: detail-fade var(--t-base) ease both;
+}
+details-content h1 {
+    font-family: var(--font-mono);
+    color: var(--accent);
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 22px 0 10px;
+}
+details-content h2 {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 600;
+    margin: 18px 0 8px;
+}
+details-content p { margin: 0 0 12px; max-width: 70ch; }
+details-content ul { margin: 0 0 14px; padding-left: 20px; }
+details-content li { margin-bottom: 6px; }
+details-content b, details-content strong { color: #fff; }
+
+details-content .img,
+details-content img.img,
+details-content center img {
+    border: 1px solid var(--card-line-2);
+    border-radius: 4px;
+    margin: 12px auto;
+    max-width: 100%;
+    display: block;
+}
+details-content .img-text {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-align: center;
+    margin: -6px 0 18px;
+    font-style: italic;
+}
+details-content center { text-align: center; }
+
+.img-compare {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 4px;
+    border: 1px solid var(--card-line-2);
+    margin: 14px 0;
+    --pos: 50%;
+}
+.img-compare img { margin: 0; border: 0; border-radius: 0; max-width: none; }
+.img-compare .img-compare-base { position: relative; width: 100%; height: auto; display: block; }
+.img-compare .img-compare-overlay {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    clip-path: inset(0 0 0 var(--pos));
+}
+.img-compare .img-compare-divider {
+    position: absolute; top: 0; bottom: 0; left: var(--pos);
+    width: 2px; background: var(--accent); transform: translateX(-1px);
+    pointer-events: none;
+}
+.img-compare-range {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    opacity: 0; cursor: ew-resize;
+}
+
+/* ---------- Click-to-enlarge marker (opens shared lightbox) ---------- */
+.img-zoomable { cursor: zoom-in; }
+
+/* ---------- Side-by-side image pair ---------- */
+.img-pair {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 760px;
+    margin: 14px auto 0;
+}
+.img-pair > img {
+    flex: 1 1 0;
+    min-width: 0;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0;
+    border-radius: 4px;
+    border: 1px solid var(--card-line-2);
+}
+
+/* ---------- Image carousel (prev/next + click-to-enlarge) ---------- */
+.img-carousel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 760px;
+    margin: 14px auto;
+}
+.img-carousel img,
+.img-carousel .img-carousel-img { margin: 0; border: 0; border-radius: 4px; max-width: none; }
+.img-carousel .img-carousel-img {
+    flex: 1 1 auto;
+    min-width: 0;
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: zoom-in;
+    border: 1px solid var(--card-line-2);
+}
+.img-carousel-prev,
+.img-carousel-next {
+    flex: 0 0 auto;
+    background: var(--bg-soft);
+    color: var(--accent);
+    border: 1px solid var(--card-line-2);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 22px;
+    line-height: 1;
+    width: 36px;
+    height: 56px;
+    cursor: pointer;
+    transition: color var(--t-base) ease, border-color var(--t-base) ease, background var(--t-base) ease;
+}
+.img-carousel-prev:hover,
+.img-carousel-next:hover {
+    color: var(--bg);
+    background: var(--accent);
+    border-color: var(--accent);
+}
+@media (max-width: 480px) {
+    .img-carousel { gap: 6px; }
+    .img-carousel-prev,
+    .img-carousel-next { width: 28px; height: 44px; font-size: 18px; }
+}
+
+/* ---------- Lightbox (shared, lazily injected by enhance()) ---------- */
+.img-lightbox {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+.img-lightbox.open { display: flex; }
+.img-lightbox .img-lightbox-img {
+    max-width: 95vw;
+    max-height: 90vh;
+    object-fit: contain;
+    display: block;
+    border-radius: 4px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.6);
+    margin: 0;
+    border: 0;
+}
+.img-lightbox-prev,
+.img-lightbox-next,
+.img-lightbox-close {
+    position: absolute;
+    background: var(--bg-soft);
+    color: var(--accent);
+    border: 1px solid var(--card-line-2);
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    line-height: 1;
+    cursor: pointer;
+    transition: color var(--t-base) ease, border-color var(--t-base) ease, background var(--t-base) ease;
+}
+.img-lightbox-prev,
+.img-lightbox-next {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 72px;
+    font-size: 28px;
+}
+.img-lightbox-prev { left: 24px; }
+.img-lightbox-next { right: 24px; }
+.img-lightbox-close {
+    top: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+}
+.img-lightbox-prev:hover,
+.img-lightbox-next:hover,
+.img-lightbox-close:hover {
+    color: var(--bg);
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
+.vid-log2 { width: 100%; max-width: 720px; display: block; margin: 12px auto; border-radius: 4px; border: 1px solid var(--card-line-2); }
+
+details-content pre {
+    background: var(--bg-soft);
+    border: 1px solid var(--card-line-2);
+    border-radius: 4px;
+    padding: 14px;
+    overflow-x: auto;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.55;
+    color: var(--text);
+}
+details-content code { font-family: var(--font-mono); }
