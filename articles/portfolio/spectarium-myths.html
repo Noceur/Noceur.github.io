@@ -365,14 +365,11 @@
         <summary>Procedural roadmap & reflection</summary>
         <div class="detail-body">
             <p>
-                During a company trip 2025 in Prague I held a presentation for the team on procedural dungeon generation on how it could
-                work in Myths. The game was already well into production by then, but the procedural roadmap was still a key topic for the
-                future of the project and the team. I wanted to share my thoughts on how we could approach that, and what the trade-offs
-                were between different approaches.<br><br>
-                
-                The idea with the presentation was not to say "this is how we will do it" but rather "here are some options, and here are
-                the trade-offs between them." The version below brings up a few points I brought up without going into details about the
-                constraints we had to deal with.
+                During a company trip 2025 to Prague, I gave a presentation on procedural dungeon generation and how it could work for Myths.
+                The game was already well into production by then, but the procedural roadmap was still a key topic for the future of the
+                project and the team. I wanted to share my thoughts on how we could tackle this, and what the trade-offs were between different
+                approaches. The version below brings up a few points I brought up without going into details about the constraints we had to
+                deal with. 
             </p>
             <details>
                 <summary>Dungeon graph</summary>
@@ -399,10 +396,9 @@
                 <div class="detail-body">
                     <h2>Variants</h2>
                     <p>
-                        Variants are the big zone-level pieces - a whole wall plus its surroundings, a fancy
-                        centerpiece, a pit of gas clouds. The highest level of variable content and where theme
-                        control bites: two variants for "ritualistic," two for "ornate," two for "rubble." The
-                        dungeon graph picks the theme; the zone picks one of the matching variants.
+                        Variants are the biggest zone-level changes - It acts as layers and could be a whole wall plus its surroundings, a
+                        fancy centerpiece, a pit of gas clouds. A Mayan zone might have two variants for "ritualistic," two for "ornate,"
+                        two for "rubble." The dungeon graph picks the theme; the zone picks one of the matching variants.
                     </p>
                     <center>
                         <img class="img" src="img/work/Spectarium/PCG_Talk/PCG_Variants.png"
@@ -419,11 +415,11 @@
 
                     <h2>Compositions</h2>
                     <p>
-                        Compositions are what variants are mainly built from. We already used them, but the key
-                        shift is <b>standardised sizes</b> (S, M, L, XL) with distinct shapes for corners, walls
-                        and central standalone pieces. That makes them swappable without trouble: a variant picks
-                        "ritual site" with a sacrificial stone, and a randomiser can swap the stone for a statue
-                        and shuffle the surrounding props without touching colliders.
+                        Compositions are what variants are mainly built from. We already used them, but the key shift is <b>standardised
+                        sizes</b> (S, M, L, XL) with distinct shapes to fit corners, walls and central standalone pieces. That makes them
+                        swappable without trouble: The variant choosen for a specific zone through the dungeon graph could be "ritual site"
+                        with a sacrificial stone. A randomiser (based on the dungeon seed) could then swap the ritual stone composition for
+                        a statue composition and shuffle the surrounding props without affecting the zones navmesh.
                     </p>
                     <center>
                         <img class="img"
@@ -461,14 +457,9 @@
             <p>
                 Around <b>150 zones</b> shipped across three biomes for early access. A 100x100m zone layout could be completed in roughly
                 five minutes thanks to the macro pad plus the auto-tile-swap tooling, with full first-draft zone build time dropping from a
-                day to under an hour. Two of five planned biomes completed end-to-end with their bosses, with the Watcher biome carrying the
-                FTUE. The procedural-content roadmap was fully documented and work had started on it by the time of my departure.
-            </p>
-
-            <p>
-                The Early Access build 2026 ran on three biomes worth of handcrafted zones, hand-assembled dungeons, and
-                a stack of editor tooling that kept the per-zone authoring cost low enough for one person to keep
-                pace with content demand.
+                day to under an hour. This meant zone creation cost was low enough that a single person could keep pace with content demand.
+                Three biomes were completed together with two bosses and unique arenas, with the Watcher biome carrying the FTUE. The
+                procedural-content roadmap was fully documented and work had started on it by the time of my departure.
             </p>
 
             <h1>Reflection</h1>
