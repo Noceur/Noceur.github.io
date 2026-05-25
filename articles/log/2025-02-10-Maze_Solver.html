@@ -5,17 +5,17 @@
         </summary>
         <div class="article-content">
             <p class="p2">
-                During the Global Game Jam 2025 we had planned out additional mechanics for the game Sonosphere that we
-                just didn't have time to implement. The idea would be something like the old Pokemon sliding puzzles but
-                with boulders that could also be pushed for some additional challenge. <br><br><a
-                    href="https://www.youtube.com/watch?v=2sefXwFFI9E">A similar kind of puzzle can be seen in this
-                    youtube video.</a>
+                This was initially meant to be additonal content for Sonosphere (see below), that just didnt make it in due to time
+                constraints. This puzzle mechanic is a classic seen in for example Pokemon, but in our version there are also pushable
+                boulders that add an additonal layer to the challenge. (this mechanic also exists in ocarina of time) 
+                <br><br>
+                <a href="https://www.youtube.com/watch?v=2sefXwFFI9E">A similar kind of puzzle can be seen in this youtube video.</a>
                 <br><br>
 
-                I used the program Tiled to design a few levels for this mechanic. The more advanced my puzzles became
-                though the more annoyed I got with adjusting them to be solvable and figuring out if they are and in how
-                many steps. So I decided to write a small program using BFS (breadth first search) to solve the puzzles
-                for me. The program was written in Python and processes json files which could be extracted from Tiled.
+                I used the program Tiled to design a few levels for this mechanic. The more advanced my puzzles became though the more
+                annoying it became to adjust them, as well as figuring out if they were solvable, and if so in how many steps. So I decided
+                to write a small program using BFS (Breadth First Search) to solve the puzzles for me. The program was written in Python and
+                processes json files which could be extracted from Tiled.
                 <br>
                 Here are the first three levels:
                 <br><br>
@@ -37,6 +37,10 @@
                     </summary>
                     <details-content>
                         <div>
+                            <video class="vid-log2" controls preload="none">
+                                <source src="vid/work/SolutionLevel1_h264.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                             <p>
                                 4 moves:
                                 <br>1: up
@@ -55,6 +59,10 @@
                     </summary>
                     <details-content>
                         <div>
+                            <video class="vid-log2" controls preload="none">
+                                <source src="vid/work/SolutionLevel2_h264.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                             <p>
                                 17 moves:
                                 <br>1: up
@@ -87,6 +95,10 @@
                     </summary>
                     <details-content>
                         <div>
+                            <video class="vid-log2" controls preload="none">
+                                <source src="vid/work/SolutionLevel3_h264.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
                             <p>
                                 52 moves:<br>
                                 1: left<br>

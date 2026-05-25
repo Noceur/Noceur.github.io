@@ -617,6 +617,16 @@ body:has(#r-contact:checked)   .panel[data-tab="contact"] {
     font-weight: 700;
     min-width: 22px;
     text-align: center;
+    /* Hide the literal '+' in HTML; the ::before pseudo below
+       drives the marker so it can swap on [open] without HTML edits. */
+    font-size: 0;
+}
+.panel[data-tab="journals"] .article-content details summary .icon::before {
+    content: '[+]';
+    font-size: 13px;
+}
+.panel[data-tab="journals"] .article-content details[open] > summary .icon::before {
+    content: '[-]';
 }
 .panel[data-tab="journals"] .article-content details summary h2 {
     margin: 0;

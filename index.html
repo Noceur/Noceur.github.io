@@ -156,17 +156,41 @@
                     '<button type="button" class="img-lightbox-next" aria-label="Next image">&rsaquo;</button>' +
                     '<button type="button" class="img-lightbox-close" aria-label="Close">&times;</button>';
                 document.body.appendChild(lightbox);
-                var lbImg = lightbox.querySelector('.img-lightbox-img');
+                // swap the lightbox image without flashing the previous one.
+                // We replace the entire <img> element each time — the old element (with its
+                // cached bitmap) is removed from the DOM so it can never paint, and the new
+                // element stays visibility:hidden until its decode promise resolves.
+                // (Firefox doesn't reliably honour visibility:hidden on an img during a
+                // display:none → display:flex transition, hence the element-swap approach.)
+                var setLightboxImg = function (src) {
+                    var fresh = document.createElement('img');
+                    fresh.className = 'img-lightbox-img';
+                    fresh.alt = '';
+                    fresh.onclick = function (e) { e.stopPropagation(); };
+                    fresh.style.visibility = 'hidden';
+                    fresh.src = src;
+                    var current = lightbox.querySelector('.img-lightbox-img');
+                    if (current) current.parentNode.replaceChild(fresh, current);
+                    else lightbox.appendChild(fresh);
+                    var reveal = function () { fresh.style.visibility = ''; };
+                    if (fresh.decode) {
+                        fresh.decode().then(reveal, reveal);
+                    } else {
+                        fresh.onload = reveal;
+                        fresh.onerror = reveal;
+                    }
+                };
                 var lbStep = function (delta) {
                     var n = lightboxState.images.length;
                     if (!n) return;
                     lightboxState.index = (lightboxState.index + delta + n) % n;
-                    lbImg.src = lightboxState.images[lightboxState.index];
+                    setLightboxImg(lightboxState.images[lightboxState.index]);
                 };
+                // expose to the outer scope so openLightbox can use it too
+                lightbox._setImg = setLightboxImg;
                 lightbox.querySelector('.img-lightbox-prev').onclick = function (e) { e.stopPropagation(); lbStep(-1); };
                 lightbox.querySelector('.img-lightbox-next').onclick = function (e) { e.stopPropagation(); lbStep(1); };
                 lightbox.querySelector('.img-lightbox-close').onclick = function (e) { e.stopPropagation(); closeLightbox(); };
-                lbImg.onclick = function (e) { e.stopPropagation(); };
                 lightbox.onclick = function () { closeLightbox(); }; // backdrop
                 document.addEventListener('keydown', function (e) {
                     if (!lightbox.classList.contains('open')) return;
@@ -179,7 +203,7 @@
                 if (!lightbox) buildLightbox();
                 lightboxState.images = images.slice();
                 lightboxState.index = startIndex || 0;
-                lightbox.querySelector('.img-lightbox-img').src = lightboxState.images[lightboxState.index];
+                lightbox._setImg(lightboxState.images[lightboxState.index]);
                 var hasMany = lightboxState.images.length > 1;
                 lightbox.querySelector('.img-lightbox-prev').style.display = hasMany ? '' : 'none';
                 lightbox.querySelector('.img-lightbox-next').style.display = hasMany ? '' : 'none';
@@ -188,6 +212,10 @@
             function closeLightbox() {
                 if (lightbox) lightbox.classList.remove('open');
             }
+
+            // path helpers — convention: append "_sm" before the extension for inline display variants
+            function smallSrc(src) { return src.replace(/(\.[^.]+)(?:[?#].*)?$/, '_sm$1'); }
+            function fullSrc(src) { return src.replace(/_sm(\.[^.]+)(?:[?#].*)?$/, '$1'); }
 
             // ----- 2) collapse buttons + 3) Prism rehighlight -----
             var pendingPrism;
@@ -213,11 +241,12 @@
                 });
 
                 // wire any standalone .img-zoomable image to open in the shared lightbox
+                // the inline src is the _sm variant; lightbox shows the full-res original
                 root.querySelectorAll('.img-zoomable').forEach(function (img) {
                     if (img.dataset.zoomReady) return;
                     img.dataset.zoomReady = '1';
                     img.addEventListener('click', function () {
-                        openLightbox([img.currentSrc || img.src], 0);
+                        openLightbox([fullSrc(img.currentSrc || img.src)], 0);
                     });
                 });
 
@@ -234,7 +263,8 @@
                         var i = (parseInt(carousel.dataset.index, 10) || 0);
                         i = (i + delta + images.length) % images.length;
                         carousel.dataset.index = i;
-                        img.src = images[i];
+                        // inline display uses the _sm variant; lightbox opens the full-res original (data-images array)
+                        img.src = smallSrc(images[i]);
                     };
                     var prev = carousel.querySelector('.img-carousel-prev');
                     var next = carousel.querySelector('.img-carousel-next');
