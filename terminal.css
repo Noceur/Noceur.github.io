@@ -322,7 +322,6 @@ body:has(#r-contact:checked)   .panel[data-tab="contact"] {
     color: var(--text);
     line-height: 1.65;
     margin: 0 0 24px;
-    max-width: 65ch;
 }
 
 /* Accordion list inside a studio */
