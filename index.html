@@ -144,6 +144,51 @@
                     .then(function (html) { el.innerHTML = html; });
             });
 
+            // ----- shared lightbox (lazy-built on first open, reused after) -----
+            var lightbox = null;
+            var lightboxState = { images: [], index: 0 };
+            function buildLightbox() {
+                lightbox = document.createElement('div');
+                lightbox.className = 'img-lightbox';
+                lightbox.innerHTML =
+                    '<button type="button" class="img-lightbox-prev" aria-label="Previous image">&lsaquo;</button>' +
+                    '<img class="img-lightbox-img" alt="">' +
+                    '<button type="button" class="img-lightbox-next" aria-label="Next image">&rsaquo;</button>' +
+                    '<button type="button" class="img-lightbox-close" aria-label="Close">&times;</button>';
+                document.body.appendChild(lightbox);
+                var lbImg = lightbox.querySelector('.img-lightbox-img');
+                var lbStep = function (delta) {
+                    var n = lightboxState.images.length;
+                    if (!n) return;
+                    lightboxState.index = (lightboxState.index + delta + n) % n;
+                    lbImg.src = lightboxState.images[lightboxState.index];
+                };
+                lightbox.querySelector('.img-lightbox-prev').onclick = function (e) { e.stopPropagation(); lbStep(-1); };
+                lightbox.querySelector('.img-lightbox-next').onclick = function (e) { e.stopPropagation(); lbStep(1); };
+                lightbox.querySelector('.img-lightbox-close').onclick = function (e) { e.stopPropagation(); closeLightbox(); };
+                lbImg.onclick = function (e) { e.stopPropagation(); };
+                lightbox.onclick = function () { closeLightbox(); }; // backdrop
+                document.addEventListener('keydown', function (e) {
+                    if (!lightbox.classList.contains('open')) return;
+                    if (e.key === 'Escape') closeLightbox();
+                    else if (e.key === 'ArrowLeft') lbStep(-1);
+                    else if (e.key === 'ArrowRight') lbStep(1);
+                });
+            }
+            function openLightbox(images, startIndex) {
+                if (!lightbox) buildLightbox();
+                lightboxState.images = images.slice();
+                lightboxState.index = startIndex || 0;
+                lightbox.querySelector('.img-lightbox-img').src = lightboxState.images[lightboxState.index];
+                var hasMany = lightboxState.images.length > 1;
+                lightbox.querySelector('.img-lightbox-prev').style.display = hasMany ? '' : 'none';
+                lightbox.querySelector('.img-lightbox-next').style.display = hasMany ? '' : 'none';
+                lightbox.classList.add('open');
+            }
+            function closeLightbox() {
+                if (lightbox) lightbox.classList.remove('open');
+            }
+
             // ----- 2) collapse buttons + 3) Prism rehighlight -----
             var pendingPrism;
             function enhance(root) {
@@ -159,6 +204,45 @@
                         d.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     };
                     body.appendChild(btn);
+                });
+
+                // sync each img-compare slider's initial --pos to its `value` attribute
+                root.querySelectorAll('.img-compare-range').forEach(function (input) {
+                    var container = input.parentElement;
+                    if (container) container.style.setProperty('--pos', input.value + '%');
+                });
+
+                // wire any standalone .img-zoomable image to open in the shared lightbox
+                root.querySelectorAll('.img-zoomable').forEach(function (img) {
+                    if (img.dataset.zoomReady) return;
+                    img.dataset.zoomReady = '1';
+                    img.addEventListener('click', function () {
+                        openLightbox([img.currentSrc || img.src], 0);
+                    });
+                });
+
+                // wire each img-carousel: prev/next stepping + click-to-enlarge
+                root.querySelectorAll('.img-carousel').forEach(function (carousel) {
+                    if (carousel.dataset.carouselReady) return;
+                    carousel.dataset.carouselReady = '1';
+                    var images;
+                    try { images = JSON.parse(carousel.dataset.images || '[]'); }
+                    catch (e) { images = []; }
+                    if (!images.length) return;
+                    var img = carousel.querySelector('.img-carousel-img');
+                    var step = function (delta) {
+                        var i = (parseInt(carousel.dataset.index, 10) || 0);
+                        i = (i + delta + images.length) % images.length;
+                        carousel.dataset.index = i;
+                        img.src = images[i];
+                    };
+                    var prev = carousel.querySelector('.img-carousel-prev');
+                    var next = carousel.querySelector('.img-carousel-next');
+                    if (prev) prev.onclick = function () { step(-1); };
+                    if (next) next.onclick = function () { step(1); };
+                    img.onclick = function () {
+                        openLightbox(images, parseInt(carousel.dataset.index, 10) || 0);
+                    };
                 });
 
                 if (window.Prism) {
