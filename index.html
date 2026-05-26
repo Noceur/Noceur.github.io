@@ -19,17 +19,6 @@
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Space+Grotesk:wght@500;700&display=swap">
 
-    <!-- Portfolio image preloads: standards-correct background fetching -->
-    <link rel="preload" as="image" href="img/work/Spectarium/Zones/Zone_Mayan10.png">
-    <link rel="preload" as="image" href="img/work/Spectarium/Dungeons/Dungeons_Watcher2.png">
-    <link rel="preload" as="image" href="img/work/Spectarium/PCG_Talk/PCG_Variants.png">
-    <link rel="preload" as="image" href="img/work/Spectarium/MacroPad.jpg">
-    <link rel="preload" as="image" href="img/work/Albion/main_template.png">
-    <link rel="preload" as="image" href="img/work/Albion/content_templates.jpg">
-    <link rel="preload" as="image" href="img/work/Albion/minimap.png">
-    <link rel="preload" as="image" href="img/work/Albion/AssetMover.png">
-    <link rel="preload" as="image" href="img/work/Stratosphere/batch_exporter.png">
-
     <link href="terminal.css" rel="stylesheet">
 
     <!-- Prism syntax highlighting for embedded Python code blocks -->
@@ -139,11 +128,48 @@
     <script>
         (function () {
             // ----- 1) inline tab wrapper files -----
-            document.querySelectorAll('[data-include]').forEach(function (el) {
-                fetch(el.dataset.include)
-                    .then(function (r) { return r.text(); })
-                    .then(function (html) { el.innerHTML = html; });
-            });
+            // Track each panel's full readiness (fetch + every inner
+            // iframe's onload-inlining finished) so we can fade the
+            // body in only once nothing else is about to pop in.
+            function waitForIframes(root) {
+                var frames = root.querySelectorAll('iframe');
+                if (!frames.length) return Promise.resolve();
+                return Promise.all(Array.prototype.map.call(frames, function (f) {
+                    return new Promise(function (resolve) {
+                        // addEventListener (not f.onload =) so the inline
+                        // onload="..." handler that does the inlining still runs.
+                        f.addEventListener('load', resolve, { once: true });
+                        f.addEventListener('error', resolve, { once: true });
+                    });
+                }));
+            }
+
+            var includeJobs = Array.prototype.map.call(
+                document.querySelectorAll('[data-include]'),
+                function (el) {
+                    return fetch(el.dataset.include)
+                        .then(function (r) { return r.text(); })
+                        .then(function (html) {
+                            el.innerHTML = html;
+                            return waitForIframes(el);
+                        })
+                        .catch(function () { /* never block the fade-in on a bad fetch */ });
+                }
+            );
+
+            var revealed = false;
+            function reveal() {
+                if (revealed) return;
+                revealed = true;
+                // Add the class directly; the CSS transition handles the smoothness.
+                // (Avoid requestAnimationFrame here — rAF is throttled/suspended in
+                // background tabs and inside non-rendered preview iframes, which would
+                // leave the body permanently invisible.)
+                document.body.classList.add('ready');
+            }
+            Promise.all(includeJobs).then(reveal);
+            // Safety net: reveal anyway if something hangs.
+            setTimeout(reveal, 2000);
 
             // ----- deep-linking: sync URL hash <-> selected tab -----
             // Valid hashes: #intro, #portfolio, #journals, #contact

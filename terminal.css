@@ -73,7 +73,20 @@ body {
             rgba(255, 255, 255, 0.008) 2px,
             rgba(255, 255, 255, 0.008) 3px
         );
+
+    /* Hold the page invisible until panel fetches + iframe inlining
+       finish; the bootstrap script adds .ready to fade in. Safety
+       timeout in the script ensures we always reveal. */
+    opacity: 0;
+    transition: opacity 260ms ease;
 }
+body.ready { opacity: 1; }
+
+/* Every iframe in this site is a one-shot loader that inlines its
+   own body via onload and then removes itself. Keep them invisible
+   during that brief lifetime so the default 300x150 white box
+   doesn't flash before the real content lands. */
+iframe { opacity: 0; }
 
 a { color: var(--accent); text-decoration: none; transition: color var(--t-fast) ease; }
 a:hover { color: #fff; }
@@ -811,9 +824,6 @@ body:has(#r-contact:checked)   .panel[data-tab="contact"] {
     flex-wrap: wrap;
     gap: 10px;
 }
-
-/* Portfolio image preloading is handled in <head> with
-   <link rel="preload" as="image" href="…"> — no hidden DOM hack needed. */
 
 /* ---------- Selection ---------- */
 ::selection { background: var(--accent); color: var(--bg); }
